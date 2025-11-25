@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BlueCross Medical | Maritime Emergency Medicine</title>
+    <meta name="description" content="Your complete resource for emergency medicine at sea. Flag state regulations, advanced training courses, knowledge articles, and tested equipment." />
+    <!-- Ecwid Store -->
+    <script data-cfasync="false" type="text/javascript" src="https://app.ecwid.com/script.js?90579256&data_platform=code" charset="utf-8"></script>
+    <script type="text/javascript">
+      window.ec = window.ec || Object();
+      window.ec.config = window.ec.config || Object();
+      window.ec.config.storefrontUrls = window.ec.config.storefrontUrls || Object();
+      window.ec.config.storefrontUrls.cleanUrls = true;
+      window.ec.config.baseUrl = '/store';
+      
+      // Initialize Ecwid widgets
+      window._xnext_initialization_scripts = [
+        {
+          widgetType: 'MinicartPopup',
+          id: 'my-minicart-popup',
+          arg: ["id=my-minicart-popup"]
+        },
+        {
+          widgetType: 'Minicart',
+          id: 'ec-cart-widget',
+          arg: ["id=ec-cart-widget"]
+        }
+      ];
+      
+      // Add product to cart function
+      window.ecwidAddToCart = function(productId, callback) {
+        if (typeof Ecwid !== 'undefined') {
+          Ecwid.Cart.addProduct({
+            id: productId,
+            quantity: 1,
+            callback: function(success, product, cart) {
+              if (success) {
+                // Open the cart popup
+                Ecwid.openPage('cart');
+                // Show cart widget
+                updateCartVisibility();
+              }
+              if (callback) callback(success);
+            }
+          });
+        }
+      };
+
+      // Show/hide cart widget based on item count
+      function updateCartVisibility() {
+        var cartWidget = document.getElementById('ec-cart-widget');
+        if (typeof Ecwid !== 'undefined' && Ecwid.Cart) {
+          Ecwid.Cart.get(function(cart) {
+            if (cart && cart.productsQuantity > 0) {
+              cartWidget.style.display = 'block';
+            } else {
+              cartWidget.style.display = 'none';
+            }
+          });
+        }
+      }
+
+      // Listen for Ecwid to be ready
+      if (typeof Ecwid !== 'undefined') {
+        Ecwid.OnAPILoaded.add(function() {
+          updateCartVisibility();
+          // Listen for cart changes
+          Ecwid.OnCartChanged.add(function(cart) {
+            updateCartVisibility();
+          });
+        });
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <!-- Ecwid Minicart Popup -->
+    <div id="my-minicart-popup"></div>
+    <!-- Ecwid Floating Cart Icon - hidden by default, shows when cart has items -->
+    <div id="ec-cart-widget" class="ec-cart-widget" style="position: fixed; right: 20px; bottom: 20px; z-index: 9999; display: none;"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
