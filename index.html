@@ -78,8 +78,20 @@
     <div id="root"></div>
     <!-- Ecwid Minicart Popup -->
     <div id="my-minicart-popup"></div>
-    <!-- Ecwid Floating Cart Icon - hidden by default, shows when cart has items -->
+    <!-- Ecwid Floating Cart Icon - hidden by default, shows when cart has items, hidden on mobile -->
     <div id="ec-cart-widget" class="ec-cart-widget" style="position: fixed; right: 20px; bottom: 20px; z-index: 9999; display: none;"></div>
+    <style>
+      /* Hide Ecwid floating cart on mobile - we have cart icon in header */
+      @media (max-width: 767px) {
+        #ec-cart-widget,
+        .ec-cart-widget,
+        .ecwid-minicart,
+        .ec-minicart,
+        .ecwid-shopping-cart-icon {
+          display: none !important;
+        }
+      }
+    </style>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
