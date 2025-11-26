@@ -98,16 +98,27 @@ function Footer() {
         {/* Bottom */}
         <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center text-gray-400 text-sm">
           <p>&copy; {currentYear} {COMPANY_INFO.name}. All rights reserved.</p>
-          <div className="flex space-x-6 mt-4 md:mt-0">
-            <Link to="/privacy" className="hover:text-brand-ocean transition-colors">
-              Privacy Policy
-            </Link>
-            <Link to="/terms" className="hover:text-brand-ocean transition-colors">
-              Terms of Service
-            </Link>
-            <Link to="/hipaa" className="hover:text-brand-ocean transition-colors">
-              HIPAA Compliance
-            </Link>
+          <div className="flex items-center space-x-6 mt-4 md:mt-0">
+            <div className="flex space-x-6">
+              <Link to="/privacy" className="hover:text-brand-ocean transition-colors">
+                Privacy Policy
+              </Link>
+              <Link to="/terms" className="hover:text-brand-ocean transition-colors">
+                Terms of Service
+              </Link>
+              <Link to="/hipaa" className="hover:text-brand-ocean transition-colors">
+                HIPAA Compliance
+              </Link>
+            </div>
+            <span className="text-gray-500">|</span>
+            <a 
+              href="https://marsoft.ai" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="hover:text-brand-ocean transition-colors"
+            >
+              Made by Marsoft.ai
+            </a>
           </div>
         </div>
       </Container>

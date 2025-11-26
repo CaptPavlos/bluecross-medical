@@ -16,7 +16,7 @@ export const isNeonConfigured = (): boolean => {
 };
 
 // Helper to run queries safely
-export async function query<T>(queryString: string, _params?: unknown[]): Promise<T[]> {
+export async function query<T>(queryString: string): Promise<T[]> {
   if (!sql) {
     console.warn('Neon not configured, query skipped:', queryString);
     return [];
