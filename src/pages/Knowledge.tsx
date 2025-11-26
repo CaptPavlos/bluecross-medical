@@ -89,40 +89,6 @@ function Knowledge() {
         </Container>
       </section>
 
-      {/* Search */}
-      <section className="py-6 bg-white border-b border-gray-100 sticky top-16 md:top-20 z-30">
-        <Container>
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-              <input
-                type="text"
-                placeholder="Search articles and guides..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-ocean/20 focus:border-brand-ocean"
-              />
-            </div>
-            <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0">
-              {categories.map(cat => (
-                <button
-                  key={cat.id}
-                  onClick={() => setActiveCategory(cat.id)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
-                    activeCategory === cat.id
-                      ? 'bg-brand-ocean text-white'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                  }`}
-                >
-                  <cat.icon size={16} />
-                  {cat.label}
-                </button>
-              ))}
-            </div>
-          </div>
-        </Container>
-      </section>
-
       {/* Official Documents */}
       <section className="py-12 bg-surface-secondary">
         <Container>
@@ -171,6 +137,75 @@ function Knowledge() {
                 </div>
               </motion.a>
             ))}
+          </div>
+        </Container>
+      </section>
+
+      {/* Mariners Medical Guide - Primary Resource */}
+      <section className="py-8 bg-gradient-to-r from-brand-ocean to-brand-blue">
+        <Container>
+          <motion.a
+            href="https://app.medicoguide.no/"
+            target="_blank"
+            rel="noopener noreferrer"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="flex flex-col md:flex-row items-center gap-6 bg-white/10 backdrop-blur-sm rounded-2xl p-6 md:p-8 hover:bg-white/20 transition-all group"
+          >
+            <div className="w-16 h-16 md:w-20 md:h-20 bg-white rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
+              <Stethoscope className="w-8 h-8 md:w-10 md:h-10 text-brand-ocean" />
+            </div>
+            <div className="flex-1 text-center md:text-left">
+              <div className="inline-flex items-center gap-2 bg-white/20 px-3 py-1 rounded-full mb-2">
+                <span className="text-xs font-medium text-white">First Point of Reference</span>
+              </div>
+              <h2 className="text-xl md:text-2xl font-bold text-white mb-2">
+                Mariners Medical Guide (MEDICO)
+              </h2>
+              <p className="text-brand-sky-light text-sm md:text-base">
+                The essential interactive digital guide for medical emergencies at sea. 
+                Start here for immediate guidance on symptoms, treatments, and procedures.
+              </p>
+            </div>
+            <div className="flex items-center gap-2 bg-white text-brand-ocean px-6 py-3 rounded-lg font-medium group-hover:bg-brand-sky-light transition-colors">
+              <span>Open Guide</span>
+              <ExternalLink size={18} />
+            </div>
+          </motion.a>
+        </Container>
+      </section>
+
+      {/* Search */}
+      <section className="py-6 bg-white border-b border-gray-100 sticky top-16 md:top-20 z-30">
+        <Container>
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+              <input
+                type="text"
+                placeholder="Search articles and guides..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-ocean/20 focus:border-brand-ocean"
+              />
+            </div>
+            <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0">
+              {categories.map(cat => (
+                <button
+                  key={cat.id}
+                  onClick={() => setActiveCategory(cat.id)}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
+                    activeCategory === cat.id
+                      ? 'bg-brand-ocean text-white'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
+                >
+                  <cat.icon size={16} />
+                  {cat.label}
+                </button>
+              ))}
+            </div>
           </div>
         </Container>
       </section>

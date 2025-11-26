@@ -7,7 +7,7 @@ function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-gradient-to-b from-brand-navy to-brand-navy text-white pt-12 pb-24 md:pb-8 relative overflow-hidden">
+    <footer className="bg-gradient-to-b from-brand-navy to-brand-navy text-white pt-12 pb-20 md:pb-8 relative overflow-hidden">
       {/* Wave decoration at top */}
       <div className="absolute top-0 left-0 right-0 h-16 opacity-10">
         <svg className="w-full h-full" viewBox="0 0 1440 100" preserveAspectRatio="none">

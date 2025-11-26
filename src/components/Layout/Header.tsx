@@ -1,13 +1,31 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { ShoppingCart } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useIsScrolled, useIsMobile } from '../../hooks';
 import { NAV_ITEMS } from '../../lib/constants';
 import { cn } from '../../lib/utils';
 import Container from '../Common/Container';
 
+// Ecwid type declarations
+declare global {
+  interface Window {
+    Ecwid?: {
+      Cart?: {
+        get: (callback: (cart: { productsQuantity?: number }) => void) => void;
+      };
+      OnCartChanged?: {
+        add: (callback: (cart: { productsQuantity?: number }) => void) => void;
+      };
+      OnAPILoaded?: {
+        add: (callback: () => void) => void;
+      };
+      openPage: (page: string) => void;
+    };
+  }
+}
+
 function Header() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
   const isScrolled = useIsScrolled(50);
   const isMobile = useIsMobile();
   const location = useLocation();
@@ -19,11 +37,37 @@ function Header() {
   // Use dark text when scrolled OR when on a page without dark hero
   const useDarkText = isScrolled || !hasDarkHero;
 
-  // Close mobile menu on route change
+  // Listen for Ecwid cart changes
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setIsMenuOpen(false);
-  }, [location.pathname]);
+    const updateCartCount = () => {
+      if (typeof window !== 'undefined' && window.Ecwid?.Cart) {
+        window.Ecwid.Cart.get((cart: { productsQuantity?: number }) => {
+          setCartCount(cart?.productsQuantity || 0);
+        });
+      }
+    };
+
+    // Initial check
+    updateCartCount();
+
+    // Listen for cart changes
+    if (typeof window !== 'undefined' && window.Ecwid?.OnCartChanged) {
+      window.Ecwid.OnCartChanged.add((cart: { productsQuantity?: number }) => {
+        setCartCount(cart?.productsQuantity || 0);
+      });
+    }
+
+    // Also check when Ecwid API loads
+    if (typeof window !== 'undefined' && window.Ecwid?.OnAPILoaded) {
+      window.Ecwid.OnAPILoaded.add(updateCartCount);
+    }
+  }, []);
+
+  const handleCartClick = () => {
+    if (typeof window !== 'undefined' && window.Ecwid) {
+      window.Ecwid.openPage('cart');
+    }
+  };
 
   return (
     <header
@@ -71,39 +115,24 @@ function Header() {
             </nav>
           )}
 
-          {/* Mobile Menu Button */}
-          {isMobile && (
+          {/* Shopping Cart - shows when cart has items */}
+          {cartCount > 0 && (
             <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              onClick={handleCartClick}
               className={cn(
-                "p-2 transition-colors",
+                "relative p-2 transition-colors",
                 useDarkText ? "text-brand-slate hover:text-brand-ocean" : "text-white hover:text-brand-sky"
               )}
-              aria-label="Toggle menu"
+              aria-label={`Shopping cart with ${cartCount} items`}
             >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              <ShoppingCart size={24} />
+              <span className="absolute -top-1 -right-1 w-5 h-5 bg-brand-ocean text-white text-xs font-bold rounded-full flex items-center justify-center">
+                {cartCount > 9 ? '9+' : cartCount}
+              </span>
             </button>
           )}
         </div>
       </Container>
-
-      {/* Mobile Menu */}
-      {isMenuOpen && (
-        <div className="md:hidden bg-white border-t border-gray-100 shadow-lg">
-          <nav className="py-4">
-            {NAV_ITEMS.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                onClick={() => setIsMenuOpen(false)}
-                className="block px-4 py-3 text-brand-slate hover:bg-surface-secondary hover:text-brand-ocean transition-colors"
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-        </div>
-      )}
     </header>
   );
 }

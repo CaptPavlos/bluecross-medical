@@ -277,19 +277,21 @@ function Training() {
             onMouseUp={handleMapMouseUp}
             onMouseLeave={handleMapMouseLeave}
           >
-            {/* ESRI World Ocean Basemap - Free tier */}
+            {/* Light blue ocean background fallback */}
+            <div className="absolute inset-0 bg-[#b5d0d0]" />
+            {/* ESRI World Ocean Basemap - Zoomed in more */}
             <div 
               className="absolute transition-transform duration-75"
               style={{ 
                 transform: `translate(${mapOffset.x}px, ${mapOffset.y}px)`,
-                width: '150%',
-                height: '150%',
-                left: '-25%',
-                top: '-25%',
+                width: '180%',
+                height: '180%',
+                left: '-40%',
+                top: '-40%',
               }}
             >
               <img 
-                src="https://services.arcgisonline.com/arcgis/rest/services/Ocean/World_Ocean_Base/MapServer/export?bbox=-180,-60,180,80&bboxSR=4326&size=1800,525&format=png&f=image"
+                src="https://services.arcgisonline.com/arcgis/rest/services/Ocean/World_Ocean_Base/MapServer/export?bbox=-160,-50,160,70&bboxSR=4326&size=2000,600&format=png&f=image"
                 alt="Training Locations Map"
                 className="w-full h-full object-cover select-none pointer-events-none"
                 draggable={false}

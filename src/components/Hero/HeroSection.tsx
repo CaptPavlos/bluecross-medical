@@ -1,8 +1,53 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, Flag, Database, Ship } from 'lucide-react';
+import { motion } from 'framer-motion';
 import Container from '../Common/Container';
 import Button from '../Common/Button';
 import { COMPANY_INFO } from '../../lib/constants';
+
+// Highlight word component with fade effect and delayed red color + underline
+function HighlightedText({ text, highlightWord }: { text: string; highlightWord: string }) {
+  const parts = text.split(highlightWord);
+  
+  return (
+    <motion.span
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+    >
+      {parts[0]}
+      <span className="relative inline-block">
+        <motion.span
+          initial={{ color: "#ffffff" }}
+          animate={{ color: "#ef4444" }}
+          transition={{ delay: 1, duration: 0.3 }}
+        >
+          {highlightWord}
+        </motion.span>
+        <motion.svg 
+          className="absolute -bottom-2 left-0 w-full h-3"
+          viewBox="0 0 100 12" 
+          preserveAspectRatio="none"
+          initial={{ opacity: 0, pathLength: 0 }}
+          animate={{ opacity: 1, pathLength: 1 }}
+          transition={{ delay: 1.2, duration: 0.5, ease: "easeOut" }}
+        >
+          <motion.path 
+            d="M2 8 Q 15 2, 30 7 T 55 6 T 80 8 T 98 5" 
+            fill="none" 
+            stroke="#ef4444" 
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: 1 }}
+            transition={{ delay: 1.2, duration: 0.5, ease: "easeOut" }}
+          />
+        </motion.svg>
+      </span>
+      {parts[1]}
+    </motion.span>
+  );
+}
 
 function HeroSection() {
   const features = [
@@ -29,7 +74,7 @@ function HeroSection() {
             </span>
             
             <h1 className="text-display md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-              {COMPANY_INFO.tagline}
+              <HighlightedText text={COMPANY_INFO.tagline} highlightWord="Emergency" />
             </h1>
             
             <p className="text-lg md:text-xl text-brand-sky-light/90 mb-8 max-w-lg">
