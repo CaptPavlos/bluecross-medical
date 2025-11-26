@@ -13,7 +13,7 @@ function Header() {
   const location = useLocation();
   
   // Pages with dark hero sections (white text needed)
-  const darkHeroPages = ['/', '/products', '/blog', '/flags', '/tech', '/team', '/about', '/training', '/knowledge', '/contact'];
+  const darkHeroPages = ['/', '/products', '/blog', '/flags', '/tech', '/team', '/about', '/training', '/knowledge', '/contact', '/privacy', '/terms', '/hipaa'];
   const hasDarkHero = darkHeroPages.includes(location.pathname) || location.pathname.startsWith('/products/') || location.pathname.startsWith('/flags/') || location.pathname.startsWith('/blog/');
   
   // Use dark text when scrolled OR when on a page without dark hero

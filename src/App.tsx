@@ -1,6 +1,8 @@
 import { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Navigation, Footer } from './components/Layout';
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import './styles/globals.css';
 
 // Lazy load pages for code splitting
@@ -17,6 +19,9 @@ const FlagDatabase = lazy(() => import('./pages/FlagDatabase'));
 const FlagDetail = lazy(() => import('./pages/FlagDetail'));
 const Contact = lazy(() => import('./pages/Contact'));
 const NotFound = lazy(() => import('./pages/NotFound'));
+const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
+const TermsOfService = lazy(() => import('./pages/TermsOfService'));
+const HipaaCompliance = lazy(() => import('./pages/HipaaCompliance'));
 
 // Loading fallback
 function PageLoader() {
@@ -48,11 +53,16 @@ function App() {
             <Route path="/flags" element={<FlagDatabase />} />
             <Route path="/flags/:slug" element={<FlagDetail />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/terms" element={<TermsOfService />} />
+            <Route path="/hipaa" element={<HipaaCompliance />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
 
         <Footer />
+        <Analytics />
+        <SpeedInsights />
       </div>
     </Router>
   );

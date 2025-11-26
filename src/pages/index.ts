@@ -11,3 +11,6 @@ export { default as Blog } from './Blog';
 export { default as BlogPost } from './BlogPost';
 export { default as Contact } from './Contact';
 export { default as NotFound } from './NotFound';
+export { default as PrivacyPolicy } from './PrivacyPolicy';
+export { default as TermsOfService } from './TermsOfService';
+export { default as HipaaCompliance } from './HipaaCompliance';
