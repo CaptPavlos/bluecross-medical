@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Mail, Phone, MapPin, Linkedin, Lock } from 'lucide-react';
+import { Mail, Phone, MapPin, Stethoscope, Lock } from 'lucide-react';
 import { COMPANY_INFO } from '../../lib/constants';
 import Container from '../Common/Container';
 import { useAuth } from '../../context/AuthContext';
@@ -34,10 +34,12 @@ function Footer() {
             <div className="flex space-x-4">
               <a
                 href={COMPANY_INFO.social.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="p-2 bg-white/10 rounded-lg hover:bg-brand-ocean transition-colors"
-                aria-label="LinkedIn"
+                aria-label="Mariners Medico Guide"
               >
-                <Linkedin size={18} />
+                <Stethoscope size={18} />
               </a>
             </div>
           </div>

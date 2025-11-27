@@ -437,7 +437,7 @@ export const COMPANY_INFO = {
   address: 'Frynis 55, Athens, Greece',
   workingHours: 'Mon-Fri 09:00 - 18:00 (EET/EEST)',
   social: {
-    linkedin: 'https://linkedin.com/company/bluecross-medical',
+    linkedin: 'https://app.medicoguide.no/p/t/d8c084c3-f3b4-4369-6086-08d7f8ead50e',
     twitter: '#',
     facebook: '#',
   },

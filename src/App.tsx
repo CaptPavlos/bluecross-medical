@@ -45,8 +45,9 @@ function App() {
           <div className="flex flex-col min-h-screen bg-white">
             <Navigation />
             
-            <Suspense fallback={<PageLoader />}>
-              <Routes>
+            <main className="flex-1 md:mb-0 mb-16">
+              <Suspense fallback={<PageLoader />}>
+                <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/products" element={<Products />} />
                 <Route path="/products/:slug" element={<ProductDetail />} />
@@ -68,8 +69,9 @@ function App() {
                 <Route path="/admin" element={<AdminPanel />} />
                 <Route path="/admin/edit/:slug" element={<AdminEditArticle />} />
                 <Route path="*" element={<NotFound />} />
-              </Routes>
-            </Suspense>
+                </Routes>
+              </Suspense>
+            </main>
 
             <Footer />
             <Analytics />

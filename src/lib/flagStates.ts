@@ -4,12 +4,12 @@ import type { FlagState, TMASContact } from './types';
 export const TMAS_DIRECTORY: Record<string, TMASContact> = {
   CIRM_ITALY: {
     name: 'CIRM - Centro Internazionale Radio Medico',
-    phone: '+39 06 5923331',
-    email: 'cirm@cirm.it',
+    phone: '+39 065 9290 263',
+    email: 'telesoccorso@cirm.it',
     website: 'https://www.cirmtmas.it',
     hours: '24/7',
-    languages: ['Italian', 'English', 'French', 'Spanish'],
-    notes: 'Worldwide coverage. Founded 1935. Free service for all nationalities.',
+    languages: ['Italian', 'English', 'French'],
+    notes: 'Worldwide coverage. Founded 1935. Free service for all nationalities. Alt email: telesoccorso@cirmtmas.it',
   },
   CCMM_FRANCE: {
     name: 'CCMM - Centre de Consultations Médicales Maritimes',
@@ -30,12 +30,13 @@ export const TMAS_DIRECTORY: Record<string, TMASContact> = {
     notes: 'Hamburg Port Health Center. Only flag state mandating AEDs.',
   },
   RMN_NORWAY: {
-    name: 'Radio Medico Norway',
-    phone: '+47 55 58 20 00',
+    name: 'NSMDM Radio Medico Norway',
+    phone: '+47 51 68 36 01',
+    email: 'advice@radiomedico.no',
     website: 'https://helse-bergen.no/radio-medico',
     hours: '24/7',
     languages: ['Norwegian', 'English'],
-    notes: 'Based at Haukeland University Hospital, Bergen.',
+    notes: 'Norwegian Centre for Maritime and Diving Medicine at Haukeland University Hospital. Inmarsat: 32 via Eik earth station.',
   },
   MRCC_DENMARK: {
     name: 'MRCC Denmark / Radio Medical Denmark',
@@ -85,6 +86,49 @@ export const TMAS_DIRECTORY: Record<string, TMASContact> = {
     hours: '24/7',
     languages: ['English', 'Mandarin'],
     notes: 'Via Maritime and Port Authority.',
+  },
+  // Additional TMAS services from MMG
+  LIFE_FLIGHT_AUSTRALIA: {
+    name: 'Life Flight Australia',
+    phone: '+61 7 5598 0500',
+    hours: '24/7',
+    languages: ['English'],
+    notes: 'Australian TMAS service.',
+  },
+  JRCC_CANADA: {
+    name: 'Joint Rescue Coordination Centre (JRCC) Canada',
+    phone: '+1 800 267 7270',
+    hours: '24/7',
+    languages: ['English', 'French'],
+    notes: 'Canadian Coast Guard TMAS.',
+  },
+  UCMTM_POLAND: {
+    name: 'UCMTM Poland',
+    phone: '+48 58 349 17 46',
+    hours: '24/7',
+    languages: ['Polish', 'English'],
+    notes: 'University Centre of Maritime and Tropical Medicine, Gdynia.',
+  },
+  MRCC_SOUTH_AFRICA: {
+    name: 'Cape Town MRCC',
+    phone: '+27 21 938 3300',
+    hours: '24/7',
+    languages: ['English', 'Afrikaans'],
+    notes: 'South African Maritime Rescue Coordination Centre.',
+  },
+  TMAS_TURKEY: {
+    name: 'Turkey TMAS',
+    phone: '+90 312 232 1212',
+    hours: '24/7',
+    languages: ['Turkish', 'English'],
+    notes: 'Turkish Maritime TMAS service.',
+  },
+  SMA_SWEDEN: {
+    name: 'SMA TMAS Sweden',
+    phone: '+46 31 343 9700',
+    hours: '24/7',
+    languages: ['Swedish', 'English'],
+    notes: 'Swedish Maritime Administration TMAS.',
   },
 };
 
