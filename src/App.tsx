@@ -45,7 +45,7 @@ function App() {
           <div className="flex flex-col min-h-screen bg-white">
             <Navigation />
             
-            <main className="flex-1 md:mb-0 mb-16">
+            <main className="flex-1 mb-0">
               <Suspense fallback={<PageLoader />}>
                 <Routes>
                 <Route path="/" element={<Home />} />
