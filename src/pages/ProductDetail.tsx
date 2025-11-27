@@ -82,8 +82,12 @@ function ProductDetail() {
             <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
               <div>
                 <div className="flex items-center gap-3 mb-4">
-                  <Badge variant={product.status === 'available' ? 'success' : 'default'}>
-                    {product.status === 'available' ? 'Available' : 'Not Available'}
+                  <Badge variant={
+                    product.status === 'in-stock' ? 'success' : 
+                    product.status === 'to-order' ? 'warning' : 'danger'
+                  }>
+                    {product.status === 'in-stock' ? 'In Stock' : 
+                     product.status === 'to-order' ? 'To Order' : 'Not Available'}
                   </Badge>
                   <Badge variant="info">✓ Tested at Sea</Badge>
                 </div>
@@ -100,13 +104,20 @@ function ProductDetail() {
                 </div>
                 
                 {product.ecwid_product_id ? (
-                  <button 
-                    onClick={() => handleAddToCart(product.ecwid_product_id!)}
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-white text-[#0A1628] font-semibold rounded-lg hover:bg-gray-100 transition-colors"
-                  >
-                    Add to Cart
-                    <ShoppingCart size={20} />
-                  </button>
+                  <div className="flex items-center gap-4">
+                    {product.price && (
+                      <span className="text-2xl font-bold text-white">
+                        €{product.price.toLocaleString()}
+                      </span>
+                    )}
+                    <button 
+                      onClick={() => handleAddToCart(product.ecwid_product_id!)}
+                      className="inline-flex items-center gap-2 px-6 py-3 bg-white text-[#0A1628] font-semibold rounded-lg hover:bg-gray-100 transition-colors"
+                    >
+                      Add to Cart
+                      <ShoppingCart size={20} />
+                    </button>
+                  </div>
                 ) : (
                   <Link to="/contact">
                     <button className="inline-flex items-center gap-2 px-6 py-3 bg-white text-[#0A1628] font-semibold rounded-lg hover:bg-gray-100 transition-colors">
@@ -235,13 +246,20 @@ function ProductDetail() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                 {product.ecwid_product_id ? (
-                  <button 
-                    onClick={() => handleAddToCart(product.ecwid_product_id!)}
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-brand-ocean text-white font-semibold rounded-lg hover:bg-brand-ocean/90 transition-colors"
-                  >
-                    Add to Cart
-                    <ShoppingCart size={20} />
-                  </button>
+                  <div className="flex items-center gap-4">
+                    {product.price && (
+                      <span className="text-2xl font-bold text-white">
+                        €{product.price.toLocaleString()}
+                      </span>
+                    )}
+                    <button 
+                      onClick={() => handleAddToCart(product.ecwid_product_id!)}
+                      className="inline-flex items-center gap-2 px-6 py-3 bg-brand-ocean text-white font-semibold rounded-lg hover:bg-brand-ocean/90 transition-colors"
+                    >
+                      Add to Cart
+                      <ShoppingCart size={20} />
+                    </button>
+                  </div>
                 ) : null}
                 <Link to="/contact">
                   <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-brand-navy">

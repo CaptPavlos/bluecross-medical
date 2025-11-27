@@ -1,10 +1,12 @@
 import { Link } from 'react-router-dom';
-import { Mail, Phone, MapPin, Twitter, Linkedin, Facebook } from 'lucide-react';
-import { COMPANY_INFO, NAV_ITEMS } from '../../lib/constants';
+import { Mail, Phone, MapPin, Linkedin, Lock } from 'lucide-react';
+import { COMPANY_INFO } from '../../lib/constants';
 import Container from '../Common/Container';
+import { useAuth } from '../../context/AuthContext';
 
 function Footer() {
   const currentYear = new Date().getFullYear();
+  const { isAdmin } = useAuth();
 
   return (
     <footer className="bg-gradient-to-b from-brand-navy to-brand-navy text-white pt-12 pb-20 md:pb-8 relative overflow-hidden">
@@ -31,44 +33,13 @@ function Footer() {
             </p>
             <div className="flex space-x-4">
               <a
-                href={COMPANY_INFO.social.twitter}
-                className="p-2 bg-white/10 rounded-lg hover:bg-brand-ocean transition-colors"
-                aria-label="Twitter"
-              >
-                <Twitter size={18} />
-              </a>
-              <a
                 href={COMPANY_INFO.social.linkedin}
                 className="p-2 bg-white/10 rounded-lg hover:bg-brand-ocean transition-colors"
                 aria-label="LinkedIn"
               >
                 <Linkedin size={18} />
               </a>
-              <a
-                href={COMPANY_INFO.social.facebook}
-                className="p-2 bg-white/10 rounded-lg hover:bg-brand-ocean transition-colors"
-                aria-label="Facebook"
-              >
-                <Facebook size={18} />
-              </a>
             </div>
-          </div>
-
-          {/* Quick Links */}
-          <div>
-            <h3 className="font-semibold text-lg mb-4">Quick Links</h3>
-            <ul className="space-y-2">
-              {NAV_ITEMS.map((item) => (
-                <li key={item.path}>
-                  <Link
-                    to={item.path}
-                    className="text-gray-400 hover:text-brand-ocean transition-colors"
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
           </div>
 
           {/* Contact */}
@@ -119,6 +90,14 @@ function Footer() {
             >
               Made by Marsoft.ai
             </a>
+            <span className="text-gray-500">|</span>
+            <Link 
+              to={isAdmin ? "/admin" : "/admin/login"} 
+              className="hover:text-brand-ocean transition-colors flex items-center gap-1"
+            >
+              <Lock size={12} />
+              {isAdmin ? 'Admin Panel' : 'Admin'}
+            </Link>
           </div>
         </div>
       </Container>

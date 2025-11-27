@@ -4,7 +4,7 @@ import { BookOpen, FileText, Video, Download, ExternalLink, Search, ArrowRight, 
 import { useState } from 'react';
 import Container from '../components/Common/Container';
 import Button from '../components/Common/Button';
-import { MOCK_BLOG_POSTS } from '../lib/constants';
+import { useArticles } from '../context/ArticleContext';
 
 const categories = [
   { id: 'all', label: 'All', icon: BookOpen },
@@ -55,8 +55,9 @@ const videoGuides = [
 function Knowledge() {
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const { articles } = useArticles();
 
-  const filteredPosts = MOCK_BLOG_POSTS.filter(post => {
+  const filteredPosts = articles.filter(post => {
     const matchesSearch = post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          post.excerpt.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = activeCategory === 'all' || 

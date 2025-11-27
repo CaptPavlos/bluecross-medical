@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Navigation, Footer } from './components/Layout';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
+import { AuthProvider } from './context/AuthContext';
+import { ArticleProvider } from './context/ArticleContext';
 import './styles/globals.css';
 
 // Lazy load pages for code splitting
@@ -22,6 +24,9 @@ const NotFound = lazy(() => import('./pages/NotFound'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
 const TermsOfService = lazy(() => import('./pages/TermsOfService'));
 const HipaaCompliance = lazy(() => import('./pages/HipaaCompliance'));
+const AdminLogin = lazy(() => import('./pages/AdminLogin'));
+const AdminPanel = lazy(() => import('./pages/AdminPanel'));
+const AdminEditArticle = lazy(() => import('./pages/AdminEditArticle'));
 
 // Loading fallback
 function PageLoader() {
@@ -35,35 +40,43 @@ function PageLoader() {
 function App() {
   return (
     <Router>
-      <div className="flex flex-col min-h-screen bg-white">
-        <Navigation />
-        
-        <Suspense fallback={<PageLoader />}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/products" element={<Products />} />
-            <Route path="/products/:slug" element={<ProductDetail />} />
-            <Route path="/tech" element={<Tech />} />
-            <Route path="/team" element={<Team />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/training" element={<Training />} />
-            <Route path="/knowledge" element={<Knowledge />} />
-            <Route path="/blog" element={<Knowledge />} />
-            <Route path="/blog/:slug" element={<BlogDetail />} />
-            <Route path="/flags" element={<FlagDatabase />} />
-            <Route path="/flags/:slug" element={<FlagDetail />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/privacy" element={<PrivacyPolicy />} />
-            <Route path="/terms" element={<TermsOfService />} />
-            <Route path="/hipaa" element={<HipaaCompliance />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Suspense>
+      <AuthProvider>
+        <ArticleProvider>
+          <div className="flex flex-col min-h-screen bg-white">
+            <Navigation />
+            
+            <Suspense fallback={<PageLoader />}>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/products" element={<Products />} />
+                <Route path="/products/:slug" element={<ProductDetail />} />
+                <Route path="/tech" element={<Tech />} />
+                <Route path="/team" element={<Team />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/training" element={<Training />} />
+                <Route path="/knowledge" element={<Knowledge />} />
+                <Route path="/knowledge/:slug" element={<BlogDetail />} />
+                <Route path="/blog" element={<Knowledge />} />
+                <Route path="/blog/:slug" element={<BlogDetail />} />
+                <Route path="/flags" element={<FlagDatabase />} />
+                <Route path="/flags/:slug" element={<FlagDetail />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/privacy" element={<PrivacyPolicy />} />
+                <Route path="/terms" element={<TermsOfService />} />
+                <Route path="/hipaa" element={<HipaaCompliance />} />
+                <Route path="/admin/login" element={<AdminLogin />} />
+                <Route path="/admin" element={<AdminPanel />} />
+                <Route path="/admin/edit/:slug" element={<AdminEditArticle />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
 
-        <Footer />
-        <Analytics />
-        <SpeedInsights />
-      </div>
+            <Footer />
+            <Analytics />
+            <SpeedInsights />
+          </div>
+        </ArticleProvider>
+      </AuthProvider>
     </Router>
   );
 }

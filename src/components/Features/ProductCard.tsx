@@ -24,12 +24,14 @@ function ProductCard({ product }: ProductCardProps) {
   const IconComponent = iconMap[product.icon_name || 'Package'] || Package;
 
   const statusVariant = {
-    'available': 'success' as const,
-    'not-available': 'default' as const,
+    'in-stock': 'success' as const,
+    'to-order': 'warning' as const,
+    'not-available': 'danger' as const,
   };
 
   const statusLabel = {
-    'available': 'Available',
+    'in-stock': 'In Stock',
+    'to-order': 'To Order',
     'not-available': 'Not Available',
   };
 

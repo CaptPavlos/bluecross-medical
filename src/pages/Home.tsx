@@ -1,268 +1,215 @@
 import { Link } from 'react-router-dom';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { useRef } from 'react';
-import { ArrowRight, Anchor, Ship, Flag, Database, Headphones, Globe } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { useState, useEffect, useRef } from 'react';
+import { ArrowRight, Anchor, Heart, AlertTriangle, GraduationCap, ChevronDown, ChevronUp } from 'lucide-react';
 import { HeroSection } from '../components/Hero';
-import { ProductGrid } from '../components/Features';
 import Container from '../components/Common/Container';
 import Button from '../components/Common/Button';
-import { FLAG_STATES } from '../lib/flagStates';
 
 function Home() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"]
-  });
-  
-  const statsScale = useTransform(scrollYProgress, [0.1, 0.2], [0.95, 1]);
-  const statsOpacity = useTransform(scrollYProgress, [0.1, 0.2], [0.8, 1]);
+  const [showMoreStats, setShowMoreStats] = useState(false);
+  const [showTrainingDetails, setShowTrainingDetails] = useState(false);
+  const trainingGapRef = useRef<HTMLElement>(null);
+  const heartDiseaseRef = useRef<HTMLElement>(null);
+  const [hasOpenedTraining, setHasOpenedTraining] = useState(false);
+  const [hasOpenedStats, setHasOpenedStats] = useState(false);
 
-  const highlights = [
-    {
-      icon: Flag,
-      title: 'Free Flag Database',
-      description: 'Comprehensive medical requirements for Malta, Cyprus, Panama, Liberia, UK, Greece and more. Always free.',
-    },
-    {
-      icon: Database,
-      title: 'Advanced Training',
-      description: 'Curated courses that exceed STCW requirements. No license needed. Community rated.',
-    },
-    {
-      icon: Ship,
-      title: 'Tested Equipment',
-      description: 'We resell only equipment personally tested at sea. All proceeds support our free database.',
-    },
-  ];
+  // Auto-open sections when scrolled into view
+  useEffect(() => {
+    const trainingObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !hasOpenedTraining) {
+            setShowTrainingDetails(true);
+            setHasOpenedTraining(true);
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
 
-  const stats = [
-    { value: '62', label: 'Flag States' },
-    { value: '6', label: 'Knowledge Articles' },
-    { value: '100%', label: 'Free Forever' },
-    { value: '24/7', label: 'TMAS Support' },
-  ];
+    const statsObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !hasOpenedStats) {
+            setShowMoreStats(true);
+            setHasOpenedStats(true);
+          }
+        });
+      },
+      { threshold: 0.4 }
+    );
 
-  const services = [
-    { icon: Headphones, title: '24/7 Emergency Line', description: 'Round-the-clock medical advice through our partnership with Hellenic Red Cross MEDICO.' },
-    { icon: Anchor, title: 'Community Ratings', description: 'Anonymous course ratings help seafarers find the best training programs worldwide.' },
-    { icon: Globe, title: 'Worldwide Coverage', description: 'Flag state requirements from major maritime registries around the world. Always free.' },
+    if (trainingGapRef.current) {
+      trainingObserver.observe(trainingGapRef.current);
+    }
+    if (heartDiseaseRef.current) {
+      statsObserver.observe(heartDiseaseRef.current);
+    }
+
+    return () => {
+      trainingObserver.disconnect();
+      statsObserver.disconnect();
+    };
+  }, [hasOpenedTraining, hasOpenedStats]);
+
+  // AED requirement data by flag state
+  const aedData = [
+    { flag: '🇲🇹 Malta', required: true, percentage: 100 },
+    { flag: '🇨🇾 Cyprus', required: true, percentage: 100 },
+    { flag: '🇬🇧 UK', required: true, percentage: 100 },
+    { flag: '🇳🇴 Norway', required: true, percentage: 100 },
+    { flag: '🇩🇰 Denmark', required: true, percentage: 100 },
+    { flag: '🇵🇦 Panama', required: false, percentage: 0 },
+    { flag: '🇱🇷 Liberia', required: false, percentage: 0 },
+    { flag: '🇲🇭 Marshall Is.', required: false, percentage: 0 },
   ];
 
   return (
-    <main ref={containerRef}>
+    <main>
       {/* Hero Section */}
       <HeroSection />
 
-      {/* Highlights Section */}
-      <section className="py-16 md:py-24 bg-surface-secondary -mt-1">
+      {/* Heart Disease Statistics Section */}
+      <section className="py-16 md:py-20 bg-gradient-to-br from-red-50 to-white border-y border-red-100" ref={heartDiseaseRef}>
         <Container>
-          <motion.div 
-            className="text-center mb-12"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 className="text-h1 md:text-display font-bold text-brand-navy mb-4">
-              Why BlueCross Medical?
-            </h2>
-            <p className="text-lg text-brand-gray max-w-2xl mx-auto">
-              Free flag state database. Curated advanced training. Tested equipment. All to keep seafarers safe.
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {highlights.map((item, index) => (
-              <motion.div 
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.5, delay: index * 0.15 }}
-                whileHover={{ y: -8, boxShadow: "0 20px 40px rgba(0,119,182,0.15)" }}
-                className="bg-white p-6 md:p-8 rounded-xl shadow-sm text-center border border-brand-ocean/10 cursor-pointer"
-              >
-                <motion.div 
-                  className="w-14 h-14 bg-brand-ocean/10 rounded-xl flex items-center justify-center mx-auto mb-4"
-                  whileHover={{ scale: 1.1, rotate: 5 }}
-                  transition={{ type: "spring", stiffness: 300 }}
-                >
-                  <item.icon className="w-7 h-7 text-brand-ocean" />
-                </motion.div>
-                <h3 className="text-h3 font-semibold text-brand-navy mb-2">
-                  {item.title}
-                </h3>
-                <p className="text-brand-gray">{item.description}</p>
-              </motion.div>
-            ))}
-          </div>
-        </Container>
-      </section>
-
-      {/* Stats Section - Maritime wave background */}
-      <motion.section 
-        className="py-12 bg-gradient-to-r from-brand-navy via-brand-blue to-brand-navy relative overflow-hidden"
-        style={{ scale: statsScale, opacity: statsOpacity }}
-      >
-        {/* Wave decoration */}
-        <div className="absolute inset-0 opacity-20">
-          <svg className="absolute top-0 w-full h-16 transform rotate-180" viewBox="0 0 1440 100" preserveAspectRatio="none">
-            <path fill="#0077B6" d="M0,50 C150,100 350,0 600,50 C850,100 1050,0 1200,50 C1350,100 1440,80 1440,80 L1440,100 L0,100 Z"></path>
-          </svg>
-        </div>
-        <Container className="relative z-10">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
-              <motion.div 
-                key={index} 
-                className="text-center"
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: index * 0.1 }}
-                whileHover={{ scale: 1.05 }}
-              >
-                <div className="text-3xl md:text-4xl font-bold text-white mb-1">{stat.value}</div>
-                <div className="text-brand-sky text-sm">{stat.label}</div>
-              </motion.div>
-            ))}
-          </div>
-        </Container>
-      </motion.section>
-
-      {/* Products Preview */}
-      <section className="py-16 md:py-24">
-        <Container>
-          <motion.div 
-            className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10"
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.5 }}
           >
-            <div>
-              <h2 className="text-h1 md:text-display font-bold text-brand-slate mb-2">
-                Medical Equipment Categories
-              </h2>
-              <p className="text-brand-gray">
-                Comprehensive solutions for hospitals, clinics, and healthcare facilities.
-              </p>
-            </div>
-            <Link to="/products" className="mt-4 md:mt-0">
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button variant="outline" rightIcon={<ArrowRight size={16} />}>
-                  View All Equipment
-                </Button>
-              </motion.div>
-            </Link>
-          </motion.div>
-          <ProductGrid limit={3} />
-        </Container>
-      </section>
-
-      {/* Services Section */}
-      <section className="py-16 md:py-24 bg-surface-secondary">
-        <Container>
-          <motion.div 
-            className="text-center mb-12"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.5 }}
-          >
-            <h2 className="text-h1 md:text-display font-bold text-brand-navy mb-4">
-              Our Services
-            </h2>
-            <p className="text-lg text-brand-gray max-w-2xl mx-auto">
-              Full-service support from port to hospital – consultation, delivery, and maintenance.
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {services.map((service, index) => (
+            <div className="flex items-center gap-3 mb-6">
               <motion.div 
-                key={index}
-                initial={{ opacity: 0, x: index === 0 ? -30 : index === 2 ? 30 : 0, y: index === 1 ? 30 : 0 }}
-                whileInView={{ opacity: 1, x: 0, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                whileHover={{ y: -4, borderColor: "rgba(0,119,182,0.3)" }}
-                className="bg-white p-6 rounded-xl shadow-sm border border-brand-ocean/10 transition-colors"
+                className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center"
+                animate={{ scale: [1, 1.15, 1] }}
+                transition={{ duration: 0.8, repeat: Infinity, ease: "easeInOut" }}
               >
-                <motion.div 
-                  className="w-12 h-12 bg-brand-ocean/10 rounded-lg flex items-center justify-center mb-4"
-                  whileHover={{ scale: 1.1 }}
-                >
-                  <service.icon className="w-6 h-6 text-brand-ocean" />
-                </motion.div>
-                <h3 className="text-h3 font-semibold text-brand-navy mb-2">{service.title}</h3>
-                <p className="text-brand-gray">{service.description}</p>
+                <Heart className="w-6 h-6 text-red-600" fill="currentColor" />
               </motion.div>
-            ))}
-          </div>
-        </Container>
-      </section>
-
-      {/* Flag Regulations Preview */}
-      <section className="py-16 md:py-24 bg-surface-secondary">
-        <Container>
-          <motion.div 
-            className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.5 }}
-          >
-            <div>
-              <h2 className="text-h1 md:text-display font-bold text-brand-navy mb-2">
-                🌍 Flag State Requirements
+              <h2 className="text-h1 md:text-2xl font-bold text-brand-navy">
+                Heart Disease: The Silent Killer at Sea
               </h2>
-              <p className="text-brand-gray">
-                Browse medical requirements by flag state or read our maritime health guides.
-              </p>
             </div>
-            <Link to="/flags" className="mt-4 md:mt-0">
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button variant="outline" rightIcon={<ArrowRight size={16} />}>
-                  View All Regulations
-                </Button>
-              </motion.div>
-            </Link>
-          </motion.div>
-          {/* Flag Preview Grid */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {FLAG_STATES.filter(f => f.paris_mou_status === 'white').slice(0, 6).map((flag, index) => (
-              <motion.div
-                key={flag.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <Link to={`/flags/${flag.slug}`}>
-                  <div className="bg-white rounded-xl border border-gray-200 p-4 hover:shadow-lg hover:border-brand-ocean/30 transition-all group">
-                    <div className="flex items-center gap-3">
-                      <span className="text-3xl">{flag.flag_emoji}</span>
-                      <div>
-                        <h3 className="font-semibold text-brand-navy group-hover:text-brand-ocean transition-colors">
-                          {flag.country_name}
-                        </h3>
-                        <span className="text-xs text-green-600 font-medium">
-                          WHITE LIST {flag.paris_mou_rank && `#${flag.paris_mou_rank}`}
-                        </span>
+            
+            <div className="grid md:grid-cols-2 gap-8 items-start">
+              <div>
+                <p className="text-brand-gray mb-4 leading-relaxed">
+                  According to P&I Club studies, <span className="font-semibold text-red-600">cardiovascular disease is the leading cause of death</span> among seafarers, accounting for approximately <span className="font-semibold">30-40% of all deaths onboard</span> commercial vessels.
+                </p>
+                <p className="text-brand-gray mb-4 leading-relaxed">
+                  The UK P&I Club reports that heart attacks and strokes are responsible for more crew fatalities than any other medical condition, with many occurring in seafarers under 50 years old.
+                </p>
+                <p className="text-brand-gray leading-relaxed">
+                  Early detection through regular ECG monitoring and immediate access to defibrillators can significantly improve survival rates. Studies show that <span className="font-semibold text-green-600">AEDs can increase survival chances up to 85%</span> for witnessed cardiac arrests.
+                </p>
+                
+                {/* Interactive Stats Toggle */}
+                <button 
+                  onClick={() => setShowMoreStats(!showMoreStats)}
+                  className="mt-4 flex items-center gap-2 text-brand-ocean font-medium hover:text-brand-blue transition-colors"
+                >
+                  {showMoreStats ? 'Hide detailed statistics' : 'Show detailed statistics'}
+                  {showMoreStats ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+                </button>
+                
+                {showMoreStats && (
+                  <motion.div 
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    transition={{ duration: 0.4 }}
+                    className="mt-4 p-4 bg-white rounded-lg border border-gray-200"
+                  >
+                    <motion.h4 
+                      className="font-semibold text-brand-navy mb-2"
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      Additional P&I Club Findings:
+                    </motion.h4>
+                    <ul className="text-sm text-brand-gray space-y-2">
+                      <motion.li
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.3, delay: 0.1 }}
+                      >
+                        • <strong>Gard P&I:</strong> 22% of all crew illness claims are cardiovascular
+                      </motion.li>
+                      <motion.li
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.3, delay: 0.2 }}
+                      >
+                        • <strong>Swedish Club:</strong> Average age of cardiac death at sea is 52 years
+                      </motion.li>
+                      <motion.li
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.3, delay: 0.3 }}
+                      >
+                        • <strong>UK P&I:</strong> 60% of cardiac events occur during rest periods
+                      </motion.li>
+                      <motion.li
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.3, delay: 0.4 }}
+                      >
+                        • <strong>Skuld:</strong> Repatriation costs for cardiac cases average $45,000
+                      </motion.li>
+                    </ul>
+                  </motion.div>
+                )}
+              </div>
+              
+              {/* AED Requirements Chart */}
+              <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                <h4 className="font-semibold text-brand-navy mb-4">AED Requirements by Flag State</h4>
+                <div className="space-y-3">
+                  {aedData.map((item, index) => (
+                    <motion.div 
+                      key={index}
+                      initial={{ opacity: 0, x: 20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: index * 0.05 }}
+                      className="flex items-center gap-3"
+                    >
+                      <span className="text-lg w-32">{item.flag}</span>
+                      <div className="flex-1 h-6 bg-gray-100 rounded-full overflow-hidden">
+                        <motion.div 
+                          className={`h-full ${item.required ? 'bg-green-500' : 'bg-red-400'}`}
+                          initial={{ width: 0 }}
+                          whileInView={{ width: `${item.required ? 100 : 15}%` }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.8, delay: index * 0.05 }}
+                        />
                       </div>
-                    </div>
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
-          </div>
+                      <span className={`text-sm font-medium w-20 text-right ${item.required ? 'text-green-600' : 'text-red-500'}`}>
+                        {item.required ? 'Required' : 'Not Req.'}
+                      </span>
+                    </motion.div>
+                  ))}
+                </div>
+                <p className="text-xs text-brand-gray mt-4 italic">
+                  Only ~40% of major flag states mandate AEDs onboard. Many vessels sail without this life-saving equipment.
+                </p>
+              </div>
+            </div>
+            
+            <div className="mt-6 p-4 bg-amber-50 rounded-lg border border-amber-200 flex items-start gap-3">
+              <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+              <p className="text-sm text-amber-800">
+                <span className="font-semibold">P&I Club Recommendation:</span> All vessels should carry AEDs and ECG monitoring equipment. Regular health screenings for crew members, especially those over 40 or with risk factors, are strongly advised.
+              </p>
+            </div>
+
+            </motion.div>
         </Container>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-16 md:py-24 bg-gradient-to-b from-brand-navy via-brand-blue to-brand-navy relative overflow-hidden">
+      {/* CTA Section - Equipment */}
+      <section className="py-16 md:py-20 bg-gradient-to-b from-brand-navy via-brand-blue to-brand-navy relative overflow-hidden">
         <Container className="relative z-10">
           <motion.div 
             className="text-center"
@@ -303,6 +250,223 @@ function Home() {
                   </Button>
                 </motion.div>
               </Link>
+            </div>
+          </motion.div>
+        </Container>
+      </section>
+
+      {/* Training Gap Section */}
+      <section className="py-16 md:py-20 bg-white" ref={trainingGapRef}>
+        <Container>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.5 }}
+          >
+            <motion.div 
+              className="flex items-center gap-3 mb-6"
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
+              <motion.div 
+                className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center"
+                whileHover={{ rotate: 15 }}
+              >
+                <GraduationCap className="w-6 h-6 text-blue-600" />
+              </motion.div>
+              <h2 className="text-h1 md:text-2xl font-bold text-brand-navy">
+                The Training Gap: A Critical Problem
+              </h2>
+            </motion.div>
+            
+            <motion.p 
+              className="text-brand-gray mb-6 leading-relaxed max-w-3xl"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+            >
+              P&I Club studies reveal that seafarer medical skills are often significantly below required standards. This gap costs lives.
+            </motion.p>
+
+            <div 
+              className="cursor-pointer"
+              onClick={() => setShowTrainingDetails(!showTrainingDetails)}
+            >
+              <div className="flex items-center gap-2 text-brand-ocean font-medium hover:text-brand-blue transition-colors mb-4">
+                {showTrainingDetails ? 'Hide detailed findings' : 'Show detailed findings'}
+                {showTrainingDetails ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+              </div>
+            </div>
+            
+            {showTrainingDetails && (
+              <motion.div 
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                transition={{ duration: 0.4 }}
+                className="space-y-4"
+              >
+                <div className="grid md:grid-cols-2 gap-4">
+                  <motion.div 
+                    className="bg-blue-50 p-5 rounded-xl border border-blue-100"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.4, delay: 0.1 }}
+                  >
+                    <h5 className="font-semibold text-brand-navy mb-3">Gard P&I Club Survey</h5>
+                    <ul className="text-sm text-brand-gray space-y-2">
+                      <li className="flex items-start gap-2">
+                        <span className="text-blue-500 font-bold">•</span>
+                        Only <strong>47%</strong> of officers felt confident handling medical emergencies
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-blue-500 font-bold">•</span>
+                        <strong>68%</strong> said onboard medical training was inadequate
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-blue-500 font-bold">•</span>
+                        <strong>82%</strong> wanted more practical, hands-on training
+                      </li>
+                    </ul>
+                  </motion.div>
+                  <motion.div 
+                    className="bg-blue-50 p-5 rounded-xl border border-blue-100"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.4, delay: 0.2 }}
+                  >
+                    <h5 className="font-semibold text-brand-navy mb-3">Swedish Club Analysis</h5>
+                    <ul className="text-sm text-brand-gray space-y-2">
+                      <li className="flex items-start gap-2">
+                        <span className="text-blue-500 font-bold">•</span>
+                        Inadequate first aid training contributed to <strong>preventable deaths</strong>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-blue-500 font-bold">•</span>
+                        Basic STCW medical training is <strong>insufficient</strong> for real emergencies
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-blue-500 font-bold">•</span>
+                        <strong>5-year refresh</strong> cycle too long for skill retention
+                      </li>
+                    </ul>
+                  </motion.div>
+                </div>
+                <motion.div 
+                  className="bg-amber-50 p-5 rounded-xl border border-amber-200"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.3 }}
+                >
+                  <h5 className="font-semibold text-brand-navy mb-2">The Reality Gap</h5>
+                  <p className="text-sm text-brand-gray">
+                    STCW requires only <strong>basic first aid</strong> for ratings and <strong>medical care</strong> for officers—typically a 3-5 day course renewed every 5 years. Compare this to shore-based EMTs who complete <strong>120-150 hours</strong> of initial training with <strong>annual refreshers</strong>. Seafarers are expected to handle the same emergencies with a fraction of the training, often days away from professional medical help.
+                  </p>
+                  <Link to="/training" className="inline-flex items-center gap-2 mt-3 text-sm font-medium text-brand-ocean hover:text-brand-blue transition-colors">
+                    Explore our training resources
+                    <ArrowRight size={16} />
+                  </Link>
+                </motion.div>
+              </motion.div>
+            )}
+          </motion.div>
+        </Container>
+      </section>
+
+      {/* About Section - Personal Story */}
+      <section className="py-16 md:py-20 bg-gradient-to-br from-brand-navy via-brand-blue to-brand-navy">
+        <Container>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.5 }}
+            className="max-w-4xl mx-auto"
+          >
+            <div className="grid md:grid-cols-3 gap-8 items-start">
+              <div className="md:col-span-1">
+                <motion.div 
+                  className="sticky top-24 text-center md:text-left"
+                  initial={{ opacity: 0, x: -30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6 }}
+                >
+                  <motion.div 
+                    className="w-40 h-40 mx-auto md:mx-0 mb-4 rounded-full overflow-hidden shadow-xl border-4 border-white/20"
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <img 
+                      src="/Profile Picture - Circular.webp" 
+                      alt="Pavlos-Angelos Filippakis"
+                      className="w-full h-full object-cover"
+                    />
+                  </motion.div>
+                  <h3 className="text-xl font-bold text-white">Pavlos-Angelos Filippakis</h3>
+                  <p className="text-brand-sky text-sm mt-1">Master Mariner • R-EMT</p>
+                </motion.div>
+              </div>
+              
+              <div className="md:col-span-2 space-y-4">
+                <motion.h2 
+                  className="text-2xl font-bold text-white mb-4"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5 }}
+                >
+                  From Bridge to Ambulance
+                </motion.h2>
+                <motion.p 
+                  className="text-brand-sky-light leading-relaxed text-lg"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.1 }}
+                >
+                  <span className="font-semibold text-white">I was a cadet on an oil tanker</span> when I first witnessed how unprepared we are for medical emergencies at sea.
+                </motion.p>
+                <motion.p 
+                  className="text-brand-sky-light leading-relaxed"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                >
+                  After a routine maintenance of a fuel oil filter, an incorrect setup led to the 2nd Engineer being sprayed with <span className="font-semibold text-white">70°C fuel oil</span>. He survived, but with second-degree burns. Calling the TMAS service saved his life—but it also showed me just how unprepared we were. We had the medical chest, the procedures, but standing there with a man screaming in pain, I realized how woefully inadequate our training really was.
+                </motion.p>
+                <motion.p 
+                  className="text-brand-sky-light leading-relaxed"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.3 }}
+                >
+                  That experience stayed with me. Years later, I volunteered as an <span className="font-semibold text-white">Emergency Medical Technician</span> in South Africa. Working on ambulances, I learned what real emergency response looks like—the protocols, the muscle memory, the confidence that comes from proper training.
+                </motion.p>
+                <motion.p 
+                  className="text-brand-sky-light leading-relaxed"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.4 }}
+                >
+                  The contrast was stark. Shore-based EMTs get 150+ hours of training with regular refreshers. Seafarers get a 3-day course every 5 years and are expected to handle the same emergencies, often days from help.
+                </motion.p>
+                <motion.p 
+                  className="text-white leading-relaxed font-medium"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.5 }}
+                >
+                  <span className="text-brand-sky font-bold">BlueCross Medical</span> exists to bridge that gap. Free resources, practical training guides, and equipment that actually works at sea—because no seafarer should feel as helpless as I did that day in the engine room.
+                </motion.p>
+              </div>
             </div>
           </motion.div>
         </Container>

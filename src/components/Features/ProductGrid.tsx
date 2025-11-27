@@ -32,7 +32,8 @@ function ProductGrid({ limit, showFilters = false }: ProductGridProps) {
 
   const filters: { value: ProductStatus | 'all'; label: string }[] = [
     { value: 'all', label: 'All' },
-    { value: 'available', label: 'Available' },
+    { value: 'in-stock', label: 'In Stock' },
+    { value: 'to-order', label: 'To Order' },
     { value: 'not-available', label: 'Not Available' },
   ];
 

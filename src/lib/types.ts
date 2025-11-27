@@ -31,12 +31,13 @@ export interface Product {
   status: ProductStatus;
   image_url?: string;
   ecwid_product_id?: string;
+  price?: number;
   order_index: number;
   created_at: string;
   updated_at: string;
 }
 
-export type ProductStatus = 'available' | 'not-available';
+export type ProductStatus = 'in-stock' | 'to-order' | 'not-available';
 
 export interface BlogPost {
   id: string;

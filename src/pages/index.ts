@@ -14,3 +14,6 @@ export { default as NotFound } from './NotFound';
 export { default as PrivacyPolicy } from './PrivacyPolicy';
 export { default as TermsOfService } from './TermsOfService';
 export { default as HipaaCompliance } from './HipaaCompliance';
+export { default as AdminLogin } from './AdminLogin';
+export { default as AdminPanel } from './AdminPanel';
+export { default as AdminEditArticle } from './AdminEditArticle';
