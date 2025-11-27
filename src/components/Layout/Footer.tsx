@@ -11,9 +11,9 @@ function Footer() {
   return (
     <>
       {/* Mobile Footer - Minimal with legal links only */}
-      <footer className="md:hidden bg-brand-navy text-white py-4 mb-14">
+      <footer className="md:hidden bg-brand-navy text-white py-6 mb-14">
         <Container>
-          <div className="flex justify-center items-center gap-4 text-xs text-gray-400">
+          <div className="flex justify-center items-center gap-4 text-sm text-gray-400">
             <Link to="/privacy" className="hover:text-brand-ocean transition-colors">
               Privacy
             </Link>
