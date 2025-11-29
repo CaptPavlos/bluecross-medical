@@ -279,15 +279,11 @@ function Training() {
           >
             {/* Light blue ocean background fallback */}
             <div className="absolute inset-0 bg-[#b5d0d0]" />
-            {/* ESRI World Ocean Basemap - Zoomed in more */}
+            {/* ESRI World Ocean Basemap - Full size, no offset */}
             <div 
-              className="absolute transition-transform duration-75"
+              className="absolute inset-0 transition-transform duration-75"
               style={{ 
                 transform: `translate(${mapOffset.x}px, ${mapOffset.y}px)`,
-                width: '180%',
-                height: '180%',
-                left: '-40%',
-                top: '-40%',
               }}
             >
               <img 
@@ -303,18 +299,24 @@ function Training() {
               style={{ transform: `translate(${mapOffset.x}px, ${mapOffset.y}px)` }}
             >
               {recommendedCourses.map((course, index) => {
-                // Calculate position based on coordinates for world map
+                // Map bbox: -160,-50,160,70 (lng_min, lat_min, lng_max, lat_max)
+                // Adjusted based on visual inspection of the map
                 const positions: Record<string, { top: string; left: string }> = {
-                  'wfr-maritime-sanjuan': { top: '28%', left: '15%' }, // San Juan Islands, WA
-                  'offshore-emergency-wma': { top: '32%', left: '22%' }, // Boston area
-                  'rmr-level1': { top: '30%', left: '50%' }, // London
-                  'rmr-level2': { top: '29%', left: '51%' }, // Birmingham
-                  'nols-wfr': { top: '33%', left: '18%' }, // Wyoming
-                  'advanced-fa-mariners': { top: '36%', left: '14%' }, // California
-                  'nols-wafa': { top: '34%', left: '23%' }, // New York
-                  'corom-remt': { top: '42%', left: '54%' }, // Malta
-                  'ronin-frec3-sa': { top: '75%', left: '55%' }, // South Africa
-                  'ronin-frec3-poland': { top: '32%', left: '56%' }, // Poland
+                  // US courses - move right onto US landmass
+                  'wfr-maritime-sanjuan': { top: '18%', left: '18%' }, // San Juan Islands, WA 
+                  'offshore-emergency-wma': { top: '23%', left: '28%' }, // Boston
+                  'nols-wfr': { top: '22%', left: '22%' }, // Wyoming
+                  'advanced-fa-mariners': { top: '27%', left: '17%' }, // California
+                  'nols-wafa': { top: '24%', left: '27%' }, // New York
+                  // UK courses - move left onto UK
+                  'rmr-level1': { top: '18%', left: '46%' }, // London
+                  'rmr-level2': { top: '17%', left: '45%' }, // Birmingham
+                  // Malta - move left to Mediterranean
+                  'corom-remt': { top: '30%', left: '48%' }, // Malta (Mediterranean, south of Italy)
+                  // South Africa - looks OK
+                  'ronin-frec3-sa': { top: '75%', left: '52%' }, // Cape Town
+                  // Poland - move left to Eastern Europe
+                  'ronin-frec3-poland': { top: '18%', left: '49%' }, // Warsaw
                 };
                 const pos = positions[course.id] || { top: '50%', left: '50%' };
                 
