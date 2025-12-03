@@ -5,6 +5,7 @@ import { ArrowRight, Anchor, Heart, AlertTriangle, GraduationCap, ChevronDown, C
 import { HeroSection } from '../components/Hero';
 import Container from '../components/Common/Container';
 import Button from '../components/Common/Button';
+import { SEOHead } from '../components/SEO';
 
 function Home() {
   const [showMoreStats, setShowMoreStats] = useState(false);
@@ -67,6 +68,13 @@ function Home() {
 
   return (
     <main>
+      <SEOHead 
+        url="/"
+        title="Maritime Emergency Medicine"
+        description="Your complete resource for emergency medicine at sea. Flag state regulations, advanced training courses, knowledge articles, and tested equipment for yachts and commercial vessels."
+        keywords={['maritime medicine', 'emergency medicine at sea', 'yacht medical', 'superyacht medical', 'flag state regulations']}
+      />
+      
       {/* Hero Section */}
       <HeroSection />
 

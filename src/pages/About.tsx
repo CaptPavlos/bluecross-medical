@@ -1,10 +1,18 @@
 import { motion } from 'framer-motion';
 import { Mail, Linkedin, Anchor, Ship, Award, Heart } from 'lucide-react';
 import Container from '../components/Common/Container';
+import { SEOHead } from '../components/SEO';
 
 function About() {
   return (
     <main className="flex-1">
+      <SEOHead 
+        title="About Us"
+        description="BlueCross Medical was founded by a Captain & Paramedic to make maritime medical compliance accessible to all. Learn about our mission to improve emergency medicine at sea."
+        url="/about"
+        keywords={['about BlueCross Medical', 'maritime medical company', 'yacht medical experts']}
+      />
+      
       {/* Hero */}
       <section className="pt-24 pb-12 md:pt-28 md:pb-16 bg-gradient-to-br from-brand-navy to-brand-blue">
         <Container>

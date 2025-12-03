@@ -4,6 +4,7 @@ import { useState, useRef } from 'react';
 import { GraduationCap, Clock, MapPin, Star, ThumbsUp, ExternalLink, Stethoscope, Heart, Shield, Anchor, Ship, AlertCircle } from 'lucide-react';
 import Container from '../components/Common/Container';
 import Button from '../components/Common/Button';
+import { SEOHead } from '../components/SEO';
 
 // Advanced medical training courses that EXCEED STCW requirements
 // These courses do NOT require a medical license and go beyond standard Captain's Medical
@@ -229,6 +230,13 @@ function Training() {
 
   return (
     <main className="flex-1">
+      <SEOHead 
+        title="Maritime Medical Training Courses"
+        description="Advanced medical training courses for yacht crew and maritime professionals. Wilderness First Responder, Offshore Emergency Medicine, FREC, and more. Courses worldwide."
+        url="/training"
+        keywords={['maritime medical training', 'yacht crew medical course', 'offshore emergency medicine', 'wilderness first responder', 'FREC maritime', 'superyacht medical training']}
+      />
+      
       {/* Hero */}
       <section className="pt-24 pb-12 md:pt-28 md:pb-16 bg-gradient-to-br from-brand-navy to-brand-blue">
         <Container>

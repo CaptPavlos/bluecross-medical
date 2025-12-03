@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, ExternalLink, CheckCircle, AlertTriangle } from 'lucide-react';
 import Container from '../components/Common/Container';
 import { FLAG_STATES } from '../lib/flagStates';
+import { SEOHead } from '../components/SEO';
 
 function FlagDetail() {
   const { slug } = useParams<{ slug: string }>();
@@ -31,6 +32,13 @@ function FlagDetail() {
 
   return (
     <main className="flex-1">
+      <SEOHead 
+        title={`${flag.country_name} Flag State Medical Requirements`}
+        description={flag.excerpt || `Maritime medical regulations and requirements for ${flag.country_name} flagged vessels. TMAS contacts, equipment requirements, and compliance guidance.`}
+        url={`/flags/${flag.slug}`}
+        keywords={[`${flag.country_name} flag state`, `${flag.country_name} maritime medical`, 'flag state regulations', 'ship medical requirements', flag.paris_mou_status === 'white' ? 'Paris MOU white list' : '']}
+      />
+      
       {/* Hero */}
       <section className="pt-24 pb-12 md:pt-28 md:pb-16 bg-gradient-to-br from-brand-navy to-brand-blue">
         <Container>

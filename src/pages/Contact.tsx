@@ -5,6 +5,7 @@ import { ScrollReveal } from '../components/Animations';
 import Container from '../components/Common/Container';
 import Card from '../components/Common/Card';
 import { COMPANY_INFO } from '../lib/constants';
+import { SEOHead } from '../components/SEO';
 
 function Contact() {
   const contactInfo = [
@@ -16,6 +17,13 @@ function Contact() {
 
   return (
     <main className="flex-1">
+      <SEOHead 
+        title="Contact Us"
+        description="Get in touch with BlueCross Medical for maritime medical training, equipment, and consulting services. We're here to help with your yacht and vessel medical needs."
+        url="/contact"
+        keywords={['contact maritime medical', 'yacht medical consulting', 'maritime medical support']}
+      />
+      
       {/* Hero */}
       <section className="pt-24 pb-12 md:pt-28 md:pb-16 bg-gradient-to-br from-brand-navy to-brand-blue">
         <Container>

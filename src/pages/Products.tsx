@@ -3,10 +3,19 @@ import { Clock, Package, Truck } from 'lucide-react';
 import { ProductGrid } from '../components/Features';
 import { ScrollReveal } from '../components/Animations';
 import Container from '../components/Common/Container';
+import { SEOHead } from '../components/SEO';
 
 function Products() {
   return (
     <main className="flex-1">
+      <SEOHead 
+        title="Maritime Medical Equipment"
+        description="Tested medical equipment for yachts and commercial vessels. AEDs, first aid kits, emergency medical supplies. All proceeds support our free maritime medical database."
+        url="/products"
+        type="product"
+        keywords={['maritime medical equipment', 'yacht first aid kit', 'ship medical supplies', 'AED for boats', 'marine medical kit']}
+      />
+      
       {/* Hero */}
       <section className="pt-24 pb-12 md:pt-28 md:pb-16 bg-gradient-to-br from-brand-navy to-brand-blue">
         <Container>

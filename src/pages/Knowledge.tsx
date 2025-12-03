@@ -5,6 +5,7 @@ import { useState } from 'react';
 import Container from '../components/Common/Container';
 import Button from '../components/Common/Button';
 import { useArticles } from '../context/ArticleContext';
+import { SEOHead } from '../components/SEO';
 
 const categories = [
   { id: 'all', label: 'All', icon: BookOpen },
@@ -67,6 +68,13 @@ function Knowledge() {
 
   return (
     <main className="flex-1">
+      <SEOHead 
+        title="Maritime Medical Knowledge Base"
+        description="Comprehensive knowledge base for maritime medicine. Flag state regulations, medical guides, equipment requirements, and emergency protocols for yachts and commercial vessels."
+        url="/knowledge"
+        keywords={['maritime medical knowledge', 'ship medical regulations', 'yacht medical guide', 'MLC medical requirements', 'STCW medical']}
+      />
+      
       {/* Hero */}
       <section className="pt-24 pb-12 md:pt-28 md:pb-16 bg-gradient-to-br from-brand-navy to-brand-blue">
         <Container>

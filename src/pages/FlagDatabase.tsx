@@ -5,6 +5,7 @@ import { Search, Filter, ChevronRight } from 'lucide-react';
 import Container from '../components/Common/Container';
 import { FLAG_STATES } from '../lib/flagStates';
 import type { FlagState } from '../lib/types';
+import { SEOHead } from '../components/SEO';
 
 type FilterStatus = 'all' | 'white' | 'grey' | 'black';
 
@@ -65,6 +66,13 @@ function FlagDatabase() {
 
   return (
     <main className="flex-1">
+      <SEOHead 
+        title="Flag State Medical Regulations Database"
+        description="Comprehensive database of maritime medical regulations by flag state. Paris MOU rankings, TMAS contacts, medical equipment requirements, and compliance guidance for yacht and ship operators."
+        url="/flags"
+        keywords={['flag state regulations', 'maritime medical requirements', 'Paris MOU', 'ship medical compliance', 'yacht flag state', 'TMAS contacts', 'MLC medical']}
+      />
+      
       {/* Hero */}
       <section className="pt-24 pb-12 md:pt-28 md:pb-16 bg-gradient-to-br from-brand-navy to-brand-blue">
         <Container>

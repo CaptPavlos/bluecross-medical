@@ -6,6 +6,7 @@ import Container from '../components/Common/Container';
 import Button from '../components/Common/Button';
 import { useArticles } from '../context/ArticleContext';
 import { useAuth } from '../context/AuthContext';
+import { SEOHead } from '../components/SEO';
 
 function BlogDetail() {
   const { slug } = useParams<{ slug: string }>();
@@ -326,6 +327,19 @@ function BlogDetail() {
 
   return (
     <main className="flex-1">
+      <SEOHead 
+        title={post.title}
+        description={post.excerpt}
+        url={`/knowledge/${post.slug}`}
+        type="article"
+        image={post.featured_image_url}
+        publishedTime={post.published_at}
+        modifiedTime={post.updated_at}
+        author={post.author_name}
+        section="Maritime Medicine"
+        keywords={post.tags}
+      />
+      
       {/* Hero */}
       <section className="pt-24 pb-12 md:pt-28 md:pb-16 bg-gradient-to-br from-brand-navy to-brand-blue">
         <Container>
