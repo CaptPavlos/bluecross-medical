@@ -27,6 +27,7 @@ const HipaaCompliance = lazy(() => import('./pages/HipaaCompliance'));
 const AdminLogin = lazy(() => import('./pages/AdminLogin'));
 const AdminPanel = lazy(() => import('./pages/AdminPanel'));
 const AdminEditArticle = lazy(() => import('./pages/AdminEditArticle'));
+const BabyLoveGrowthSync = lazy(() => import('./pages/admin/BabyLoveGrowthSync'));
 
 // Loading fallback
 function PageLoader() {
@@ -68,6 +69,7 @@ function App() {
                 <Route path="/admin/login" element={<AdminLogin />} />
                 <Route path="/admin" element={<AdminPanel />} />
                 <Route path="/admin/edit/:slug" element={<AdminEditArticle />} />
+                <Route path="/admin/babylovegrowth" element={<BabyLoveGrowthSync />} />
                 <Route path="*" element={<NotFound />} />
                 </Routes>
               </Suspense>

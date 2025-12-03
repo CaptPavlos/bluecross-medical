@@ -1,6 +1,6 @@
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { LogOut, FileText, Edit, Image, Clock, Shield } from 'lucide-react';
+import { LogOut, FileText, Edit, Image, Clock, Shield, RefreshCw } from 'lucide-react';
 import Container from '../components/Common/Container';
 import Button from '../components/Common/Button';
 import { useAuth } from '../context/AuthContext';
@@ -67,6 +67,14 @@ function AdminPanel() {
                 <FileText className="w-5 h-5" />
                 Knowledge Articles ({articles.length})
               </h2>
+              <Link to="/admin/babylovegrowth">
+                <Button
+                  variant="outline"
+                  leftIcon={<RefreshCw size={16} />}
+                >
+                  BabyLoveGrowth Sync
+                </Button>
+              </Link>
             </div>
 
             <div className="bg-white rounded-xl shadow-sm overflow-hidden">
