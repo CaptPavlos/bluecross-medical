@@ -176,8 +176,29 @@ function BlogDetail() {
     );
   }
 
+  // Check if content is HTML (contains HTML tags)
+  const isHtmlContent = (content: string) => {
+    return /<[a-z][\s\S]*>/i.test(content);
+  };
+
   // Format content with checklist styling for first aiders
   const formatContent = (content: string) => {
+    // If content is HTML, render it directly with dangerouslySetInnerHTML
+    if (isHtmlContent(content)) {
+      // Remove any script tags for security but keep the rest
+      const sanitizedContent = content
+        .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
+        .replace(/tabindex="-1"/g, ''); // Clean up accessibility attributes
+      
+      return (
+        <div 
+          className="prose prose-lg max-w-none prose-headings:text-brand-navy prose-a:text-brand-ocean prose-img:rounded-xl prose-img:shadow-lg prose-table:border-collapse prose-th:bg-gray-100 prose-td:border prose-td:p-3 prose-th:border prose-th:p-3"
+          dangerouslySetInnerHTML={{ __html: sanitizedContent }}
+        />
+      );
+    }
+
+    // Plain text/markdown processing
     return content
       .split('\n\n')
       .map((paragraph, index) => {
