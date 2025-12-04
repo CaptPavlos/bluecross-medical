@@ -1,6 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { MOCK_BLOG_POSTS } from '../lib/constants';
 import { BlogPost } from '../lib/types';
 
 interface ArticleContextType {
@@ -35,13 +34,12 @@ export function ArticleProvider({ children }: { children: ReactNode }) {
       }
       
       const data = await response.json();
+      console.log(`Fetched ${data.length} articles from database`);
       setArticles(data);
     } catch (err) {
       console.error('Error fetching articles from API:', err);
-      // Fallback to mock data if API fails
-      console.log('Falling back to mock data');
-      setArticles(MOCK_BLOG_POSTS);
       setError(err instanceof Error ? err.message : 'Failed to load articles');
+      setArticles([]); // Don't fallback to mock data - show empty if API fails
     } finally {
       setLoading(false);
     }
