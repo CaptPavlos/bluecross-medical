@@ -30,7 +30,15 @@ interface BabyLoveGrowthPayload {
   publicUrl?: string;
   createdAt?: string;
   hero_image_url?: string;
-  keywords?: string[];
+  keywords?: string[] | string; // Can be array or comma-separated string
+}
+
+// Normalize keywords to array format
+function normalizeKeywords(keywords?: string[] | string): string[] {
+  if (!keywords) return [];
+  if (Array.isArray(keywords)) return keywords;
+  // Handle comma-separated string
+  return keywords.split(',').map(k => k.trim()).filter(Boolean);
 }
 
 // Generate slug from title
@@ -114,7 +122,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const slug = generateSlug(payload.title);
     const excerpt = extractExcerpt(content, payload.metaDescription);
     const readingTime = estimateReadingTime(content);
+    const tags = normalizeKeywords(payload.keywords);
     const now = new Date().toISOString();
+
+    console.log('Processing article:', {
+      title: payload.title,
+      keywordsReceived: payload.keywords,
+      keywordsType: typeof payload.keywords,
+      tagsNormalized: tags
+    });
 
     // Connect to Neon database
     const sql = neon(databaseUrl);
@@ -132,6 +148,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           content = ${content},
           excerpt = ${excerpt},
           featured_image_url = ${payload.hero_image_url || null},
+          tags = ${tags},
           reading_time_minutes = ${readingTime},
           updated_at = ${now},
           published = true,
@@ -162,7 +179,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           'BlueCross Medical',
           true,
           ${now},
-          ${payload.keywords || []},
+          ${tags},
           ${readingTime},
           ${now},
           ${now}
