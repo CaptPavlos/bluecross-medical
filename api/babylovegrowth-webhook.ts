@@ -82,6 +82,27 @@ function extractFirstImage(content: string): string | null {
   return null;
 }
 
+// Remove first h1 and first image from content to avoid duplication with header
+function cleanContentForDisplay(content: string): string {
+  let cleaned = content;
+  
+  // Remove first h1 tag (title is shown in header)
+  cleaned = cleaned.replace(/<h1[^>]*>[\s\S]*?<\/h1>/i, '');
+  
+  // Remove first image (will be used as featured image)
+  // Match <p><img...></p> or just <img...>
+  cleaned = cleaned.replace(/<p>\s*<img[^>]+>\s*<\/p>/i, '');
+  if (cleaned === content) {
+    // If no <p> wrapped image, try direct img tag
+    cleaned = cleaned.replace(/<img[^>]+>/i, '');
+  }
+  
+  // Clean up any leading whitespace/newlines
+  cleaned = cleaned.replace(/^\s+/, '');
+  
+  return cleaned;
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Set CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -134,14 +155,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(400).json({ error: 'Missing required field: title' });
     }
 
-    const content = payload.content_html || payload.content_markdown || '';
+    const rawContent = payload.content_html || payload.content_markdown || '';
     const slug = generateSlug(payload.title);
-    const excerpt = extractExcerpt(content, payload.metaDescription);
-    const readingTime = estimateReadingTime(content);
+    const excerpt = extractExcerpt(rawContent, payload.metaDescription);
+    const readingTime = estimateReadingTime(rawContent);
     const tags = normalizeKeywords(payload.keywords);
     // Priority: explicit hero_image_url > first image in content > default fallback
-    const contentImage = extractFirstImage(content);
+    const contentImage = extractFirstImage(rawContent);
     const featuredImage = payload.hero_image_url || contentImage || DEFAULT_HERO_IMAGE;
+    // Clean content: remove first h1 and first image (they're shown in header section)
+    const content = cleanContentForDisplay(rawContent);
     const now = new Date().toISOString();
 
     console.log('Processing article:', {
