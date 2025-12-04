@@ -66,6 +66,9 @@ function extractExcerpt(content: string, metaDescription?: string): string {
   return text.substring(0, 160).trim() + (text.length > 160 ? '...' : '');
 }
 
+// Default fallback image URL for articles without hero images
+const DEFAULT_HERO_IMAGE = 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&q=80&fit=crop';
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Set CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -123,13 +126,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const excerpt = extractExcerpt(content, payload.metaDescription);
     const readingTime = estimateReadingTime(content);
     const tags = normalizeKeywords(payload.keywords);
+    const featuredImage = payload.hero_image_url || DEFAULT_HERO_IMAGE;
     const now = new Date().toISOString();
 
     console.log('Processing article:', {
       title: payload.title,
       keywordsReceived: payload.keywords,
       keywordsType: typeof payload.keywords,
-      tagsNormalized: tags
+      tagsNormalized: tags,
+      heroImageProvided: !!payload.hero_image_url,
+      featuredImage: featuredImage
     });
 
     // Connect to Neon database
@@ -147,7 +153,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           title = ${payload.title},
           content = ${content},
           excerpt = ${excerpt},
-          featured_image_url = ${payload.hero_image_url || null},
+          featured_image_url = ${featuredImage},
           tags = ${tags},
           reading_time_minutes = ${readingTime},
           updated_at = ${now},
@@ -175,7 +181,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           ${slug},
           ${content},
           ${excerpt},
-          ${payload.hero_image_url || null},
+          ${featuredImage},
           'BlueCross Medical',
           true,
           ${now},
