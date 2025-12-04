@@ -69,6 +69,19 @@ function extractExcerpt(content: string, metaDescription?: string): string {
 // Default fallback image URL for articles without hero images
 const DEFAULT_HERO_IMAGE = 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&q=80&fit=crop';
 
+// Extract first image URL from markdown/HTML content
+function extractFirstImage(content: string): string | null {
+  // Try markdown image syntax: ![alt](url)
+  const markdownMatch = content.match(/!\[.*?\]\((https?:\/\/[^\s)]+)\)/);
+  if (markdownMatch) return markdownMatch[1];
+  
+  // Try HTML img tag: <img src="url">
+  const htmlMatch = content.match(/<img[^>]+src=["'](https?:\/\/[^\s"']+)["']/i);
+  if (htmlMatch) return htmlMatch[1];
+  
+  return null;
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Set CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -126,7 +139,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const excerpt = extractExcerpt(content, payload.metaDescription);
     const readingTime = estimateReadingTime(content);
     const tags = normalizeKeywords(payload.keywords);
-    const featuredImage = payload.hero_image_url || DEFAULT_HERO_IMAGE;
+    // Priority: explicit hero_image_url > first image in content > default fallback
+    const contentImage = extractFirstImage(content);
+    const featuredImage = payload.hero_image_url || contentImage || DEFAULT_HERO_IMAGE;
     const now = new Date().toISOString();
 
     console.log('Processing article:', {
@@ -135,6 +150,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       keywordsType: typeof payload.keywords,
       tagsNormalized: tags,
       heroImageProvided: !!payload.hero_image_url,
+      contentImageExtracted: contentImage,
       featuredImage: featuredImage
     });
 
