@@ -1,6 +1,9 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { MOCK_BLOG_POSTS } from '../lib/constants';
 import { BlogPost } from '../lib/types';
+
+const isDev = import.meta.env.DEV;
 
 interface ArticleContextType {
   articles: BlogPost[];
@@ -21,10 +24,18 @@ export function ArticleProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch articles from database API
+  // Fetch articles from database API (or mock data in development)
   const fetchArticles = async () => {
     setLoading(true);
     setError(null);
+    
+    // Use mock data in local development (API routes only work on Vercel)
+    if (isDev) {
+      console.log(`[DEV] Using ${MOCK_BLOG_POSTS.length} mock articles`);
+      setArticles(MOCK_BLOG_POSTS);
+      setLoading(false);
+      return;
+    }
     
     try {
       const response = await fetch(API_URL);
@@ -39,7 +50,7 @@ export function ArticleProvider({ children }: { children: ReactNode }) {
     } catch (err) {
       console.error('Error fetching articles from API:', err);
       setError(err instanceof Error ? err.message : 'Failed to load articles');
-      setArticles([]); // Don't fallback to mock data - show empty if API fails
+      setArticles([]); // Don't fallback to mock data in production
     } finally {
       setLoading(false);
     }
