@@ -37,7 +37,8 @@ export default function SEOHead({
 }: SEOHeadProps) {
   const fullTitle = title ? `${title} | ${SITE_NAME}` : `${SITE_NAME} | ${DEFAULT_TITLE}`;
   const canonicalUrl = url ? `${SITE_URL}${url}` : SITE_URL;
-  const fullImageUrl = image.startsWith('http') ? image : `${SITE_URL}${image}`;
+  const safeImage = image || DEFAULT_IMAGE;
+  const fullImageUrl = safeImage.startsWith('http') ? safeImage : `${SITE_URL}${safeImage}`;
 
   // Default organization schema
   const organizationSchema = {
