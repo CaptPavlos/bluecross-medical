@@ -1,6 +1,15 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4CXN57NPWY"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-4CXN57NPWY');
+    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
@@ -58,49 +67,43 @@
     <!-- JSON-LD Structured Data -->
     <script type="application/ld+json">
     {
-      "@context": "https://schema.org",
-      "@type": "MedicalBusiness",
+      "url": "https://bluecross.tech",
       "name": "BlueCross Medical",
-      "url": "https://www.bluecross.tech",
-      "logo": "https://www.bluecross.tech/favicon.svg",
-      "description": "Maritime emergency medicine training, equipment, and consulting services for yachts, superyachts, and commercial vessels.",
-      "priceRange": "$$",
-      "email": "sales@bluecross.tech",
-      "areaServed": {
-        "@type": "Place",
-        "name": "Worldwide"
-      },
-      "hasOfferCatalog": {
-        "@type": "OfferCatalog",
-        "name": "Maritime Medical Services",
-        "itemListElement": [
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Maritime Medical Training"
-            }
-          },
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Product",
-              "name": "Maritime Medical Equipment"
-            }
-          }
-        ]
+      "@type": "Organization",
+      "@context": "https://schema.org",
+      "description": "Maritime emergency medicine resources including flag state regulations, advanced training courses, knowledge articles, and tested equipment."
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "url": "https://bluecross.tech",
+      "name": "BlueCross Medical",
+      "@type": "WebSite",
+      "@context": "https://schema.org",
+      "description": "Maritime emergency medicine resources at sea – flag state regulations, training courses, knowledge articles, and tested equipment.",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://bluecross.tech/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
       }
     }
     </script>
     <script type="application/ld+json">
     {
+      "url": "https://bluecross.tech",
+      "name": "BlueCross Medical | Maritime Emergency Medicine",
+      "@type": "WebPage",
       "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "BlueCross Medical",
-      "url": "https://www.bluecross.tech",
+      "publisher": {
+        "url": "https://bluecross.tech",
+        "name": "BlueCross Medical",
+        "@type": "Organization"
+      },
+      "inLanguage": "en",
+      "description": "Your complete resource for emergency medicine at sea. Flag state regulations, advanced training courses, knowledge articles, and tested equipment.",
       "potentialAction": {
         "@type": "SearchAction",
-        "target": "https://www.bluecross.tech/knowledge?q={search_term_string}",
+        "target": "https://bluecross.tech/search?q={search_term_string}",
         "query-input": "required name=search_term_string"
       }
     }

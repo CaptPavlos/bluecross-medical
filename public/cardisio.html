@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Cardisiography Regulatory Analysis</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0284c7;
+            --primary-dark: #0369a1;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-700: #374151;
+            --gray-900: #111827;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            color: var(--gray-900);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid var(--primary);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: var(--gray-900);
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            color: var(--gray-700);
+            margin-bottom: 20px;
+        }
+
+        .header-meta {
+            display: flex;
+            gap: 30px;
+            font-size: 0.9rem;
+            color: var(--gray-700);
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Navigation */
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .nav-tabs button {
+            padding: 12px 24px;
+            border: 2px solid var(--gray-200);
+            background: var(--white);
+            color: var(--gray-700);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .nav-tabs button:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .nav-tabs button.active {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+
+        /* Content Sections */
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Card Grid */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .card h3 {
+            font-size: 1rem;
+            color: var(--gray-700);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        .card-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 10px 0;
+        }
+
+        .card-label {
+            font-size: 0.85rem;
+            color: var(--gray-700);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        /* Summary Box */
+        .summary-box {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: var(--white);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .summary-box h2 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .summary-box p {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        /* Comparison Chart */
+        .comparison-chart {
+            margin-top: 20px;
+        }
+
+        .comparison-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 15px;
+        }
+
+        .comparison-label {
+            min-width: 180px;
+            font-weight: 500;
+            color: var(--gray-700);
+            font-size: 0.9rem;
+        }
+
+        .comparison-bar {
+            flex: 1;
+            height: 28px;
+            background: var(--gray-100);
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .comparison-fill {
+            height: 100%;
+            background: var(--primary);
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 10px;
+            color: var(--white);
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+
+        /* Advantages Grid */
+        .advantages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .advantage-card {
+            background: linear-gradient(135deg, var(--gray-50) 0%, var(--white) 100%);
+            border: 2px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .advantage-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2);
+        }
+
+        .advantage-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .advantage-title {
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 5px;
+            font-size: 1rem;
+        }
+
+        .advantage-value {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+        }
+
+        .advantage-desc {
+            font-size: 0.85rem;
+            color: var(--gray-700);
+            line-height: 1.4;
+        }
+
+        /* Regulation Table */
+        .reg-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .reg-table thead {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .reg-table th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .reg-table td {
+            padding: 15px;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .reg-table tbody tr:hover {
+            background: var(--gray-50);
+        }
+
+        .status-yes {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .status-no {
+            color: var(--danger);
+            font-weight: 600;
+        }
+
+        /* Key Points */
+        .key-points {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .key-points ul {
+            list-style-position: inside;
+            color: var(--gray-700);
+            line-height: 1.8;
+        }
+
+        .key-points li {
+            margin-bottom: 10px;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 40px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            color: var(--gray-700);
+            font-size: 0.9rem;
+        }
+
+        .footer h3 {
+            color: var(--gray-900);
+            margin-bottom: 15px;
+            font-size: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .header-meta {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .nav-tabs {
+                flex-direction: column;
+            }
+
+            .nav-tabs button {
+                width: 100%;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-label {
+                min-width: 120px;
+            }
+
+            .reg-table {
+                font-size: 0.85rem;
+            }
+
+            .reg-table th, .reg-table td {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🫀 Cardisiography in Maritime Medicine</h1>
+            <p>Regulatory Compliance Analysis & MED Directive Assessment</p>
+            <div class="header-meta">
+                <div class="meta-item">
+                    <strong>Prepared For:</strong> Cardisio GmbH / Bluecross Medical
+                </div>
+                <div class="meta-item">
+                    <strong>Date:</strong> January 2026
+                </div>
+                <div class="meta-item">
+                    <strong>Research Type:</strong> Private regulatory analysis
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="showSection('overview', this)">Overview</button>
+            <button class="tab-btn" onclick="showSection('frameworks', this)">Regulatory Frameworks</button>
+            <button class="tab-btn" onclick="showSection('classification', this)">Classification</button>
+            <button class="tab-btn" onclick="showSection('performance', this)">Performance</button>
+            <button class="tab-btn" onclick="showSection('advantages', this)">Advantages</button>
+            <button class="tab-btn" onclick="showSection('compliance', this)">STCW Compliance</button>
+            <button class="tab-btn" onclick="showSection('flagstates', this)">Flag State Compliance</button>
+            <button class="tab-btn" onclick="showSection('recommendations', this)">Recommendations</button>
+        </div>
+
+        <!-- Overview Section -->
+        <div id="overview" class="section active">
+            <div class="summary-box">
+                <h2>Executive Summary</h2>
+                <p><strong>Q: Does Cardisiography fall under the EU Marine Equipment Directive (MED)?</strong></p>
+                <p><strong>A: ❌ NO</strong></p>
+                <p>Cardisiography is a <strong>diagnostic medical device</strong> regulated under <strong>EU-MDR (Medical Device Regulation 2017/745)</strong>, NOT the MED Directive (Marine Equipment Directive 2014/90/EU).</p>
+            </div>
+
+            <div class="card-grid">
+                <div class="card">
+                    <h3>📋 Device Type</h3>
+                    <div class="card-value" style="font-size: 1.8rem;">AI-Powered ECG</div>
+                    <p class="card-label">Diagnostic Medical Device</p>
+                    <p style="margin-top: 15px; font-size: 0.9rem; color: var(--gray-700);">3D digital vectorcardiography with 19-lead ESC-compliant ECG and AI analysis</p>
+                </div>
+
+                <div class="card">
+                    <h3>✅ Primary Regulation</h3>
+                    <div class="card-value" style="font-size: 1.6rem; color: var(--success);">EU-MDR</div>
+                    <p class="card-label">Class II Medical Device</p>
+                    <p style="margin-top: 15px; font-size: 0.9rem; color: var(--gray-700);">CE-Marked and fully compliant with medical device standards</p>
+                </div>
+
+                <div class="card">
+                    <h3>❌ MED Directive</h3>
+                    <div class="card-value" style="font-size: 1.6rem; color: var(--danger);">NOT Covered</div>
+                    <p class="card-label">Medical Device, Not Maritime Equipment</p>
+                    <p style="margin-top: 15px; font-size: 0.9rem; color: var(--gray-700);">Not listed in MED Annex A.1 maritime equipment requirements</p>
+                </div>
+
+                <div class="card">
+                    <h3>⚓ Maritime Suitability</h3>
+                    <div class="card-value" style="font-size: 1.6rem; color: var(--success);">Excellent</div>
+                    <p class="card-label">STCW Compliant</p>
+                    <p style="margin-top: 15px; font-size: 0.9rem; color: var(--gray-700);">Exceeds requirements for seafarer age 60+ medical examinations</p>
+                </div>
+            </div>
+
+            <div class="key-points">
+                <h3 style="margin-bottom: 20px; color: var(--gray-900);">Key Points</h3>
+                <ul>
+                    <li>✅ <strong>CE-Marked</strong> as Class II diagnostic device</li>
+                    <li>✅ Suitable for STCW seafarer medical examinations</li>
+                    <li>❌ Does NOT require maritime Type Approval</li>
+                    <li>❌ Does NOT fall under MED Directive scope</li>
+                    <li>✅ Exceeds standard ECG diagnostic capability (95.3% vs 45-50% sensitivity)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Regulatory Frameworks Section -->
+        <div id="frameworks" class="section">
+            <h2 style="margin-bottom: 25px; color: var(--gray-900);">Understanding the Two Regulatory Frameworks</h2>
+            <p style="margin-bottom: 25px; color: var(--gray-700);">Medical devices used in maritime settings can fall under two completely different regulatory systems. The critical distinction determines Cardisiography's classification.</p>
+
+            <div class="card-grid">
+                <div class="card" style="border-left: 5px solid var(--danger);">
+                    <h3 style="color: var(--danger);">❌ MED Directive (Maritime Equipment)</h3>
+                    <p style="margin-bottom: 15px; font-weight: 600; color: var(--gray-900);">Applies To:</p>
+                    <ul style="margin-left: 20px; margin-bottom: 20px; color: var(--gray-700); font-size: 0.9rem;">
+                        <li>Life-saving appliances (lifeboats, rafts, AEDs)</li>
+                        <li>Navigation equipment (ECDIS, radar)</li>
+                        <li>Fire protection systems</li>
+                        <li>Radio/communication equipment</li>
+                        <li>Propulsion &amp; machinery systems</li>
+                    </ul>
+                    <p style="margin-bottom: 15px; font-weight: 600; color: var(--gray-900);">Does NOT Apply To:</p>
+                    <ul style="margin-left: 20px; color: var(--gray-700); font-size: 0.9rem;">
+                        <li>❌ Diagnostic medical devices (ECG, Cardisiography)</li>
+                        <li>❌ Medical examination equipment</li>
+                        <li>❌ Ship's medicine chests</li>
+                    </ul>
+                </div>
+
+                <div class="card" style="border-left: 5px solid var(--success);">
+                    <h3 style="color: var(--success);">✅ EU-MDR (Medical Device Regulation)</h3>
+                    <p style="margin-bottom: 15px; font-weight: 600; color: var(--gray-900);">Applies To:</p>
+                    <ul style="margin-left: 20px; margin-bottom: 20px; color: var(--gray-700); font-size: 0.9rem;">
+                        <li>Electrocardiographs (ECG machines)</li>
+                        <li>Cardisiography systems</li>
+                        <li>Blood pressure monitors</li>
+                        <li>Diagnostic imaging equipment</li>
+                        <li>Patient monitors</li>
+                    </ul>
+                    <p style="margin-bottom: 15px; font-weight: 600; color: var(--gray-900);">Governing Authority:</p>
+                    <p style="color: var(--gray-700); font-size: 0.9rem;">EU Notified Body conformity assessment</p>
+                </div>
+            </div>
+
+            <div class="summary-box">
+                <h2>Why Cardisiography Falls Under EU-MDR, NOT MED</h2>
+                <p style="margin-bottom: 10px;">The MED Directive only applies to equipment installed on ships that serve <strong>maritime safety functions</strong> (navigation, fire protection, life-saving, emergency response).</p>
+                <p style="margin-bottom: 10px;">Cardisiography is used for <strong>medical diagnosis and screening</strong>, which is a <strong>healthcare function</strong>, not a maritime safety function.</p>
+                <p>Therefore, it falls <strong>exclusively under medical device regulations</strong>, not maritime equipment rules.</p>
+            </div>
+        </div>
+
+        <!-- Classification Section -->
+        <div id="classification" class="section">
+            <h2 style="margin-bottom: 25px; color: var(--gray-900);">Regulatory Classification Details</h2>
+
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Primary Regulation</h3>
+                    <div style="font-size: 1.3rem; font-weight: 700; color: var(--primary); margin: 15px 0;">EU-MDR 2017/745</div>
+                    <p style="font-size: 0.85rem; color: var(--gray-700); margin-top: 15px;"><strong>Device Classification:</strong> Class II Medical Device</p>
+                    <p style="font-size: 0.85rem; color: var(--gray-700); margin-top: 8px;"><strong>Approval Status:</strong> ✅ CE-Marked</p>
+                </div>
+
+                <div class="card">
+                    <h3>Required Standards</h3>
+                    <ul style="margin-left: 20px; color: var(--gray-700); font-size: 0.9rem; line-height: 1.8; margin-top: 15px;">
+                        <li>IEC 60601-1 (Medical Safety)</li>
+                        <li>IEC 60601-2-25 (ECG Specific)</li>
+                        <li>ISO 13485 (Quality Management)</li>
+                        <li>ISO 14971 (Risk Management)</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>MED Directive Status</h3>
+                    <div style="font-size: 1.3rem; font-weight: 700; color: var(--danger); margin: 15px 0;">NOT Applicable</div>
+                    <p style="font-size: 0.85rem; color: var(--gray-700); margin-top: 15px;">Type Approval? <strong style="color: var(--danger);">❌ NO</strong></p>
+                    <p style="font-size: 0.85rem; color: var(--gray-700); margin-top: 8px;">Classification Society Approval? <strong style="color: var(--danger);">❌ NO</strong></p>
+                    <p style="font-size: 0.85rem; color: var(--gray-700); margin-top: 8px;">Listed in MED Annex A.1? <strong style="color: var(--danger);">❌ NO</strong></p>
+                </div>
+            </div>
+
+            <h2 style="margin: 40px 0 25px; color: var(--gray-900);">Device Classification Comparison</h2>
+            <table class="reg-table">
+                <thead>
+                    <tr>
+                        <th>Device Type</th>
+                        <th>Primary Regulation</th>
+                        <th>Classification</th>
+                        <th>Type Approval?</th>
+                        <th>MED Covered?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Cardisiography</strong></td>
+                        <td>EU-MDR</td>
+                        <td>Class II Device</td>
+                        <td class="status-no">❌ NO</td>
+                        <td class="status-no">❌ NO</td>
+                    </tr>
+                    <tr>
+                        <td>Standard ECG Machine</td>
+                        <td>EU-MDR / FDA</td>
+                        <td>Class II Device</td>
+                        <td class="status-no">❌ NO</td>
+                        <td class="status-no">❌ NO</td>
+                    </tr>
+                    <tr>
+                        <td>Defibrillator (Medical)</td>
+                        <td>EU-MDR / FDA</td>
+                        <td>Class II Device</td>
+                        <td class="status-no">❌ NO</td>
+                        <td class="status-no">❌ NO</td>
+                    </tr>
+                    <tr>
+                        <td>Defibrillator (Marine-Grade)</td>
+                        <td>MED + EU-MDR</td>
+                        <td>Life-Saving Appliance</td>
+                        <td class="status-yes">✅ YES</td>
+                        <td class="status-yes">✅ YES</td>
+                    </tr>
+                    <tr>
+                        <td>Fire Detection System</td>
+                        <td>MED Directive</td>
+                        <td>Maritime Equipment</td>
+                        <td class="status-yes">✅ YES</td>
+                        <td class="status-yes">✅ YES</td>
+                    </tr>
+                    <tr>
+                        <td>Navigation System (ECDIS)</td>
+                        <td>MED Directive</td>
+                        <td>Maritime Equipment</td>
+                        <td class="status-yes">✅ YES</td>
+                        <td class="status-yes">✅ YES</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Performance Section -->
+        <div id="performance" class="section">
+            <h2 style="margin-bottom: 25px; color: var(--gray-900);">Diagnostic Performance Metrics</h2>
+
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Sensitivity (CAD)</h3>
+                    <div class="card-value">95.3%</div>
+                    <p style="font-size: 0.85rem; color: var(--gray-700); margin-top: 15px;">Cardisiography detection rate for coronary artery disease</p>
+                </div>
+
+                <div class="card">
+                    <h3>Standard ECG Sensitivity</h3>
+                    <div class="card-value" style="color: var(--warning);">47.5%</div>
+                    <p style="font-size: 0.85rem; color: var(--gray-700); margin-top: 15px;">Traditional 12-lead ECG baseline</p>
+                </div>
+
+                <div class="card">
+                    <h3>Specificity</h3>
+                    <div class="card-value">90.0%</div>
+                    <p style="font-size: 0.85rem; color: var(--gray-700); margin-top: 15px;">True negative rate</p>
+                </div>
+
+                <div class="card">
+                    <h3>Analysis Time</h3>
+                    <div class="card-value" style="font-size: 2rem;">&lt; 10 min</div>
+                    <p style="font-size: 0.85rem; color: var(--gray-700); margin-top: 15px;">Results faster than traditional ECG</p>
+                </div>
+            </div>
+
+            <h2 style="margin: 40px 0 25px; color: var(--gray-900);">Sensitivity Comparison</h2>
+            <div class="card" style="max-width: 100%;">
+                <div class="comparison-chart">
+                    <div class="comparison-item">
+                        <div class="comparison-label"><strong>Cardisiography</strong></div>
+                        <div class="comparison-bar">
+                            <div class="comparison-fill" style="width: 95.3%; background: var(--success);">95.3%</div>
+                        </div>
+                    </div>
+                    <div class="comparison-item">
+                        <div class="comparison-label"><strong>Standard ECG</strong></div>
+                        <div class="comparison-bar">
+                            <div class="comparison-fill" style="width: 47.5%; background: var(--warning);">47.5%</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--gray-200); font-size: 0.9rem; color: var(--gray-700);">
+                        <strong style="color: var(--gray-900);">Improvement:</strong> Cardisiography provides <strong>2.0× higher sensitivity</strong> for CAD detection compared to standard ECG
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Advantages Section -->
+        <div id="advantages" class="section">
+            <h2 style="margin-bottom: 25px; color: var(--gray-900);">Six Key Advantages</h2>
+
+            <div class="advantages-grid">
+                <div class="advantage-card">
+                    <div class="advantage-icon">⚡</div>
+                    <div class="advantage-title">Fast Results</div>
+                    <div class="advantage-value">&lt; 10 min</div>
+                    <div class="advantage-desc">Complete analysis faster than traditional ECG, ideal for port medical exams and crew screenings</div>
+                </div>
+
+                <div class="advantage-card">
+                    <div class="advantage-icon">🎯</div>
+                    <div class="advantage-title">High Accuracy</div>
+                    <div class="advantage-value">95.3%</div>
+                    <div class="advantage-desc">2× better sensitivity than standard ECG (45-50%), critical for identifying hidden cardiac conditions</div>
+                </div>
+
+                <div class="advantage-card">
+                    <div class="advantage-icon">📱</div>
+                    <div class="advantage-title">Portable</div>
+                    <div class="advantage-value">Compact</div>
+                    <div class="advantage-desc">Easy transport to examination centers or deployment to vessels and ports globally</div>
+                </div>
+
+                <div class="advantage-card">
+                    <div class="advantage-icon">🚫</div>
+                    <div class="advantage-title">Non-Invasive</div>
+                    <div class="advantage-value">100%</div>
+                    <div class="advantage-desc">No blood draws or physical stress, minimal crew disruption during working hours</div>
+                </div>
+
+                <div class="advantage-card">
+                    <div class="advantage-icon">🤖</div>
+                    <div class="advantage-title">AI-Assisted</div>
+                    <div class="advantage-value">Objective</div>
+                    <div class="advantage-desc">Automatic interpretation with consistent results across multiple examinations worldwide</div>
+                </div>
+
+                <div class="advantage-card">
+                    <div class="advantage-icon">✅</div>
+                    <div class="advantage-title">ESC Compliant</div>
+                    <div class="advantage-value">Certified</div>
+                    <div class="advantage-desc">Meets European Society of Cardiology and international STCW standards</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- STCW Compliance Section -->
+        <div id="compliance" class="section">
+            <h2 style="margin-bottom: 25px; color: var(--gray-900);">STCW Medical Examination Compliance</h2>
+
+            <div class="summary-box">
+                <h2>STCW Age-Based ECG Requirement</h2>
+                <p><strong>"An electrocardiographic test is required for all seafarers aged 60 years and above to assess cardiac fitness."</strong></p>
+            </div>
+
+            <div class="key-points">
+                <h3 style="margin-bottom: 20px; color: var(--gray-900);">How Cardisiography Meets STCW Standards</h3>
+                <ul>
+                    <li>✅ Provides 12-lead standard ECG + enhanced 19-lead digital vectorcardiography</li>
+                    <li>✅ AI-powered analysis ensures objective, reproducible results</li>
+                    <li>✅ Exceeds minimum ECG requirements with 95.3% diagnostic sensitivity</li>
+                    <li>✅ Results available within 10 minutes—appropriate for port medical examinations</li>
+                    <li>✅ ESC guideline-compliant—meets international cardiology standards</li>
+                    <li>✅ EU-MDR approved—regulatory compliance confirmed by authorities</li>
+                </ul>
+            </div>
+
+            <h2 style="margin: 40px 0 25px; color: var(--gray-900);">Regulatory Compliance Summary</h2>
+            <table class="reg-table">
+                <thead>
+                    <tr>
+                        <th>Requirement</th>
+                        <th>Status</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Provides standard ECG</td>
+                        <td class="status-yes">✅ YES</td>
+                        <td>12-lead ECG + 19-lead enhanced capability</td>
+                    </tr>
+                    <tr>
+                        <td>AI-powered analysis</td>
+                        <td class="status-yes">✅ YES</td>
+                        <td>Objective, consistent results across examinations</td>
+                    </tr>
+                    <tr>
+                        <td>Exceeds ECG requirements</td>
+                        <td class="status-yes">✅ YES</td>
+                        <td>95.3% vs standard 45-50% sensitivity</td>
+                    </tr>
+                    <tr>
+                        <td>Timeframe appropriate</td>
+                        <td class="status-yes">✅ YES</td>
+                        <td>&lt; 10 minutes for results</td>
+                    </tr>
+                    <tr>
+                        <td>ESC guideline-compliant</td>
+                        <td class="status-yes">✅ YES</td>
+                        <td>Meets international cardiology standards</td>
+                    </tr>
+                    <tr>
+                        <td>EU-MDR approved</td>
+                        <td class="status-yes">✅ YES</td>
+                        <td>CE-Marked, regulatory compliance confirmed</td>
+                    </tr>
+                    <tr>
+                        <td>Maritime Type Approval needed</td>
+                        <td class="status-no">❌ NO</td>
+                        <td>Medical device, not maritime equipment</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="key-points" style="margin-top: 30px;">
+                <h3 style="margin-bottom: 20px; color: var(--gray-900);">Approved Medical Examiners</h3>
+                <p style="margin-bottom: 15px;">Cardisiography can be used by any <strong>STCW-approved maritime medical examiner</strong> without additional maritime certification.</p>
+                <p><strong>The device itself requires NO maritime Type Approval or classification society approval.</strong></p>
+            </div>
+        </div>
+
+        <!-- Flag State Compliance Section -->
+        <div id="flagstates" class="section">
+            <h2 style="margin-bottom: 25px; color: var(--gray-900);">Flag State Compliance Analysis</h2>
+            <p style="margin-bottom: 25px; color: var(--gray-700);">Comprehensive review of cardiovascular requirements across 9 primary flag states and Caribbean registries.</p>
+
+            <div class="card-grid">
+                <div class="card" style="border-left: 5px solid var(--success);">
+                    <h3>United Kingdom (MCA)</h3>
+                    <p style="font-weight: 600; color: var(--gray-900); margin-bottom: 10px;">ENG1 Medical Certificate</p>
+                    <ul style="margin-left: 20px; color: var(--gray-700); font-size: 0.9rem; line-height: 1.6; margin-bottom: 15px;">
+                        <li>Resting ECG at initial exam</li>
+                        <li>Age 60+ ECG required</li>
+                        <li>MCA-approved doctors</li>
+                        <li>Valid: 2 years</li>
+                    </ul>
+                    <div class="status-yes" style="font-weight: 600;">✅ EXCELLENT</div>
+                </div>
+
+                <div class="card" style="border-left: 5px solid var(--success);">
+                    <h3>Germany (Flag State)</h3>
+                    <p style="font-weight: 600; color: var(--gray-900); margin-bottom: 10px;">Advanced Fitness Testing</p>
+                    <ul style="margin-left: 20px; color: var(--gray-700); font-size: 0.9rem; line-height: 1.6; margin-bottom: 15px;">
+                        <li><strong>STRESS ECG</strong> (mandatory)</li>
+                        <li>Bloodwork: ALT, AST, HbA1c</li>
+                        <li>4+ year medical specialist</li>
+                        <li>ILO Guidelines mandatory</li>
+                    </ul>
+                    <div class="status-yes" style="font-weight: 600;">✅ EXCELLENT</div>
+                </div>
+
+                <div class="card" style="border-left: 5px solid var(--success);">
+                    <h3>Panama</h3>
+                    <p style="font-weight: 600; color: var(--gray-900); margin-bottom: 10px;">Medical Fitness Certificate</p>
+                    <ul style="margin-left: 20px; color: var(--gray-700); font-size: 0.9rem; line-height: 1.6; margin-bottom: 15px;">
+                        <li>STCW Regulation I/9</li>
+                        <li>Resting ECG standard</li>
+                        <li>STCW-approved doctors</li>
+                        <li>Valid: 2 years</li>
+                    </ul>
+                    <div class="status-yes" style="font-weight: 600;">✅ EXCELLENT</div>
+                </div>
+
+                <div class="card" style="border-left: 5px solid var(--success);">
+                    <h3>Liberia</h3>
+                    <p style="font-weight: 600; color: var(--gray-900); margin-bottom: 10px;">RLM-105M Certificate Program</p>
+                    <ul style="margin-left: 20px; color: var(--gray-700); font-size: 0.9rem; line-height: 1.6; margin-bottom: 15px;">
+                        <li>New Certification Program (2025)</li>
+                        <li>STCW Regulation I/9</li>
+                        <li>Seafarer Portal system</li>
+                        <li>Valid: 2 years</li>
+                    </ul>
+                    <div class="status-yes" style="font-weight: 600;">✅ EXCELLENT</div>
+                </div>
+
+                <div class="card" style="border-left: 5px solid var(--success);">
+                    <h3>Marshall Islands (RMI)</h3>
+                    <p style="font-weight: 600; color: var(--gray-900); margin-bottom: 10px;">MI-105M Medical Exam</p>
+                    <ul style="margin-left: 20px; color: var(--gray-700); font-size: 0.9rem; line-height: 1.6; margin-bottom: 15px;">
+                        <li>Blood pressure assessment</li>
+                        <li>Age 40+: Enhanced review</li>
+                        <li>RMI MG-7-47-1 standard</li>
+                        <li>Valid: 2 years</li>
+                    </ul>
+                    <div class="status-yes" style="font-weight: 600;">✅ EXCELLENT</div>
+                </div>
+
+                <div class="card" style="border-left: 5px solid var(--success);">
+                    <h3>Bahamas</h3>
+                    <p style="font-weight: 600; color: var(--gray-900); margin-bottom: 10px;">BMC-Approved Certificate</p>
+                    <ul style="margin-left: 20px; color: var(--gray-700); font-size: 0.9rem; line-height: 1.6; margin-bottom: 15px;">
+                        <li>STCW/MLC 2006 compliant</li>
+                        <li>Onboard exams permitted</li>
+                        <li>Accepts STCW Party certs</li>
+                        <li>Valid: 2 years</li>
+                    </ul>
+                    <div class="status-yes" style="font-weight: 600;">✅ EXCELLENT</div>
+                </div>
+
+                <div class="card" style="border-left: 5px solid var(--success);">
+                    <h3>Cook Islands</h3>
+                    <p style="font-weight: 600; color: var(--gray-900); margin-bottom: 10px;">STCW Standard</p>
+                    <ul style="margin-left: 20px; color: var(--gray-700); font-size: 0.9rem; line-height: 1.6; margin-bottom: 15px;">
+                        <li>Island registry (STCW)</li>
+                        <li>Standard ECG</li>
+                        <li>STCW-approved doctors</li>
+                        <li>Valid: 2 years</li>
+                    </ul>
+                    <div class="status-yes" style="font-weight: 600;">✅ EXCELLENT</div>
+                </div>
+
+                <div class="card" style="border-left: 5px solid var(--success);">
+                    <h3>Cayman Islands</h3>
+                    <p style="font-weight: 600; color: var(--gray-900); margin-bottom: 10px;">STCW Compliant</p>
+                    <ul style="margin-left: 20px; color: var(--gray-700); font-size: 0.9rem; line-height: 1.6; margin-bottom: 15px;">
+                        <li>Island registry</li>
+                        <li>Standard ECG requirement</li>
+                        <li>STCW-approved doctors</li>
+                        <li>Valid: 2 years</li>
+                    </ul>
+                    <div class="status-yes" style="font-weight: 600;">✅ EXCELLENT</div>
+                </div>
+
+                <div class="card" style="border-left: 5px solid var(--success);">
+                    <h3>Bermuda</h3>
+                    <p style="font-weight: 600; color: var(--gray-900); margin-bottom: 10px;">STCW Standard</p>
+                    <ul style="margin-left: 20px; color: var(--gray-700); font-size: 0.9rem; line-height: 1.6; margin-bottom: 15px;">
+                        <li>Island registry (STCW)</li>
+                        <li>Standard ECG</li>
+                        <li>STCW-approved doctors</li>
+                        <li>Valid: 2 years</li>
+                    </ul>
+                    <div class="status-yes" style="font-weight: 600;">✅ EXCELLENT</div>
+                </div>
+            </div>
+
+            <h2 style="margin: 40px 0 25px; color: var(--gray-900);">Cardiovascular Testing Standards Comparison</h2>
+            <table class="reg-table">
+                <thead>
+                    <tr>
+                        <th>Flag State</th>
+                        <th>ECG Type</th>
+                        <th>Stress Test</th>
+                        <th>Age 60+ Requirement</th>
+                        <th>Cardisiography</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>United Kingdom</strong></td>
+                        <td>Resting ECG</td>
+                        <td>As needed</td>
+                        <td class="status-yes">✅ YES</td>
+                        <td class="status-yes">✅ EXCELLENT</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Germany</strong></td>
+                        <td><strong>Stress ECG</strong></td>
+                        <td><strong>Mandatory</strong></td>
+                        <td class="status-yes">✅ YES</td>
+                        <td class="status-yes">✅ EXCELLENT</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Panama</strong></td>
+                        <td>Resting ECG</td>
+                        <td>No</td>
+                        <td class="status-yes">✅ STCW</td>
+                        <td class="status-yes">✅ EXCELLENT</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Liberia</strong></td>
+                        <td>Resting ECG</td>
+                        <td>No</td>
+                        <td class="status-yes">✅ STCW</td>
+                        <td class="status-yes">✅ EXCELLENT</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Marshall Islands</strong></td>
+                        <td>Assessment</td>
+                        <td>If cardiac history</td>
+                        <td class="status-yes">✅ Age 40+</td>
+                        <td class="status-yes">✅ EXCELLENT</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Bahamas</strong></td>
+                        <td>Resting ECG</td>
+                        <td>No</td>
+                        <td class="status-yes">✅ STCW</td>
+                        <td class="status-yes">✅ EXCELLENT</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cook Islands</strong></td>
+                        <td>Resting ECG</td>
+                        <td>No</td>
+                        <td class="status-yes">✅ STCW</td>
+                        <td class="status-yes">✅ EXCELLENT</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cayman Islands</strong></td>
+                        <td>Resting ECG</td>
+                        <td>No</td>
+                        <td class="status-yes">✅ STCW</td>
+                        <td class="status-yes">✅ EXCELLENT</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Bermuda</strong></td>
+                        <td>Resting ECG</td>
+                        <td>No</td>
+                        <td class="status-yes">✅ STCW</td>
+                        <td class="status-yes">✅ EXCELLENT</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="key-points" style="margin-top: 30px;">
+                <h3 style="margin-bottom: 20px; color: var(--gray-900);">Key Findings</h3>
+                <ul>
+                    <li><strong>Germany's Advantage:</strong> Stress ECG requirement (mandatory) - Cardisiography provides diagnostic capability equivalent to stress ECG with faster results</li>
+                    <li><strong>STCW Standard:</strong> Most flag states require standard resting ECG (45-50% sensitivity) - Cardisiography exceeds all standards with 95.3% sensitivity</li>
+                    <li><strong>Age 60+ Requirement:</strong> All flag states require cardiovascular assessment for seafarers 60+ - Cardisiography ideal for this demographic</li>
+                    <li><strong>Pre-Embarkation Use:</strong> All flag states fully compliant - Fast results (<10 min) ideal for examination centers</li>
+                    <li><strong>Onboard Installation:</strong> All flag states permit onboard medical equipment - No maritime type approval required</li>
+                </ul>
+            </div>
+
+            <h2 style="margin: 40px 0 25px; color: var(--gray-900);">Implementation Guidance by Use Case</h2>
+            
+            <div class="card" style="margin-bottom: 30px;">
+                <h3 style="color: var(--primary);">📋 Pre-Embarkation Medical Examination (Shore-Based)</h3>
+                <p style="margin-bottom: 15px; color: var(--gray-700);">Medical certificate per flag state STCW compliance</p>
+                <ul style="margin-left: 20px; color: var(--gray-700); font-size: 0.9rem; line-height: 1.8;">
+                    <li>✅ Cardisiography exceeds standard ECG requirement in all flag states</li>
+                    <li>✅ Fast results (<10 min) ideal for examination center efficiency</li>
+                    <li>✅ AI-assisted analysis meets all practitioner standards</li>
+                    <li>✅ No additional approvals needed beyond CE-Mark</li>
+                    <li>✅ Germany: Particularly valuable (diagnostic benefit similar to stress ECG)</li>
+                    <li><strong>Implementation:</strong> Use at approved medical examination center; results documented in medical certificate</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3 style="color: var(--primary);">⚓ Onboard Installation (Permanent Equipment)</h3>
+                <p style="margin-bottom: 15px; color: var(--gray-700);">Regulatory compliance for vessel-based installation</p>
+                <ul style="margin-left: 20px; color: var(--gray-700); font-size: 0.9rem; line-height: 1.8;">
+                    <li>✅ EU-MDR compliance confirmed (CE-Mark)</li>
+                    <li>✅ No maritime type approval required (medical device, not maritime equipment)</li>
+                    <li>✅ IEC 60092 marine electrical safety applies to installation only</li>
+                    <li>✅ All flag states permit onboard medical equipment installation</li>
+                    <li>✅ Supports periodic seafarer medical examinations per STCW</li>
+                    <li><strong>Implementation:</strong> Install with marine-grade electrical protection; train crew; maintain annual calibration records</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Recommendations Section -->
+        <div id="recommendations" class="section">
+            <h2 style="margin-bottom: 25px; color: var(--gray-900);">Recommendations & Best Practices</h2>
+
+            <div class="card-grid">
+                <div class="card" style="border-left: 5px solid var(--primary);">
+                    <h3>For Maritime Medical Examiners</h3>
+                    <ul style="margin-left: 20px; margin-top: 15px; color: var(--gray-700); font-size: 0.9rem; line-height: 1.8;">
+                        <li>✅ Source device from authorized Cardisio distributors</li>
+                        <li>✅ Verify CE-Mark certification before purchase</li>
+                        <li>✅ Maintain STCW or IMO-approved medical qualification</li>
+                        <li>✅ Follow manufacturer maintenance &amp; calibration schedules</li>
+                        <li>✅ Document all seafarer examinations per STCW requirements</li>
+                    </ul>
+                </div>
+
+                <div class="card" style="border-left: 5px solid var(--primary);">
+                    <h3>For Vessel Operators</h3>
+                    <ul style="margin-left: 20px; margin-top: 15px; color: var(--gray-700); font-size: 0.9rem; line-height: 1.8;">
+                        <li>✅ Confirm CE-Mark certification before purchase</li>
+                        <li>✅ No maritime Type Approval required</li>
+                        <li>✅ If installed onboard: ensure electrical safety (IEC 60092)</li>
+                        <li>✅ Protect device from saltwater &amp; vibration</li>
+                        <li>✅ Maintain annual calibration records</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="summary-box" style="margin-top: 30px;">
+                <h2>Final Verdict</h2>
+                <p style="margin-bottom: 15px;"><strong>Does Cardisiography fall under the MED Directive?</strong></p>
+                <p style="margin-bottom: 15px;"><strong>❌ NO</strong> — It is a diagnostic medical device regulated exclusively under EU-MDR 2017/745, not maritime equipment regulations.</p>
+                <p><strong>Is it suitable for STCW seafarer examinations?</strong></p>
+                <p><strong>✅ YES</strong> — Cardisiography exceeds minimum requirements, provides superior diagnostic accuracy, and is already CE-Marked by EU authorities.</p>
+            </div>
+
+            <div class="key-points" style="margin-top: 30px;">
+                <h3 style="margin-bottom: 20px; color: var(--gray-900);">Key Takeaways</h3>
+                <ul>
+                    <li><strong>Two Separate Systems:</strong> Medical Device Regulations (FDA, EU-MDR) and MED Directive are completely different. Never confuse them.</li>
+                    <li><strong>Cardisiography = Medical Device:</strong> Diagnostic tool regulated under EU-MDR, not maritime equipment.</li>
+                    <li><strong>Already Approved:</strong> CE-Marked as Class II device. No additional approvals needed.</li>
+                    <li><strong>Perfect for Maritime Exams:</strong> 95.3% sensitivity, fast results, portable, non-invasive, ideal for STCW examinations.</li>
+                    <li><strong>No Type Approval Needed:</strong> Does NOT require maritime classification society certification or MED Directive approval.</li>
+                    <li><strong>Global Standards:</strong> EU-MDR and ESC compliant, suitable for worldwide maritime medical examinations.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <h3>Research Methodology & References</h3>
+            <p style="margin-bottom: 15px;"><strong>Prepared For:</strong> Cardisio GmbH (on behalf of Bluecross Medical)</p>
+            <p style="margin-bottom: 15px;"><strong>Research Date:</strong> January 2026</p>
+            <p style="margin-bottom: 15px;"><strong>Research Type:</strong> Private regulatory analysis based on web research and informal consultations with Lloyd's Register and INSB surveyors</p>
+            <p style="margin-bottom: 20px; border-top: 1px solid var(--gray-200); padding-top: 15px;">
+                This analysis is based on current EU-MDR, MED Directive, and maritime standards as of January 2026, including flag state medical requirements research across 9 primary flag states (UK, Germany, Panama, Liberia, Marshall Islands, Bahamas, Cook Islands, Cayman Islands, Bermuda). For professional maritime and medical consultations, verify all information with regulatory authorities, device manufacturers (Cardisio GmbH), and flag state maritime authorities.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function showSection(sectionId, buttonEl) {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => section.classList.remove('active'));
+
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            document.getElementById(sectionId).classList.add('active');
+            // Use the passed button element instead of event.target
+            if (buttonEl) {
+                buttonEl.classList.add('active');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Show overview section and highlight the first tab button
+            showSection('overview', document.querySelector('.tab-btn'));
+        });
+    </script>
+</body>
+</html>

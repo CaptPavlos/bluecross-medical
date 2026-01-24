@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { ShoppingCart } from 'lucide-react';
+import { ShoppingCart, AlertCircle } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useIsScrolled, useIsMobile } from '../../hooks';
 import { NAV_ITEMS } from '../../lib/constants';
@@ -115,22 +115,37 @@ function Header() {
             </nav>
           )}
 
-          {/* Shopping Cart - shows when cart has items */}
-          {cartCount > 0 && (
-            <button
-              onClick={handleCartClick}
-              className={cn(
-                "relative p-2 transition-colors",
-                useDarkText ? "text-brand-slate hover:text-brand-ocean" : "text-white hover:text-brand-sky"
-              )}
-              aria-label={`Shopping cart with ${cartCount} items`}
+          {/* Right side buttons */}
+          <div className="flex items-center space-x-3">
+            {/* SOS Emergency Button */}
+            <a
+              href="https://www.globalsarhub.com/sea-sar.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center space-x-1.5 px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white font-bold text-sm rounded-lg transition-all duration-200 shadow-md hover:shadow-lg animate-pulse hover:animate-none"
+              aria-label="SOS Emergency - Global SAR Hub"
             >
-              <ShoppingCart size={24} />
-              <span className="absolute -top-1 -right-1 w-5 h-5 bg-brand-ocean text-white text-xs font-bold rounded-full flex items-center justify-center">
-                {cartCount > 9 ? '9+' : cartCount}
-              </span>
-            </button>
-          )}
+              <AlertCircle size={18} />
+              <span>SOS</span>
+            </a>
+
+            {/* Shopping Cart - shows when cart has items */}
+            {cartCount > 0 && (
+              <button
+                onClick={handleCartClick}
+                className={cn(
+                  "relative p-2 transition-colors",
+                  useDarkText ? "text-brand-slate hover:text-brand-ocean" : "text-white hover:text-brand-sky"
+                )}
+                aria-label={`Shopping cart with ${cartCount} items`}
+              >
+                <ShoppingCart size={24} />
+                <span className="absolute -top-1 -right-1 w-5 h-5 bg-brand-ocean text-white text-xs font-bold rounded-full flex items-center justify-center">
+                  {cartCount > 9 ? '9+' : cartCount}
+                </span>
+              </button>
+            )}
+          </div>
         </div>
       </Container>
     </header>

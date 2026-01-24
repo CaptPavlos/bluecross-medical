@@ -10,6 +10,7 @@ Sitemap: https://www.bluecross.tech/sitemap.xml
 # Disallow admin and API routes
 Disallow: /admin
 Disallow: /api/
+Disallow: /cardisio.html
 
 # Allow all major crawlers
 User-agent: Googlebot
