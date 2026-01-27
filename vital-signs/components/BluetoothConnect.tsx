@@ -16,14 +16,15 @@ import { BLECallbacks } from '@/lib/types';
 
 interface BluetoothConnectProps {
   onDemoMode: () => void;
+  bleManagerRef?: React.MutableRefObject<WebBluetoothManager | null>;
 }
 
-export const BluetoothConnect: React.FC<BluetoothConnectProps> = ({ onDemoMode }) => {
+export const BluetoothConnect: React.FC<BluetoothConnectProps> = ({ onDemoMode, bleManagerRef }) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [isSupported, setIsSupported] = useState<boolean | null>(null); // null = loading
-  const bleManagerRef = useRef<WebBluetoothManager | null>(null);
+  const [isSupported, setIsSupported] = useState<boolean | null>(null);
+  const internalRef = useRef<WebBluetoothManager | null>(null);
+  const managerRef = bleManagerRef || internalRef;
 
-  // Check browser support only on client after mount (avoids hydration mismatch)
   useEffect(() => {
     setIsSupported(isWebBluetoothSupported());
   }, []);
@@ -31,13 +32,14 @@ export const BluetoothConnect: React.FC<BluetoothConnectProps> = ({ onDemoMode }
   const {
     connectionStatus,
     setConnectionStatus,
+    setDeviceInfo,
+    setStoredRecords,
     addECGData,
     setSpO2,
     setBloodPressure,
     setTemperature,
   } = useVitalsStore();
 
-  // Initialize BLE manager
   useEffect(() => {
     const callbacks: BLECallbacks = {
       onECGData: (samples) => addECGData(samples),
@@ -45,28 +47,29 @@ export const BluetoothConnect: React.FC<BluetoothConnectProps> = ({ onDemoMode }
       onBPData: (reading) => setBloodPressure(reading.systolic, reading.diastolic, reading.pulse),
       onTemperatureData: (reading) => setTemperature(reading.celsius),
       onConnectionChange: (status, deviceName) => setConnectionStatus(status, deviceName),
+      onDeviceInfo: (info) => setDeviceInfo(info),
+      onStoredData: (records) => setStoredRecords(records),
       onError: (message) => setErrorMessage(message),
     };
 
-    bleManagerRef.current = new WebBluetoothManager(callbacks);
+    managerRef.current = new WebBluetoothManager(callbacks);
 
     return () => {
-      bleManagerRef.current?.disconnect();
+      managerRef.current?.disconnect();
     };
-  }, [addECGData, setSpO2, setBloodPressure, setTemperature, setConnectionStatus]);
+  }, [addECGData, setSpO2, setBloodPressure, setTemperature, setConnectionStatus, setDeviceInfo, setStoredRecords, managerRef]);
 
   const handleConnect = useCallback(async () => {
     setErrorMessage(null);
-    if (bleManagerRef.current) {
-      await bleManagerRef.current.requestDevice();
+    if (managerRef.current) {
+      await managerRef.current.requestDevice();
     }
-  }, []);
+  }, [managerRef]);
 
   const handleDisconnect = useCallback(() => {
-    bleManagerRef.current?.disconnect();
-  }, []);
+    managerRef.current?.disconnect();
+  }, [managerRef]);
 
-  // Loading state — waiting for client-side check
   if (isSupported === null) {
     return (
       <div className="flex flex-col items-center justify-center gap-6 p-8 md:p-16 bg-bg-secondary rounded-2xl max-w-lg mx-auto">
@@ -82,18 +85,10 @@ export const BluetoothConnect: React.FC<BluetoothConnectProps> = ({ onDemoMode }
         <AlertTriangle size={64} className="text-accent-yellow" />
         <h2 className="text-xl font-semibold text-center">Browser Not Supported</h2>
         <p className="text-gray-400 text-center leading-relaxed">
-          Web Bluetooth is required for device connectivity.
-          Please use <strong>Google Chrome</strong> or <strong>Microsoft Edge</strong> on a desktop
-          or Android device.
+          Web Bluetooth is required. Use <strong>Google Chrome</strong> or <strong>Microsoft Edge</strong> on desktop or Android.
         </p>
-        <div className="text-sm text-gray-500 text-center">
-          iOS Safari does not support Web Bluetooth.
-        </div>
         <div className="flex gap-3 mt-4">
-          <button
-            onClick={onDemoMode}
-            className="btn-primary flex items-center gap-2"
-          >
+          <button onClick={onDemoMode} className="btn-primary flex items-center gap-2">
             <Monitor size={18} />
             Try Demo Mode
           </button>
@@ -103,7 +98,7 @@ export const BluetoothConnect: React.FC<BluetoothConnectProps> = ({ onDemoMode }
   }
 
   if (connectionStatus === 'connected') {
-    return null; // Don't show when connected — DeviceStatus handles it
+    return null;
   }
 
   return (
@@ -111,7 +106,7 @@ export const BluetoothConnect: React.FC<BluetoothConnectProps> = ({ onDemoMode }
       <Bluetooth size={64} className="text-accent-blue" />
       <h2 className="text-xl font-semibold">Connect Your Device</h2>
       <p className="text-gray-400 text-center leading-relaxed">
-        Pair your Viatom Checkme Pro, AirBP, or compatible device via Bluetooth.
+        Pair your Viatom Checkme Pro or compatible device via Bluetooth.
       </p>
 
       {errorMessage && (
@@ -127,17 +122,13 @@ export const BluetoothConnect: React.FC<BluetoothConnectProps> = ({ onDemoMode }
           className="btn-primary flex items-center justify-center gap-2 text-lg px-8 py-3"
         >
           <Bluetooth size={20} />
-          {connectionStatus === 'scanning'
-            ? 'Scanning...'
-            : connectionStatus === 'connecting'
-            ? 'Connecting...'
+          {connectionStatus === 'scanning' ? 'Scanning...'
+            : connectionStatus === 'connecting' ? 'Connecting...'
+            : connectionStatus === 'reconnecting' ? 'Reconnecting...'
             : 'Scan for Devices'}
         </button>
 
-        <button
-          onClick={onDemoMode}
-          className="btn-outline flex items-center justify-center gap-2"
-        >
+        <button onClick={onDemoMode} className="btn-outline flex items-center justify-center gap-2">
           <Monitor size={18} />
           Demo Mode
         </button>

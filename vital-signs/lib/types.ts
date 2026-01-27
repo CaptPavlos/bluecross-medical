@@ -64,11 +64,33 @@ export interface DeviceInfo {
 
 export type ConnectionStatus = 'disconnected' | 'scanning' | 'connecting' | 'connected' | 'reconnecting' | 'error';
 
+export interface CheckmeDeviceInfo {
+  Region?: string;
+  Model?: string;
+  HardwareVer?: string;
+  SoftwareVer?: string;
+  CurLanguage?: string;
+  Application?: string;  // MODE_HOME, MODE_ECG, MODE_SPO2, etc.
+  SN?: string;
+  BranchCode?: string;
+  FileVer?: string;
+  SPCPVer?: string;
+}
+
+export interface StoredRecord {
+  type: 'ecg' | 'spo2' | 'bp' | 'temperature' | 'sleep';
+  timestamp: number;
+  data: Record<string, unknown>;
+  raw?: Uint8Array;
+}
+
 export interface BLECallbacks {
   onECGData: (samples: ECGSample[]) => void;
   onSpO2Data: (reading: SpO2Reading) => void;
   onBPData: (reading: BloodPressure) => void;
   onTemperatureData: (reading: TemperatureReading) => void;
   onConnectionChange: (status: ConnectionStatus, deviceName?: string) => void;
+  onDeviceInfo: (info: CheckmeDeviceInfo) => void;
+  onStoredData: (records: StoredRecord[]) => void;
   onError: (message: string) => void;
 }
