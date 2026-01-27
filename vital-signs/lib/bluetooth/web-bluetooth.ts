@@ -153,7 +153,14 @@ export class WebBluetoothManager {
   }
 
   /**
-   * Connect to the selected device's GATT server and set up characteristics
+   * Connect to the selected device's GATT server and set up characteristics.
+   * 
+   * Connection sequence (based on official Viatom SDK):
+   * 1. Connect GATT server
+   * 2. Discover service + characteristics
+   * 3. Send RT data command FIRST (device may disconnect if idle too long)
+   * 4. Subscribe to notifications
+   * 5. Device starts streaming data
    */
   private async connect(): Promise<boolean> {
     if (!this.device?.gatt) return false;
@@ -162,15 +169,18 @@ export class WebBluetoothManager {
       this.callbacks.onConnectionChange('connecting');
       this.reconnectAttempts = 0;
 
-      // Connect to GATT server
+      // Step 1: Connect to GATT server
       this.server = await this.device.gatt.connect();
       console.log('[BLE] GATT server connected');
 
-      // Get the primary Viatom service
+      // Small delay to let the connection stabilize
+      await this.delay(500);
+
+      // Step 2: Discover service
       const service = await this.server.getPrimaryService(VIATOM_SERVICE_UUID);
       console.log('[BLE] Viatom service found');
 
-      // Get the write characteristic (for sending commands)
+      // Step 3: Get BOTH characteristics before doing anything else
       try {
         this.writeCharacteristic = await service.getCharacteristic(WRITE_CHARACTERISTIC_UUID);
         console.log('[BLE] Write characteristic ready');
@@ -178,24 +188,41 @@ export class WebBluetoothManager {
         console.warn('[BLE] Write characteristic not available:', e);
       }
 
-      // Get the notify characteristic (for receiving all data)
       try {
         this.notifyCharacteristic = await service.getCharacteristic(NOTIFY_CHARACTERISTIC_UUID);
-        await this.notifyCharacteristic.startNotifications();
-        this.notifyCharacteristic.addEventListener('characteristicvaluechanged', (event) => {
-          this.handleNotification(event);
-        });
-        console.log('[BLE] Notify characteristic subscribed');
+        console.log('[BLE] Notify characteristic found');
       } catch (e) {
         console.warn('[BLE] Notify characteristic not available:', e);
-        this.callbacks.onError('Could not subscribe to device notifications');
       }
+
+      // Step 4: Send RT command IMMEDIATELY to keep device from disconnecting.
+      // The Checkme Pro may drop the connection if it doesn't receive a command quickly.
+      await this.startRealTimeData();
+
+      // Step 5: NOW subscribe to notifications (after command is sent)
+      if (this.notifyCharacteristic) {
+        try {
+          await this.notifyCharacteristic.startNotifications();
+          this.notifyCharacteristic.addEventListener('characteristicvaluechanged', (event) => {
+            this.handleNotification(event);
+          });
+          console.log('[BLE] Notify subscribed — waiting for data...');
+        } catch (e) {
+          console.warn('[BLE] Failed to subscribe to notifications:', e);
+          this.callbacks.onError('Could not subscribe to device notifications');
+        }
+      }
+
+      // Step 6: Send RT command again after notifications are set up
+      // (in case the device needs it after notification subscription)
+      await this.delay(200);
+      await this.startRealTimeData();
 
       this.callbacks.onConnectionChange('connected', this.device.name || 'Checkme Pro');
       this.isStreaming = true;
 
-      // Send command to start real-time data streaming
-      await this.startRealTimeData();
+      // Keep sending RT command periodically to prevent idle disconnect
+      this.startKeepAlive();
 
       return true;
     } catch (error) {
@@ -208,8 +235,8 @@ export class WebBluetoothManager {
   }
 
   /**
-   * Send command to start real-time data streaming
-   * From official SDK: sends 0x00 to trigger getRtData()
+   * Send command to start real-time data streaming.
+   * From official SDK: sends 0x00 to trigger getRtData().
    */
   private async startRealTimeData(): Promise<void> {
     if (!this.writeCharacteristic) {
@@ -221,10 +248,43 @@ export class WebBluetoothManager {
       const cmd = new Uint8Array([RT_DATA_COMMAND]);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       await this.writeCharacteristic.writeValueWithoutResponse(cmd as any);
-      console.log('[BLE] Real-time data command sent');
+      console.log('[BLE] RT data command sent');
     } catch (e) {
       console.warn('[BLE] Failed to send RT command:', e);
     }
+  }
+
+  /**
+   * Keep-alive: periodically send RT command to prevent idle disconnect.
+   * Some Viatom devices drop the connection after a few seconds without commands.
+   */
+  private keepAliveTimer: ReturnType<typeof setInterval> | null = null;
+
+  private startKeepAlive(): void {
+    this.stopKeepAlive();
+    this.keepAliveTimer = setInterval(async () => {
+      if (this.server?.connected && this.writeCharacteristic) {
+        try {
+          const cmd = new Uint8Array([RT_DATA_COMMAND]);
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          await this.writeCharacteristic.writeValueWithoutResponse(cmd as any);
+        } catch {
+          // Ignore — disconnect handler will take care of it
+        }
+      }
+    }, 3000); // Every 3 seconds
+  }
+
+  private stopKeepAlive(): void {
+    if (this.keepAliveTimer) {
+      clearInterval(this.keepAliveTimer);
+      this.keepAliveTimer = null;
+    }
+  }
+
+  /** Simple delay helper */
+  private delay(ms: number): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, ms));
   }
 
   /**
@@ -449,6 +509,7 @@ export class WebBluetoothManager {
     this.writeCharacteristic = null;
     this.notifyCharacteristic = null;
     this.packetBuffer = new Uint8Array(0);
+    this.stopKeepAlive();
 
     if (this.reconnectAttempts < MAX_RECONNECT_ATTEMPTS) {
       this.callbacks.onConnectionChange('reconnecting');
@@ -474,6 +535,7 @@ export class WebBluetoothManager {
   disconnect(): void {
     this.reconnectAttempts = MAX_RECONNECT_ATTEMPTS; // Prevent auto-reconnect
     this.isStreaming = false;
+    this.stopKeepAlive();
 
     if (this.server?.connected) {
       this.server.disconnect();
