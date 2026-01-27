@@ -329,19 +329,17 @@ export class WebBluetoothManager {
 
   /**
    * Initialize communication with the device.
-   * Tries multiple approaches since the device might be in different modes:
-   * 1. GetDeviceInfo (data sync protocol) — establishes communication
-   * 2. PING (data sync protocol) — keeps alive  
-   * 3. RT data command (monitor protocol) — starts real-time streaming
+   * 1. GetDeviceInfo — establishes communication & retrieves device state
+   * 2. PING — confirms connection is alive
+   * 
+   * NOTE: Do NOT send raw 0x00 RT data command — it causes disconnect
+   * when device is in MODE_HOME. Real-time data streams when the user
+   * starts a measurement on the device (ECG, SpO2, etc).
    */
   private async initializeCommunication(): Promise<void> {
-    // Try data sync protocol first (most reliable for keeping connection)
     await this.sendGetDeviceInfo();
-    await this.delay(200);
+    await this.delay(300);
     await this.sendPing();
-    await this.delay(200);
-    // Also try monitor mode RT command
-    await this.sendRtDataCommand();
   }
 
   /**
@@ -425,8 +423,35 @@ export class WebBluetoothManager {
 
         const cmd = packet[1] & 0xff;
         console.log(`[BLE] Data sync response: cmd=0x${cmd.toString(16)}, len=${len}`);
-        // Data sync responses confirm the device is communicating.
-        // We don't need to process them further for vital signs.
+
+        // Try to decode content as text (device info is JSON)
+        if (len > 10) {
+          try {
+            const content = packet.slice(7, 7 + len);
+            // Find the JSON part (starts with '{', ends with '}')
+            const jsonStart = content.indexOf(0x7B); // '{'
+            const jsonEnd = content.lastIndexOf(0x7D); // '}'
+            if (jsonStart >= 0 && jsonEnd > jsonStart) {
+              const jsonStr = new TextDecoder().decode(content.slice(jsonStart, jsonEnd + 1));
+              const deviceInfo = JSON.parse(jsonStr);
+              console.log('[BLE] Device info:', deviceInfo);
+              // Update connection name with device model + SN
+              if (deviceInfo.Model || deviceInfo.SN) {
+                const name = `Checkme ${deviceInfo.SN || ''}`.trim();
+                this.callbacks.onConnectionChange('connected', name);
+              }
+              // Log the application mode — important for knowing if RT data is available
+              if (deviceInfo.Application) {
+                console.log(`[BLE] Device mode: ${deviceInfo.Application}`);
+                if (deviceInfo.Application === 'MODE_HOME') {
+                  console.log('[BLE] Device is on home screen. Start a measurement (ECG/SpO2) on the device for real-time data.');
+                }
+              }
+            }
+          } catch {
+            // Not JSON content — that's fine
+          }
+        }
         continue;
       }
 
