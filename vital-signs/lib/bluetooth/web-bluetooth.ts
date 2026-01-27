@@ -48,7 +48,16 @@ const HEADER_BYTE_1 = 0xA5;
 const HEADER_BYTE_2 = 0x5A;
 const PACKET_INTERVAL_MS = 40; // Device sends every ~40ms
 const SAMPLES_PER_PACKET = 5;  // 5 ECG + 5 SpO2 samples per packet
-const RT_DATA_COMMAND = 0x00;  // Command to start real-time data
+
+// Checkme Pro command protocol (from CheckMe_BLE_Demo/ce branch):
+// Commands: [0xAA, cmd, ~cmd, pkg_no(2), len(2), CRC8]
+// Responses: [0x55, cmd, ~cmd, pkg_no(2), len(2), content(len), CRC8]
+const CMD_HEADER = 0xAA;
+const CMD_PING = 0x15;
+const CMD_GET_INFO = 0x14;
+
+// Monitor mode RT data command (from LepuBle MonitorBleInterface)
+const RT_DATA_COMMAND = 0x00;
 
 // ECG voltage conversion factor from official SDK:
 // sample * 4033 / 32767 / 12 / 8.0  → millivolts
@@ -195,33 +204,29 @@ export class WebBluetoothManager {
         console.warn('[BLE] Notify characteristic not available:', e);
       }
 
-      // Step 4: Send RT command IMMEDIATELY to keep device from disconnecting.
-      // The Checkme Pro may drop the connection if it doesn't receive a command quickly.
-      await this.startRealTimeData();
-
-      // Step 5: NOW subscribe to notifications (after command is sent)
+      // Step 4: Subscribe to notifications FIRST (before sending any commands).
+      // This ensures we don't miss any response from the device.
       if (this.notifyCharacteristic) {
         try {
           await this.notifyCharacteristic.startNotifications();
           this.notifyCharacteristic.addEventListener('characteristicvaluechanged', (event) => {
             this.handleNotification(event);
           });
-          console.log('[BLE] Notify subscribed — waiting for data...');
+          console.log('[BLE] Notify subscribed');
         } catch (e) {
           console.warn('[BLE] Failed to subscribe to notifications:', e);
           this.callbacks.onError('Could not subscribe to device notifications');
         }
       }
 
-      // Step 6: Send RT command again after notifications are set up
-      // (in case the device needs it after notification subscription)
-      await this.delay(200);
-      await this.startRealTimeData();
+      // Step 5: Initialize communication with proper protocol commands.
+      // Must happen quickly after notification subscription to prevent idle disconnect.
+      await this.initializeCommunication();
 
       this.callbacks.onConnectionChange('connected', this.device.name || 'Checkme Pro');
       this.isStreaming = true;
 
-      // Keep sending RT command periodically to prevent idle disconnect
+      // Step 6: Start keep-alive PING every 2 seconds
       this.startKeepAlive();
 
       return true;
@@ -235,44 +240,126 @@ export class WebBluetoothManager {
   }
 
   /**
-   * Send command to start real-time data streaming.
-   * From official SDK: sends 0x00 to trigger getRtData().
+   * CRC8 calculation — matches BleCRC.calCRC8() from the official SDK.
    */
-  private async startRealTimeData(): Promise<void> {
-    if (!this.writeCharacteristic) {
-      console.warn('[BLE] Cannot send RT command — write characteristic not available');
-      return;
+  private calCRC8(buf: Uint8Array): number {
+    const TABLE_CRC8 = [
+      0x00, 0x07, 0x0E, 0x09, 0x1C, 0x1B, 0x12, 0x15, 0x38, 0x3F, 0x36, 0x31, 0x24, 0x23, 0x2A, 0x2D,
+      0x70, 0x77, 0x7E, 0x79, 0x6C, 0x6B, 0x62, 0x65, 0x48, 0x4F, 0x46, 0x41, 0x54, 0x53, 0x5A, 0x5D,
+      0xE0, 0xE7, 0xEE, 0xE9, 0xFC, 0xFB, 0xF2, 0xF5, 0xD8, 0xDF, 0xD6, 0xD1, 0xC4, 0xC3, 0xCA, 0xCD,
+      0x90, 0x97, 0x9E, 0x99, 0x8C, 0x8B, 0x82, 0x85, 0xA8, 0xAF, 0xA6, 0xA1, 0xB4, 0xB3, 0xBA, 0xBD,
+      0xC7, 0xC0, 0xC9, 0xCE, 0xDB, 0xDC, 0xD5, 0xD2, 0xFF, 0xF8, 0xF1, 0xF6, 0xE3, 0xE4, 0xED, 0xEA,
+      0xB7, 0xB0, 0xB9, 0xBE, 0xAB, 0xAC, 0xA5, 0xA2, 0x8F, 0x88, 0x81, 0x86, 0x93, 0x94, 0x9D, 0x9A,
+      0x27, 0x20, 0x29, 0x2E, 0x3B, 0x3C, 0x35, 0x32, 0x1F, 0x18, 0x11, 0x16, 0x03, 0x04, 0x0D, 0x0A,
+      0x57, 0x50, 0x59, 0x5E, 0x4B, 0x4C, 0x45, 0x42, 0x6F, 0x68, 0x61, 0x66, 0x73, 0x74, 0x7D, 0x7A,
+      0x89, 0x8E, 0x87, 0x80, 0x95, 0x92, 0x9B, 0x9C, 0xB1, 0xB6, 0xBF, 0xB8, 0xAD, 0xAA, 0xA3, 0xA4,
+      0xF9, 0xFE, 0xF7, 0xF0, 0xE5, 0xE2, 0xEB, 0xEC, 0xC1, 0xC6, 0xCF, 0xC8, 0xDD, 0xDA, 0xD3, 0xD4,
+      0x69, 0x6E, 0x67, 0x60, 0x75, 0x72, 0x7B, 0x7C, 0x51, 0x56, 0x5F, 0x58, 0x4D, 0x4A, 0x43, 0x44,
+      0x19, 0x1E, 0x17, 0x10, 0x05, 0x02, 0x0B, 0x0C, 0x21, 0x26, 0x2F, 0x28, 0x3D, 0x3A, 0x33, 0x34,
+      0x4E, 0x49, 0x40, 0x47, 0x52, 0x55, 0x5C, 0x5B, 0x76, 0x71, 0x78, 0x7F, 0x6A, 0x6D, 0x64, 0x63,
+      0x3E, 0x39, 0x30, 0x37, 0x22, 0x25, 0x2C, 0x2B, 0x06, 0x01, 0x08, 0x0F, 0x1A, 0x1D, 0x14, 0x13,
+      0xAE, 0xA9, 0xA0, 0xA7, 0xB2, 0xB5, 0xBC, 0xBB, 0x96, 0x91, 0x98, 0x9F, 0x8A, 0x8D, 0x84, 0x83,
+      0xDE, 0xD9, 0xD0, 0xD7, 0xC2, 0xC5, 0xCC, 0xCB, 0xE6, 0xE1, 0xE8, 0xEF, 0xFA, 0xFD, 0xF4, 0xF3,
+    ];
+    let crc = 0;
+    for (let i = 0; i < buf.length - 1; i++) {
+      crc = TABLE_CRC8[0xff & (crc ^ buf[i])];
     }
+    return crc;
+  }
 
+  /**
+   * Build a Checkme Pro command packet.
+   * Format: [0xAA, cmd, ~cmd, pkgNo(2), len(2), CRC8]
+   */
+  private buildCommand(cmd: number): Uint8Array {
+    const buf = new Uint8Array(8);
+    buf[0] = CMD_HEADER;        // 0xAA
+    buf[1] = cmd;               // command word
+    buf[2] = (~cmd) & 0xFF;     // inverse of command
+    buf[3] = 0;                 // pkg number low
+    buf[4] = 0;                 // pkg number high
+    buf[5] = 0;                 // content length low
+    buf[6] = 0;                 // content length high
+    buf[7] = this.calCRC8(buf); // CRC8
+    return buf;
+  }
+
+  /**
+   * Send a command to the device.
+   */
+  private async sendCommand(cmd: Uint8Array): Promise<void> {
+    if (!this.writeCharacteristic) return;
     try {
-      const cmd = new Uint8Array([RT_DATA_COMMAND]);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       await this.writeCharacteristic.writeValueWithoutResponse(cmd as any);
-      console.log('[BLE] RT data command sent');
     } catch (e) {
-      console.warn('[BLE] Failed to send RT command:', e);
+      console.warn('[BLE] Failed to send command:', e);
     }
   }
 
   /**
-   * Keep-alive: periodically send RT command to prevent idle disconnect.
-   * Some Viatom devices drop the connection after a few seconds without commands.
+   * Send PING command to keep connection alive.
+   * From official SDK: CMD_WORD_PING = 0x15
+   */
+  private async sendPing(): Promise<void> {
+    const cmd = this.buildCommand(CMD_PING);
+    await this.sendCommand(cmd);
+    console.log('[BLE] PING sent');
+  }
+
+  /**
+   * Send GetDeviceInfo command.
+   * From official SDK: CMD_WORD_GET_INFO = 0x14
+   */
+  private async sendGetDeviceInfo(): Promise<void> {
+    const cmd = this.buildCommand(CMD_GET_INFO);
+    await this.sendCommand(cmd);
+    console.log('[BLE] GetDeviceInfo sent');
+  }
+
+  /**
+   * Send monitor-mode RT data command.
+   * From LepuBle: byteArrayOfInts(0) = single byte 0x00
+   */
+  private async sendRtDataCommand(): Promise<void> {
+    await this.sendCommand(new Uint8Array([RT_DATA_COMMAND]));
+    console.log('[BLE] RT data command sent');
+  }
+
+  /**
+   * Initialize communication with the device.
+   * Tries multiple approaches since the device might be in different modes:
+   * 1. GetDeviceInfo (data sync protocol) — establishes communication
+   * 2. PING (data sync protocol) — keeps alive  
+   * 3. RT data command (monitor protocol) — starts real-time streaming
+   */
+  private async initializeCommunication(): Promise<void> {
+    // Try data sync protocol first (most reliable for keeping connection)
+    await this.sendGetDeviceInfo();
+    await this.delay(200);
+    await this.sendPing();
+    await this.delay(200);
+    // Also try monitor mode RT command
+    await this.sendRtDataCommand();
+  }
+
+  /**
+   * Keep-alive: periodically send PING to prevent idle disconnect.
    */
   private keepAliveTimer: ReturnType<typeof setInterval> | null = null;
 
   private startKeepAlive(): void {
     this.stopKeepAlive();
     this.keepAliveTimer = setInterval(async () => {
-      if (this.server?.connected && this.writeCharacteristic) {
+      if (this.server?.connected) {
         try {
-          const cmd = new Uint8Array([RT_DATA_COMMAND]);
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          await this.writeCharacteristic.writeValueWithoutResponse(cmd as any);
+          await this.sendPing();
         } catch {
           // Ignore — disconnect handler will take care of it
         }
       }
-    }, 3000); // Every 3 seconds
+    }, 2000); // Every 2 seconds
   }
 
   private stopKeepAlive(): void {
@@ -290,7 +377,10 @@ export class WebBluetoothManager {
   /**
    * Handle incoming BLE notifications.
    * 
-   * The Checkme Pro sends combined packets containing ECG + SpO2 + vitals data.
+   * The Checkme Pro may send:
+   * 1. Data sync responses: header 0x55 (file transfer, device info, ping ack)
+   * 2. Monitor RT data: header 0xA5 0x5A (ECG + SpO2 + vitals)
+   * 
    * Packets may be split across multiple BLE notifications due to MTU limits.
    */
   private handleNotification(event: Event): void {
@@ -298,8 +388,12 @@ export class WebBluetoothManager {
     const dataView = characteristic.value;
     if (!dataView) return;
 
-    // Append incoming data to buffer
+    // Log raw data for debugging
     const incoming = new Uint8Array(dataView.buffer);
+    const hex = Array.from(incoming).map(b => b.toString(16).padStart(2, '0')).join(' ');
+    console.log(`[BLE] Notify (${incoming.length}B): ${hex}`);
+
+    // Append incoming data to buffer
     const combined = new Uint8Array(this.packetBuffer.length + incoming.length);
     combined.set(this.packetBuffer);
     combined.set(incoming, this.packetBuffer.length);
@@ -310,58 +404,58 @@ export class WebBluetoothManager {
   }
 
   /**
-   * Process buffered data, extracting complete Checkme packets.
-   * Packet format starts with [0xA5, 0x5A] header.
+   * Process buffered data, extracting complete packets.
+   * Recognizes two packet types:
+   * - Monitor RT data: [0xA5, 0x5A, size, ...]
+   * - Data sync response: [0x55, cmd, ~cmd, pkgNo(2), len(2), content(len), CRC8]
    */
   private processBuffer(): void {
     while (this.packetBuffer.length >= 4) {
-      // Find packet header
-      const headerIndex = this.findHeader(this.packetBuffer);
-      if (headerIndex === -1) {
-        // No header found, discard buffer
-        this.packetBuffer = new Uint8Array(0);
-        return;
+      const firstByte = this.packetBuffer[0];
+
+      // Data sync response: starts with 0x55
+      if (firstByte === 0x55) {
+        if (this.packetBuffer.length < 8) return; // Need at least 8 bytes
+        const len = (this.packetBuffer[5] & 0xff) + ((this.packetBuffer[6] & 0xff) << 8);
+        const totalSize = 8 + len;
+        if (this.packetBuffer.length < totalSize) return; // Wait for full packet
+
+        const packet = this.packetBuffer.slice(0, totalSize);
+        this.packetBuffer = this.packetBuffer.slice(totalSize);
+
+        const cmd = packet[1] & 0xff;
+        console.log(`[BLE] Data sync response: cmd=0x${cmd.toString(16)}, len=${len}`);
+        // Data sync responses confirm the device is communicating.
+        // We don't need to process them further for vital signs.
+        continue;
       }
 
-      // Skip any garbage before header
-      if (headerIndex > 0) {
-        this.packetBuffer = this.packetBuffer.slice(headerIndex);
-      }
+      // Monitor RT data: starts with 0xA5, 0x5A
+      if (firstByte === 0xA5 && this.packetBuffer.length > 1 && this.packetBuffer[1] === 0x5A) {
+        if (this.packetBuffer.length < 3) return;
+        const packetSize = this.packetBuffer[2]; // pkg_size field
+        const totalSize = packetSize + 3; // header (2) + size byte (1) + data (packetSize)
 
-      // Check if we have enough data for the size byte
-      if (this.packetBuffer.length < 3) return;
+        if (this.packetBuffer.length < totalSize) return; // Wait for full packet
 
-      const packetSize = this.packetBuffer[2]; // pkg_size field
-      const totalSize = packetSize + 3; // header (2) + size byte (1) + data (packetSize)
+        const packet = this.packetBuffer.slice(0, totalSize);
+        this.packetBuffer = this.packetBuffer.slice(totalSize);
 
-      // Wait for full packet
-      if (this.packetBuffer.length < totalSize) return;
-
-      // Extract and parse the packet
-      const packet = this.packetBuffer.slice(0, totalSize);
-      this.packetBuffer = this.packetBuffer.slice(totalSize);
-
-      try {
-        const parsed = this.parsePacket(packet);
-        if (parsed) {
-          this.dispatchParsedData(parsed);
+        try {
+          const parsed = this.parsePacket(packet);
+          if (parsed) {
+            this.dispatchParsedData(parsed);
+          }
+        } catch (e) {
+          console.warn('[BLE] RT packet parse error:', e);
         }
-      } catch (e) {
-        console.warn('[BLE] Packet parse error:', e);
+        continue;
       }
-    }
-  }
 
-  /**
-   * Find [0xA5, 0x5A] header in buffer
-   */
-  private findHeader(buf: Uint8Array): number {
-    for (let i = 0; i < buf.length - 1; i++) {
-      if (buf[i] === HEADER_BYTE_1 && buf[i + 1] === HEADER_BYTE_2) {
-        return i;
-      }
+      // Unknown byte — skip it
+      console.log(`[BLE] Skipping unknown byte: 0x${firstByte.toString(16)}`);
+      this.packetBuffer = this.packetBuffer.slice(1);
     }
-    return -1;
   }
 
   /**
@@ -548,18 +642,6 @@ export class WebBluetoothManager {
     this.packetBuffer = new Uint8Array(0);
 
     this.callbacks.onConnectionChange('disconnected');
-  }
-
-  /**
-   * Send a raw command to the device
-   */
-  async sendCommand(cmd: Uint8Array): Promise<void> {
-    if (!this.writeCharacteristic) {
-      console.warn('[BLE] Cannot send command — not connected');
-      return;
-    }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    await this.writeCharacteristic.writeValueWithoutResponse(cmd as any);
   }
 
   /** Connection status */
