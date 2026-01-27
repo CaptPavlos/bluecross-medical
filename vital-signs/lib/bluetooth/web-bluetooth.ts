@@ -111,15 +111,21 @@ export class WebBluetoothManager {
     try {
       this.callbacks.onConnectionChange('scanning');
 
-      // Request device — user will see the Chrome BLE picker dialog
+      // Request device — user will see the Chrome BLE picker dialog.
+      // Many BLE devices don't advertise service UUIDs, only their name.
+      // Use multiple filter entries (OR logic) to match by service OR by name.
       this.device = await navigator.bluetooth.requestDevice({
         filters: [
           { services: [VIATOM_SERVICE_UUID] },
+          { namePrefix: 'Checkme' },
+          { namePrefix: 'CheckMe' },
+          { namePrefix: 'AirBP' },
+          { namePrefix: 'Viatom' },
+          { namePrefix: 'PC-68B' },
+          { namePrefix: 'O2Ring' },
         ],
-        // Also accept name-based filters as fallback
-        // Some devices may not advertise the service UUID
-        // Uncomment if needed:
-        // acceptAllDevices: true,
+        // Must list services here too so we can access them after connecting
+        // (Web Bluetooth requires services in filters or optionalServices)
         optionalServices: [VIATOM_SERVICE_UUID],
       });
 
