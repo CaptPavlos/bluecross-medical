@@ -12,7 +12,7 @@
  */
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Circle, History, Save } from 'lucide-react';
+import { Circle, History, Save, Download, Smartphone } from 'lucide-react';
 import Link from 'next/link';
 import { ECGWaveform } from './ECGWaveform';
 import { VitalCard } from './VitalCard';
@@ -24,15 +24,18 @@ import { useVitalsStore } from '@/lib/stores/vitals-store';
 import { ECGProcessor } from '@/lib/processors/ecg-processor';
 import { saveVitalRecord, saveECGSession } from '@/lib/storage/indexed-db';
 import { ECGSessionRecord, VitalRecord } from '@/lib/types';
+import { WebBluetoothManager } from '@/lib/bluetooth/web-bluetooth';
 
 export const MonitorDashboard: React.FC = () => {
   const [isMounted, setIsMounted] = useState(false);
   const processorRef = useRef(new ECGProcessor());
   const recordedSamplesRef = useRef<Array<{ timestamp: number; value: number }>>([]);
+  const bleManagerRef = useRef<WebBluetoothManager | null>(null);
 
   const {
     connectionStatus,
     deviceName,
+    deviceInfo,
     isDemoMode,
     ecgData,
     ecgAnalysis,
@@ -42,9 +45,12 @@ export const MonitorDashboard: React.FC = () => {
     temperature,
     isRecording,
     recordingStartTime,
+    storedRecords,
+    isDownloading,
     setConnectionStatus,
     setECGAnalysis,
     setRecording,
+    setDownloading,
     reset,
   } = useVitalsStore();
 
@@ -89,6 +95,13 @@ export const MonitorDashboard: React.FC = () => {
   const handleStartDemo = useCallback(() => {
     startDemo();
   }, [startDemo]);
+
+  const handleDownloadData = useCallback(async () => {
+    if (bleManagerRef.current?.connected) {
+      setDownloading(true);
+      await bleManagerRef.current.downloadStoredData();
+    }
+  }, [setDownloading]);
 
   const handleToggleRecording = useCallback(async () => {
     if (isRecording) {
@@ -236,7 +249,50 @@ export const MonitorDashboard: React.FC = () => {
 
       {/* Connection panel (when not connected) */}
       {!isConnected && (
-        <BluetoothConnect onDemoMode={handleStartDemo} />
+        <BluetoothConnect onDemoMode={handleStartDemo} bleManagerRef={bleManagerRef} />
+      )}
+
+      {/* Device info panel (when connected) */}
+      {isConnected && deviceInfo && (
+        <div className="bg-bg-secondary rounded-xl p-5">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <Smartphone size={18} className="text-accent-blue" />
+              <h3 className="font-semibold">Device Info</h3>
+            </div>
+            <button
+              onClick={handleDownloadData}
+              disabled={isDownloading}
+              className="btn-secondary flex items-center gap-2 text-sm"
+            >
+              <Download size={14} className={isDownloading ? 'animate-spin' : ''} />
+              {isDownloading ? 'Downloading...' : 'Download Stored Data'}
+            </button>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-sm">
+            <div><span className="text-gray-400">Model:</span> <span className="font-medium">{deviceInfo.Model || '—'}</span></div>
+            <div><span className="text-gray-400">SN:</span> <span className="font-medium">{deviceInfo.SN || '—'}</span></div>
+            <div><span className="text-gray-400">Region:</span> <span className="font-medium">{deviceInfo.Region || '—'}</span></div>
+            <div><span className="text-gray-400">Mode:</span> <span className={`font-medium ${deviceInfo.Application === 'MODE_HOME' ? 'text-accent-yellow' : 'text-accent-green'}`}>{deviceInfo.Application?.replace('MODE_', '') || '—'}</span></div>
+            <div><span className="text-gray-400">Firmware:</span> <span className="font-medium">{deviceInfo.SoftwareVer || '—'}</span></div>
+            <div><span className="text-gray-400">Language:</span> <span className="font-medium">{deviceInfo.CurLanguage || '—'}</span></div>
+          </div>
+          {deviceInfo.Application === 'MODE_HOME' && (
+            <p className="mt-3 text-sm text-accent-yellow">
+              💡 Device is on home screen. Start an ECG or SpO2 measurement on the device for real-time data, or download stored measurements above.
+            </p>
+          )}
+          {storedRecords.length > 0 && (
+            <div className="mt-3 p-3 bg-bg-card rounded-lg">
+              <p className="text-sm font-medium text-accent-green mb-1">✅ {storedRecords.length} stored record(s) downloaded</p>
+              {storedRecords.map((r, i) => (
+                <div key={i} className="text-xs text-gray-400">
+                  {r.type.toUpperCase()} — {new Date(r.timestamp).toLocaleString()} — {JSON.stringify(r.data).slice(0, 100)}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       )}
 
       {/* ECG Section */}

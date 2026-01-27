@@ -6,12 +6,13 @@
  */
 
 import { create } from 'zustand';
-import { ECGSample, BloodPressure, SpO2Reading, ConnectionStatus, ECGAnalysis } from '@/lib/types';
+import { ECGSample, BloodPressure, SpO2Reading, ConnectionStatus, ECGAnalysis, CheckmeDeviceInfo, StoredRecord } from '@/lib/types';
 
 interface VitalsState {
   // Connection
   connectionStatus: ConnectionStatus;
   deviceName: string | undefined;
+  deviceInfo: CheckmeDeviceInfo | null;
 
   // Demo mode
   isDemoMode: boolean;
@@ -34,8 +35,13 @@ interface VitalsState {
   // Temperature
   temperature: number | null;
 
+  // Stored data from device
+  storedRecords: StoredRecord[];
+  isDownloading: boolean;
+
   // Actions
   setConnectionStatus: (status: ConnectionStatus, deviceName?: string) => void;
+  setDeviceInfo: (info: CheckmeDeviceInfo) => void;
   setDemoMode: (active: boolean) => void;
   addECGData: (samples: ECGSample[]) => void;
   setECGAnalysis: (analysis: ECGAnalysis | null) => void;
@@ -45,6 +51,8 @@ interface VitalsState {
   setBloodPressure: (systolic: number, diastolic: number, pulse: number) => void;
   setMeasuringBP: (measuring: boolean) => void;
   setTemperature: (celsius: number) => void;
+  setStoredRecords: (records: StoredRecord[]) => void;
+  setDownloading: (downloading: boolean) => void;
   reset: () => void;
 }
 
@@ -53,6 +61,7 @@ const MAX_ECG_SAMPLES = 5000; // ~10 seconds at 500Hz
 const initialState = {
   connectionStatus: 'disconnected' as ConnectionStatus,
   deviceName: undefined,
+  deviceInfo: null as CheckmeDeviceInfo | null,
   isDemoMode: false,
   ecgData: [] as ECGSample[],
   ecgAnalysis: null as ECGAnalysis | null,
@@ -64,16 +73,20 @@ const initialState = {
   bloodPressure: null as BloodPressure | null,
   isMeasuringBP: false,
   temperature: null as number | null,
+  storedRecords: [] as StoredRecord[],
+  isDownloading: false,
 };
 
 export const useVitalsStore = create<VitalsState>((set) => ({
   ...initialState,
 
   setConnectionStatus: (status, deviceName) =>
-    set({
+    set((state) => ({
       connectionStatus: status,
-      deviceName: deviceName ?? (status === 'disconnected' ? undefined : undefined),
-    }),
+      deviceName: deviceName ?? state.deviceName ?? (status === 'disconnected' ? undefined : undefined),
+    })),
+
+  setDeviceInfo: (info) => set({ deviceInfo: info }),
 
   setDemoMode: (active) =>
     set({
@@ -118,6 +131,10 @@ export const useVitalsStore = create<VitalsState>((set) => ({
   setMeasuringBP: (measuring) => set({ isMeasuringBP: measuring }),
 
   setTemperature: (celsius) => set({ temperature: celsius }),
+
+  setStoredRecords: (records) => set({ storedRecords: records, isDownloading: false }),
+
+  setDownloading: (downloading) => set({ isDownloading: downloading }),
 
   reset: () => set(initialState),
 }));
