@@ -102,6 +102,9 @@ export class WebBluetoothManager {
   private callbacks: BLECallbacks;
   private isStreaming = false;
   private packetBuffer: Uint8Array = new Uint8Array(0);
+  private deviceMode: string | null = null;
+  private isDisconnecting = false;       // Flag to prevent race conditions
+  private intentionalDisconnect = false;  // Flag for user-initiated disconnect
 
   constructor(callbacks: BLECallbacks) {
     this.callbacks = callbacks;
@@ -119,6 +122,10 @@ export class WebBluetoothManager {
 
     try {
       this.callbacks.onConnectionChange('scanning');
+      this.intentionalDisconnect = false;
+      this.isDisconnecting = false;
+      this.reconnectAttempts = 0;
+      this.deviceMode = null;
 
       // Request device — user will see the Chrome BLE picker dialog.
       // Many BLE devices don't advertise service UUIDs, only their name.
@@ -167,23 +174,29 @@ export class WebBluetoothManager {
    * Connection sequence (based on official Viatom SDK):
    * 1. Connect GATT server
    * 2. Discover service + characteristics
-   * 3. Send RT data command FIRST (device may disconnect if idle too long)
-   * 4. Subscribe to notifications
-   * 5. Device starts streaming data
+   * 3. Subscribe to notifications
+   * 4. Send GetDeviceInfo to establish communication
+   * 5. Start keep-alive if device is in measurement mode
    */
   private async connect(): Promise<boolean> {
     if (!this.device?.gatt) return false;
+    if (this.isDisconnecting) return false;
 
     try {
       this.callbacks.onConnectionChange('connecting');
-      this.reconnectAttempts = 0;
+      this.deviceMode = null;
 
       // Step 1: Connect to GATT server
       this.server = await this.device.gatt.connect();
       console.log('[BLE] GATT server connected');
 
+      // Check if disconnected during async operation
+      if (this.isDisconnecting || !this.server?.connected) return false;
+
       // Small delay to let the connection stabilize
       await this.delay(500);
+
+      if (this.isDisconnecting || !this.server?.connected) return false;
 
       // Step 2: Discover service
       const service = await this.server.getPrimaryService(VIATOM_SERVICE_UUID);
@@ -204,6 +217,8 @@ export class WebBluetoothManager {
         console.warn('[BLE] Notify characteristic not available:', e);
       }
 
+      if (this.isDisconnecting) return false;
+
       // Step 4: Subscribe to notifications FIRST (before sending any commands).
       // This ensures we don't miss any response from the device.
       if (this.notifyCharacteristic) {
@@ -219,11 +234,20 @@ export class WebBluetoothManager {
         }
       }
 
+      if (this.isDisconnecting) return false;
+
       // Step 5: Initialize communication with proper protocol commands.
       // Must happen quickly after notification subscription to prevent idle disconnect.
       await this.initializeCommunication();
 
-      this.callbacks.onConnectionChange('connected', this.device.name || 'Checkme Pro');
+      // Check again — device may have disconnected during initialization
+      if (this.isDisconnecting || !this.server?.connected) {
+        console.log('[BLE] Device disconnected during initialization');
+        return false;
+      }
+
+      const deviceName = this.device?.name || 'Checkme Pro';
+      this.callbacks.onConnectionChange('connected', deviceName);
       this.isStreaming = true;
 
       // Step 6: Start keep-alive PING every 2 seconds
@@ -231,6 +255,7 @@ export class WebBluetoothManager {
 
       return true;
     } catch (error) {
+      if (this.isDisconnecting || this.intentionalDisconnect) return false;
       const err = error as Error;
       console.error('[BLE] Connection error:', err);
       this.callbacks.onError(`Connection failed: ${err.message}`);
@@ -303,6 +328,7 @@ export class WebBluetoothManager {
    * From official SDK: CMD_WORD_PING = 0x15
    */
   private async sendPing(): Promise<void> {
+    if (!this.writeCharacteristic || !this.server?.connected) return;
     const cmd = this.buildCommand(CMD_PING);
     await this.sendCommand(cmd);
     console.log('[BLE] PING sent');
@@ -350,7 +376,7 @@ export class WebBluetoothManager {
   private startKeepAlive(): void {
     this.stopKeepAlive();
     this.keepAliveTimer = setInterval(async () => {
-      if (this.server?.connected) {
+      if (this.server?.connected && this.writeCharacteristic && !this.isDisconnecting) {
         try {
           await this.sendPing();
         } catch {
@@ -440,11 +466,13 @@ export class WebBluetoothManager {
                 const name = `Checkme ${deviceInfo.SN || ''}`.trim();
                 this.callbacks.onConnectionChange('connected', name);
               }
-              // Log the application mode — important for knowing if RT data is available
+              // Track application mode — important for knowing if RT data is available
               if (deviceInfo.Application) {
-                console.log(`[BLE] Device mode: ${deviceInfo.Application}`);
-                if (deviceInfo.Application === 'MODE_HOME') {
+                this.deviceMode = deviceInfo.Application;
+                console.log(`[BLE] Device mode: ${this.deviceMode}`);
+                if (this.deviceMode === 'MODE_HOME') {
                   console.log('[BLE] Device is on home screen. Start a measurement (ECG/SpO2) on the device for real-time data.');
+                  this.callbacks.onError('Device is on home screen. Please start a measurement (ECG or SpO2) on the Checkme Pro, then reconnect.');
                 }
               }
             }
@@ -620,17 +648,42 @@ export class WebBluetoothManager {
   }
 
   /**
-   * Handle device disconnection — attempt auto-reconnect
+   * Handle device disconnection — attempt auto-reconnect only if appropriate.
+   * 
+   * Do NOT reconnect when:
+   * - User intentionally disconnected
+   * - Device is in MODE_HOME (no measurement active — reconnect would just fail again)
+   * - Already handling a disconnection (prevent re-entrancy)
    */
   private async handleDisconnection(): Promise<void> {
+    if (this.isDisconnecting) return; // Prevent re-entrancy
+    this.isDisconnecting = true;
+
     console.log('[BLE] Device disconnected');
     this.isStreaming = false;
+    this.stopKeepAlive();
     this.writeCharacteristic = null;
     this.notifyCharacteristic = null;
+    this.server = null;
     this.packetBuffer = new Uint8Array(0);
-    this.stopKeepAlive();
 
-    if (this.reconnectAttempts < MAX_RECONNECT_ATTEMPTS) {
+    // Don't reconnect if user disconnected intentionally
+    if (this.intentionalDisconnect) {
+      this.isDisconnecting = false;
+      this.callbacks.onConnectionChange('disconnected');
+      return;
+    }
+
+    // Don't reconnect if device was in MODE_HOME — user needs to start a measurement first
+    if (this.deviceMode === 'MODE_HOME') {
+      console.log('[BLE] Not reconnecting — device is on home screen. Start a measurement first.');
+      this.isDisconnecting = false;
+      this.callbacks.onConnectionChange('disconnected');
+      return;
+    }
+
+    // Auto-reconnect for unexpected disconnections during active measurement
+    if (this.reconnectAttempts < MAX_RECONNECT_ATTEMPTS && this.device) {
       this.callbacks.onConnectionChange('reconnecting');
       this.reconnectAttempts++;
 
@@ -639,12 +692,17 @@ export class WebBluetoothManager {
 
       await new Promise(resolve => setTimeout(resolve, delay));
 
-      if (this.device) {
+      this.isDisconnecting = false;
+
+      if (this.device && !this.intentionalDisconnect) {
         await this.connect();
       }
     } else {
+      this.isDisconnecting = false;
       this.callbacks.onConnectionChange('disconnected');
-      this.callbacks.onError('Device disconnected. Max reconnection attempts reached.');
+      if (this.reconnectAttempts >= MAX_RECONNECT_ATTEMPTS) {
+        this.callbacks.onError('Device disconnected. Max reconnection attempts reached.');
+      }
     }
   }
 
@@ -652,7 +710,7 @@ export class WebBluetoothManager {
    * Disconnect from the device
    */
   disconnect(): void {
-    this.reconnectAttempts = MAX_RECONNECT_ATTEMPTS; // Prevent auto-reconnect
+    this.intentionalDisconnect = true;
     this.isStreaming = false;
     this.stopKeepAlive();
 
@@ -665,6 +723,7 @@ export class WebBluetoothManager {
     this.writeCharacteristic = null;
     this.notifyCharacteristic = null;
     this.packetBuffer = new Uint8Array(0);
+    this.deviceMode = null;
 
     this.callbacks.onConnectionChange('disconnected');
   }
