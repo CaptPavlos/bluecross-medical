@@ -1,0 +1,123 @@
+/**
+ * Zustand Store for Vital Signs State
+ * 
+ * Adapted from Electron app vitalsStore.ts
+ * Added: demo mode, connection status, ECG analysis
+ */
+
+import { create } from 'zustand';
+import { ECGSample, BloodPressure, SpO2Reading, ConnectionStatus, ECGAnalysis } from '@/lib/types';
+
+interface VitalsState {
+  // Connection
+  connectionStatus: ConnectionStatus;
+  deviceName: string | undefined;
+
+  // Demo mode
+  isDemoMode: boolean;
+
+  // ECG
+  ecgData: ECGSample[];
+  ecgAnalysis: ECGAnalysis | null;
+  isRecording: boolean;
+  recordingStartTime: number | null;
+
+  // SpO2
+  spo2: number | null;
+  heartRate: number | null;
+  perfusionIndex: string | null;
+
+  // Blood Pressure
+  bloodPressure: BloodPressure | null;
+  isMeasuringBP: boolean;
+
+  // Temperature
+  temperature: number | null;
+
+  // Actions
+  setConnectionStatus: (status: ConnectionStatus, deviceName?: string) => void;
+  setDemoMode: (active: boolean) => void;
+  addECGData: (samples: ECGSample[]) => void;
+  setECGAnalysis: (analysis: ECGAnalysis | null) => void;
+  clearECGData: () => void;
+  setRecording: (isRecording: boolean) => void;
+  setSpO2: (spo2: number, heartRate: number, perfusionIndex?: string) => void;
+  setBloodPressure: (systolic: number, diastolic: number, pulse: number) => void;
+  setMeasuringBP: (measuring: boolean) => void;
+  setTemperature: (celsius: number) => void;
+  reset: () => void;
+}
+
+const MAX_ECG_SAMPLES = 5000; // ~10 seconds at 500Hz
+
+const initialState = {
+  connectionStatus: 'disconnected' as ConnectionStatus,
+  deviceName: undefined,
+  isDemoMode: false,
+  ecgData: [] as ECGSample[],
+  ecgAnalysis: null as ECGAnalysis | null,
+  isRecording: false,
+  recordingStartTime: null as number | null,
+  spo2: null as number | null,
+  heartRate: null as number | null,
+  perfusionIndex: null as string | null,
+  bloodPressure: null as BloodPressure | null,
+  isMeasuringBP: false,
+  temperature: null as number | null,
+};
+
+export const useVitalsStore = create<VitalsState>((set) => ({
+  ...initialState,
+
+  setConnectionStatus: (status, deviceName) =>
+    set({
+      connectionStatus: status,
+      deviceName: deviceName ?? (status === 'disconnected' ? undefined : undefined),
+    }),
+
+  setDemoMode: (active) =>
+    set({
+      isDemoMode: active,
+      connectionStatus: active ? 'connected' : 'disconnected',
+      deviceName: active ? 'Demo Device' : undefined,
+    }),
+
+  addECGData: (samples) =>
+    set((state) => {
+      const newData = [...state.ecgData, ...samples];
+      if (newData.length > MAX_ECG_SAMPLES) {
+        return { ecgData: newData.slice(-MAX_ECG_SAMPLES) };
+      }
+      return { ecgData: newData };
+    }),
+
+  setECGAnalysis: (analysis) => set({ ecgAnalysis: analysis }),
+
+  clearECGData: () => set({ ecgData: [], ecgAnalysis: null }),
+
+  setRecording: (isRecording) =>
+    set({
+      isRecording,
+      recordingStartTime: isRecording ? Date.now() : null,
+    }),
+
+  setSpO2: (spo2, heartRate, perfusionIndex) =>
+    set({ spo2, heartRate, perfusionIndex: perfusionIndex ?? null }),
+
+  setBloodPressure: (systolic, diastolic, pulse) =>
+    set({
+      bloodPressure: {
+        systolic,
+        diastolic,
+        pulse,
+        timestamp: Date.now(),
+      },
+      isMeasuringBP: false,
+    }),
+
+  setMeasuringBP: (measuring) => set({ isMeasuringBP: measuring }),
+
+  setTemperature: (celsius) => set({ temperature: celsius }),
+
+  reset: () => set(initialState),
+}));
