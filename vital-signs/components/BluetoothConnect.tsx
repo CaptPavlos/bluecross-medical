@@ -9,7 +9,7 @@
  */
 
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-import { Bluetooth, AlertTriangle, Monitor } from 'lucide-react';
+import { Bluetooth, AlertTriangle, Monitor, Loader2 } from 'lucide-react';
 import { WebBluetoothManager, isWebBluetoothSupported } from '@/lib/bluetooth/web-bluetooth';
 import { useVitalsStore } from '@/lib/stores/vitals-store';
 import { BLECallbacks } from '@/lib/types';
@@ -20,10 +20,13 @@ interface BluetoothConnectProps {
 
 export const BluetoothConnect: React.FC<BluetoothConnectProps> = ({ onDemoMode }) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [isSupported] = useState(() =>
-    typeof window !== 'undefined' ? isWebBluetoothSupported() : false
-  );
+  const [isSupported, setIsSupported] = useState<boolean | null>(null); // null = loading
   const bleManagerRef = useRef<WebBluetoothManager | null>(null);
+
+  // Check browser support only on client after mount (avoids hydration mismatch)
+  useEffect(() => {
+    setIsSupported(isWebBluetoothSupported());
+  }, []);
 
   const {
     connectionStatus,
@@ -62,6 +65,16 @@ export const BluetoothConnect: React.FC<BluetoothConnectProps> = ({ onDemoMode }
   const handleDisconnect = useCallback(() => {
     bleManagerRef.current?.disconnect();
   }, []);
+
+  // Loading state — waiting for client-side check
+  if (isSupported === null) {
+    return (
+      <div className="flex flex-col items-center justify-center gap-6 p-8 md:p-16 bg-bg-secondary rounded-2xl max-w-lg mx-auto">
+        <Loader2 size={64} className="text-accent-blue animate-spin" />
+        <h2 className="text-xl font-semibold text-center">Checking browser support...</h2>
+      </div>
+    );
+  }
 
   if (!isSupported) {
     return (

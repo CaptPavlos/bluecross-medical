@@ -11,7 +11,7 @@
  * - Recording and export controls
  */
 
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Circle, History, Save } from 'lucide-react';
 import Link from 'next/link';
 import { ECGWaveform } from './ECGWaveform';
@@ -26,6 +26,7 @@ import { saveVitalRecord, saveECGSession } from '@/lib/storage/indexed-db';
 import { ECGSessionRecord, VitalRecord } from '@/lib/types';
 
 export const MonitorDashboard: React.FC = () => {
+  const [isMounted, setIsMounted] = useState(false);
   const processorRef = useRef(new ECGProcessor());
   const recordedSamplesRef = useRef<Array<{ timestamp: number; value: number }>>([]);
 
@@ -48,6 +49,11 @@ export const MonitorDashboard: React.FC = () => {
   } = useVitalsStore();
 
   const { startDemo, stopDemo } = useDemoMode();
+
+  // Prevent hydration mismatch — only render dynamic content after mount
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const isConnected = connectionStatus === 'connected';
   const isStreaming = isConnected && ecgData.length > 0;
@@ -247,12 +253,10 @@ export const MonitorDashboard: React.FC = () => {
                 {displayRhythm}
               </span>
             )}
-            {isRecording && (
+            {isRecording && isMounted && (
               <span className="text-sm px-3 py-1 rounded-full bg-accent-red/20 text-accent-red flex items-center gap-1">
                 <Circle size={8} className="fill-accent-red animate-pulse" />
-                REC {recordingStartTime
-                  ? `${Math.floor((Date.now() - recordingStartTime) / 1000)}s`
-                  : ''}
+                REC
               </span>
             )}
           </div>
