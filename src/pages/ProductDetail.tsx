@@ -99,14 +99,14 @@ function ProductDetail() {
                     </span>
                   ) : product.slug === 'telemedicine-base-station' ? (
                     <span className="text-xl font-semibold text-brand-sky">
-                      Price on Request
+                      Contact for pricing
                     </span>
                   ) : null}
                   <a 
                     href={`mailto:${QUOTE_EMAIL}?subject=Quote Request: ${encodeURIComponent(product.name)}`}
                     className="inline-flex items-center gap-2 px-6 py-3 bg-white text-[#0A1628] font-semibold rounded-lg hover:bg-gray-100 transition-colors"
                   >
-                    Get a Quote
+                    Request Quote
                     <Mail size={20} />
                   </a>
                 </div>
@@ -237,14 +237,14 @@ function ProductDetail() {
                     </span>
                   ) : product.slug === 'telemedicine-base-station' ? (
                     <span className="text-xl font-semibold text-brand-sky">
-                      Price on Request
+                      Contact for pricing
                     </span>
                   ) : null}
                   <a 
                     href={`mailto:${QUOTE_EMAIL}?subject=Quote Request: ${encodeURIComponent(product.name)}`}
                     className="inline-flex items-center gap-2 px-6 py-3 bg-brand-ocean text-white font-semibold rounded-lg hover:bg-brand-ocean/90 transition-colors"
                   >
-                    Get a Quote
+                    Request Quote
                     <Mail size={20} />
                   </a>
                 </div>
