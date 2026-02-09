@@ -37,3 +37,9 @@ coverage/
 # Temp
 tmp/
 *.tmp
+
+# Subdirectory build artifacts
+vital-signs/.next/
+vital-signs/.vercel/
+vital-signs/node_modules/
+vital-signs/*.apk

@@ -87,7 +87,7 @@ function Team() {
                 We're always looking for talented individuals who share our passion for improving healthcare through technology.
               </p>
               <a
-                href="mailto:careers@bluecross.med"
+                href="mailto:bluecross@marsoft.ai"
                 className="inline-flex items-center justify-center px-6 py-3 bg-brand-ocean text-white font-medium rounded-lg hover:bg-brand-ocean-light transition-colors"
               >
                 View Open Positions

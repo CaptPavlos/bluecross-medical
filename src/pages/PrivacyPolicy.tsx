@@ -63,7 +63,7 @@ function PrivacyPolicy() {
                     <strong>Data Controller:</strong> BlueCross Medical, registered in Greece (EU)
                   </p>
                   <p className="text-sm text-gray-600 mt-1">
-                    Contact: sales@bluecross.tech
+                    Contact: bluecross@marsoft.ai
                   </p>
                 </div>
               </div>
@@ -203,7 +203,7 @@ function PrivacyPolicy() {
                 </div>
                 <div className="mt-6 p-4 bg-brand-ocean/5 rounded-lg">
                   <p className="text-sm text-gray-600">
-                    To exercise any of these rights, contact us at <a href="mailto:sales@bluecross.tech" className="text-brand-ocean hover:underline">sales@bluecross.tech</a>. 
+                    To exercise any of these rights, contact us at <a href="mailto:bluecross@marsoft.ai" className="text-brand-ocean hover:underline">bluecross@marsoft.ai</a>. 
                     We will respond within 30 days.
                   </p>
                 </div>
@@ -284,11 +284,11 @@ function PrivacyPolicy() {
                 Contact us
               </p>
               <a
-                href="mailto:sales@bluecross.tech"
+                href="mailto:bluecross@marsoft.ai"
                 className="inline-flex items-center gap-2 bg-white text-brand-navy px-6 py-3 rounded-lg font-medium hover:bg-brand-sky-light transition-colors"
               >
                 <Mail size={18} />
-                sales@bluecross.tech
+                bluecross@marsoft.ai
               </a>
               <p className="text-sm text-brand-sky-light/80 mt-4">
                 EU Supervisory Authority: Hellenic Data Protection Authority (HDPA)

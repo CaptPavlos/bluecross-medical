@@ -1,0 +1,10 @@
+# Exclude subdirectories that are separate projects
+vital-signs/
+
+# Build artifacts
+dist/
+node_modules/
+
+# Local config
+.env.local
+.DS_Store

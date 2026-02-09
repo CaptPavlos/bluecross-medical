@@ -1,7 +1,7 @@
 import type { ContactSubmission } from '../types';
 
 // Contact email
-const CONTACT_EMAIL = 'sales@bluecross.tech';
+const CONTACT_EMAIL = 'bluecross@marsoft.ai';
 
 export interface ContactResponse {
   success: boolean;

@@ -82,11 +82,11 @@ function About() {
                 {/* Contact */}
                 <div className="mt-6 flex gap-4">
                   <a
-                    href="mailto:paul@bluecross.tech"
+                    href="mailto:bluecross@marsoft.ai"
                     className="flex items-center gap-2 text-sm text-brand-ocean hover:text-brand-navy transition-colors"
                   >
                     <Mail size={16} />
-                    paul@bluecross.tech
+                    bluecross@marsoft.ai
                   </a>
                   <a
                     href="https://linkedin.com/company/bluecross-medical"

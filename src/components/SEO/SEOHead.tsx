@@ -53,7 +53,7 @@ export default function SEOHead({
     ],
     contactPoint: {
       '@type': 'ContactPoint',
-      email: 'sales@bluecross.tech',
+      email: 'bluecross@marsoft.ai',
       contactType: 'sales',
     },
   };

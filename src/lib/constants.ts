@@ -57,7 +57,7 @@ export const MOCK_TEAM: Team[] = [
     role: 'Managing Director',
     bio: 'Paul founded BlueCross in Estonia in 2020, as a means to create an affordable way for owners to equip their vessels with necessary medical equipment. He is also the Captain of an expedition yacht and an active paramedic in Greece / South Africa.',
     image_url: 'https://images.spr.so/cdn-cgi/imagedelivery/j42No7y-dcokJuNgXeA0ig/5a54b920-f88c-4848-ab32-9116a792ea13/Profile_Circle_PF/w=400,quality=90,fit=scale-down',
-    email: 'paul@bluecross.tech',
+    email: 'bluecross@marsoft.ai',
     social_links: {
       linkedin: 'https://linkedin.com/company/bluecross-medical',
     },
@@ -72,7 +72,7 @@ export const MOCK_TEAM: Team[] = [
     role: 'CMO',
     bio: 'Athina brings her experience managing channels and running marketing campaigns from unicorn startups. She manages client relations and marketing campaigns, along with being the backbone of our CRM.',
     image_url: 'https://images.spr.so/cdn-cgi/imagedelivery/j42No7y-dcokJuNgXeA0ig/b303388a-7600-4ae5-879c-11c0f2facedc/10556465_10204238388221255_8164821583300425423_n-modified/w=400,quality=90,fit=scale-down',
-    email: 'athina@bluecross.tech',
+    email: 'bluecross@marsoft.ai',
     social_links: {
       linkedin: 'https://linkedin.com/company/bluecross-medical',
     },
@@ -87,7 +87,7 @@ export const MOCK_TEAM: Team[] = [
     role: 'COO / Co-Founder',
     bio: 'George has been in the maritime retail business for over 12 years, co-managing his family\'s marine importation business. He acts as the COO when Paul is onboard and handles the legal aspect of the business.',
     image_url: 'https://images.spr.so/cdn-cgi/imagedelivery/j42No7y-dcokJuNgXeA0ig/a7112402-d323-43a3-9851-f49725146c30/Untitled_(235__235_px)/w=400,quality=90,fit=scale-down',
-    email: 'george@bluecross.tech',
+    email: 'bluecross@marsoft.ai',
     social_links: {
       linkedin: 'https://linkedin.com/company/bluecross-medical',
     },
@@ -431,7 +431,7 @@ export const COMPANY_INFO = {
   name: 'BlueCross Medical',
   tagline: 'Maritime Emergency Medicine',
   description: 'Your complete resource for emergency medicine at sea. Flag state regulations, advanced training courses, knowledge articles, and tested equipment - all in one place.',
-  email: 'sales@bluecross.tech',
+  email: 'bluecross@marsoft.ai',
   phone: '+30 698 672 0525',
   emergencyPhone: '+30 210 523 0880',
   address: 'Frynis 55, Athens, Greece',
