@@ -1,5 +1,5 @@
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, CheckCircle, Star, ExternalLink, AlertTriangle, Phone, ShoppingCart } from 'lucide-react';
+import { ArrowLeft, CheckCircle, Star, ExternalLink, AlertTriangle, Phone, Mail } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Container from '../components/Common/Container';
 import Button from '../components/Common/Button';
@@ -7,19 +7,7 @@ import { Badge } from '../components/Common';
 import { ScrollReveal } from '../components/Animations';
 import { MOCK_PRODUCTS } from '../lib/constants';
 
-// Declare Ecwid global function
-declare global {
-  interface Window {
-    ecwidAddToCart?: (productId: number, callback?: (success: boolean) => void) => void;
-  }
-}
-
-// Add to cart using Ecwid embedded cart
-const handleAddToCart = (productId: string) => {
-  if (window.ecwidAddToCart) {
-    window.ecwidAddToCart(parseInt(productId));
-  }
-};
+const QUOTE_EMAIL = 'bluecross@marsoft.ai';
 
 // Helper to format long description into readable sections
 function formatDescription(text: string) {
@@ -103,29 +91,25 @@ function ProductDetail() {
                   <span className="text-brand-sky text-sm">Verified by seafarers</span>
                 </div>
                 
-                {product.ecwid_product_id ? (
-                  <div className="flex items-center gap-4">
-                    {product.price && (
-                      <span className="text-2xl font-bold text-white">
-                        €{product.price.toLocaleString()}
-                      </span>
-                    )}
-                    <button 
-                      onClick={() => handleAddToCart(product.ecwid_product_id!)}
-                      className="inline-flex items-center gap-2 px-6 py-3 bg-white text-[#0A1628] font-semibold rounded-lg hover:bg-gray-100 transition-colors"
-                    >
-                      Add to Cart
-                      <ShoppingCart size={20} />
-                    </button>
-                  </div>
-                ) : (
-                  <Link to="/contact">
-                    <button className="inline-flex items-center gap-2 px-6 py-3 bg-white text-[#0A1628] font-semibold rounded-lg hover:bg-gray-100 transition-colors">
-                      Contact for Quote
-                      <ShoppingCart size={20} />
-                    </button>
-                  </Link>
-                )}
+                <div className="flex items-center gap-4">
+                  {/* Show price unless it's telemedicine-base-station */}
+                  {product.price && product.slug !== 'telemedicine-base-station' ? (
+                    <span className="text-2xl font-bold text-white">
+                      €{product.price.toLocaleString()}
+                    </span>
+                  ) : product.slug === 'telemedicine-base-station' ? (
+                    <span className="text-xl font-semibold text-brand-sky">
+                      Price on Request
+                    </span>
+                  ) : null}
+                  <a 
+                    href={`mailto:${QUOTE_EMAIL}?subject=Quote Request: ${encodeURIComponent(product.name)}`}
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-white text-[#0A1628] font-semibold rounded-lg hover:bg-gray-100 transition-colors"
+                  >
+                    Get a Quote
+                    <Mail size={20} />
+                  </a>
+                </div>
               </div>
               
               {/* Product Image */}
@@ -245,22 +229,25 @@ function ProductDetail() {
                 Contact us for pricing, availability, and technical specifications. Our team is ready to help equip your vessel.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                {product.ecwid_product_id ? (
-                  <div className="flex items-center gap-4">
-                    {product.price && (
-                      <span className="text-2xl font-bold text-white">
-                        €{product.price.toLocaleString()}
-                      </span>
-                    )}
-                    <button 
-                      onClick={() => handleAddToCart(product.ecwid_product_id!)}
-                      className="inline-flex items-center gap-2 px-6 py-3 bg-brand-ocean text-white font-semibold rounded-lg hover:bg-brand-ocean/90 transition-colors"
-                    >
-                      Add to Cart
-                      <ShoppingCart size={20} />
-                    </button>
-                  </div>
-                ) : null}
+                <div className="flex items-center gap-4">
+                  {/* Show price unless it's telemedicine-base-station */}
+                  {product.price && product.slug !== 'telemedicine-base-station' ? (
+                    <span className="text-2xl font-bold text-white">
+                      €{product.price.toLocaleString()}
+                    </span>
+                  ) : product.slug === 'telemedicine-base-station' ? (
+                    <span className="text-xl font-semibold text-brand-sky">
+                      Price on Request
+                    </span>
+                  ) : null}
+                  <a 
+                    href={`mailto:${QUOTE_EMAIL}?subject=Quote Request: ${encodeURIComponent(product.name)}`}
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-brand-ocean text-white font-semibold rounded-lg hover:bg-brand-ocean/90 transition-colors"
+                  >
+                    Get a Quote
+                    <Mail size={20} />
+                  </a>
+                </div>
                 <Link to="/contact">
                   <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-brand-navy">
                     Contact Us

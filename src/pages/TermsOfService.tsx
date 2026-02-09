@@ -54,7 +54,7 @@ function TermsOfService() {
                   <p className="text-sm text-brand-navy">
                     <strong>Service Provider:</strong> BlueCross Medical<br />
                     <strong>Registration:</strong> Greece<br />
-                    <strong>Contact:</strong> sales@bluecross.tech
+                    <strong>Contact:</strong> bluecross@marsoft.ai
                   </p>
                 </div>
               </div>
@@ -417,11 +417,11 @@ function TermsOfService() {
                 Contact us
               </p>
               <a
-                href="mailto:sales@bluecross.tech"
+                href="mailto:bluecross@marsoft.ai"
                 className="inline-flex items-center gap-2 bg-white text-brand-navy px-6 py-3 rounded-lg font-medium hover:bg-brand-sky-light transition-colors"
               >
                 <Mail size={18} />
-                sales@bluecross.tech
+                bluecross@marsoft.ai
               </a>
             </motion.div>
           </div>

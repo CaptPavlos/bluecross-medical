@@ -448,11 +448,11 @@ function HipaaCompliance() {
                 Contact us for information about specific equipment and software compliance
               </p>
               <a
-                href="mailto:sales@bluecross.tech"
+                href="mailto:bluecross@marsoft.ai"
                 className="inline-flex items-center gap-2 bg-white text-brand-navy px-6 py-3 rounded-lg font-medium hover:bg-brand-sky-light transition-colors"
               >
                 <Mail size={18} />
-                sales@bluecross.tech
+                bluecross@marsoft.ai
               </a>
               <p className="text-sm text-brand-sky-light/80 mt-4">
                 For legal advice regarding HIPAA compliance, please consult a qualified healthcare attorney.

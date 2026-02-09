@@ -339,7 +339,7 @@ function Tech() {
               Our technical support team is available to assist with software installation and device configuration.
             </p>
             <motion.a
-              href="mailto:info@bluecross.tech"
+              href="mailto:bluecross@marsoft.ai"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
