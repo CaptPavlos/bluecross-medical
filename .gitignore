@@ -38,8 +38,5 @@ coverage/
 tmp/
 *.tmp
 
-# Subdirectory build artifacts
-vital-signs/.next/
-vital-signs/.vercel/
-vital-signs/node_modules/
-vital-signs/*.apk
+# Exclude entire vital-signs subdirectory (separate project, not part of this repo)
+vital-signs/

@@ -13,18 +13,28 @@ function Footer() {
       {/* Mobile Footer - Minimal with legal links only */}
       <footer className="md:hidden bg-brand-navy text-white py-6 mb-14">
         <Container>
-          <div className="flex justify-center items-center gap-4 text-sm text-gray-400">
-            <Link to="/privacy" className="hover:text-brand-ocean transition-colors">
-              Privacy
-            </Link>
-            <span className="text-gray-600">•</span>
-            <Link to="/terms" className="hover:text-brand-ocean transition-colors">
-              Terms
-            </Link>
-            <span className="text-gray-600">•</span>
-            <Link to="/hipaa" className="hover:text-brand-ocean transition-colors">
-              HIPAA
-            </Link>
+          <div className="flex flex-col items-center gap-3">
+            <div className="flex justify-center items-center gap-4 text-sm text-gray-400">
+              <Link to="/privacy" className="hover:text-brand-ocean transition-colors">
+                Privacy
+              </Link>
+              <span className="text-gray-600">•</span>
+              <Link to="/terms" className="hover:text-brand-ocean transition-colors">
+                Terms
+              </Link>
+              <span className="text-gray-600">•</span>
+              <Link to="/hipaa" className="hover:text-brand-ocean transition-colors">
+                HIPAA
+              </Link>
+            </div>
+            <a 
+              href="https://marsoft.ai" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-xs text-gray-500 hover:text-brand-ocean transition-colors"
+            >
+              Powered by MarSoft AI
+            </a>
           </div>
         </Container>
       </footer>
@@ -111,7 +121,7 @@ function Footer() {
                 rel="noopener noreferrer"
                 className="hover:text-brand-ocean transition-colors"
               >
-                Made by Marsoft.ai
+                Powered by MarSoft AI
               </a>
               <span className="text-gray-500">|</span>
               <Link 
