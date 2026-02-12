@@ -4,11 +4,20 @@ import type { BlogPost } from '../../lib/types';
 import BlogCard from './BlogCard';
 import { SkeletonBlogCard } from '../Common/Skeleton';
 
+/**
+ * Props for the BlogGrid component.
+ */
 interface BlogGridProps {
   limit?: number;
   showFeatured?: boolean;
 }
 
+/**
+ * Responsive grid layout for displaying blog post cards.
+ * Handles data fetching, loading states, and empty states.
+ * @param limit - Maximum number of posts to display
+ * @param showFeatured - Shows first post as featured (larger) when true
+ */
 function BlogGrid({ limit, showFeatured = false }: BlogGridProps) {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [isLoading, setIsLoading] = useState(true);

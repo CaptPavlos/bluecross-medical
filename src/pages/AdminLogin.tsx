@@ -1,3 +1,6 @@
+/**
+ * @fileoverview Admin login page for authentication.
+ */
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -6,6 +9,10 @@ import Container from '../components/Common/Container';
 import Button from '../components/Common/Button';
 import { useAuth } from '../context/AuthContext';
 
+/**
+ * Admin login page with username/password authentication.
+ * Redirects to admin panel on successful login.
+ */
 function AdminLogin() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');

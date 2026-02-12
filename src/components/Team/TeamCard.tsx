@@ -3,11 +3,20 @@ import { Mail, Linkedin, Twitter, Github } from 'lucide-react';
 import Card from '../Common/Card';
 import type { Team } from '../../lib/types';
 
+/**
+ * Props for the TeamCard component.
+ */
 interface TeamCardProps {
   member: Team;
   index?: number;
 }
 
+/**
+ * Team member profile card with avatar, role, bio, and social links.
+ * Features staggered animation on initial render.
+ * @param member - Team member data to display
+ * @param index - Position in list for animation delay
+ */
 function TeamCard({ member, index = 0 }: TeamCardProps) {
   const socialIcons = {
     linkedin: Linkedin,

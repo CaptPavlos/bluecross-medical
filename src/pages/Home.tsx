@@ -1,3 +1,6 @@
+/**
+ * @fileoverview Homepage component with hero section and feature highlights.
+ */
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
@@ -7,6 +10,10 @@ import Container from '../components/Common/Container';
 import Button from '../components/Common/Button';
 import { SEOHead } from '../components/SEO';
 
+/**
+ * Homepage with hero section, statistics, and call-to-action sections.
+ * Features scroll-triggered animations and expandable content sections.
+ */
 function Home() {
   const [showMoreStats, setShowMoreStats] = useState(false);
   const [showTrainingDetails, setShowTrainingDetails] = useState(false);

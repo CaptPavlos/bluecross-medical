@@ -1,8 +1,14 @@
+/**
+ * @fileoverview About page with company mission and founder information.
+ */
 import { motion } from 'framer-motion';
 import { Mail, Linkedin, Anchor, Ship, Award, Heart } from 'lucide-react';
 import Container from '../components/Common/Container';
 import { SEOHead } from '../components/SEO';
 
+/**
+ * About page describing company mission, values, and founder story.
+ */
 function About() {
   return (
     <main className="flex-1">

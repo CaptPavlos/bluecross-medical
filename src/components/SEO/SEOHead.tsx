@@ -1,5 +1,8 @@
 import { Helmet } from 'react-helmet-async';
 
+/**
+ * Props for the SEOHead component.
+ */
 interface SEOHeadProps {
   title?: string;
   description?: string;
@@ -15,12 +18,33 @@ interface SEOHeadProps {
   jsonLd?: object;
 }
 
+/** Site name for SEO titles */
 const SITE_NAME = 'BlueCross Medical';
+/** Default page title suffix */
 const DEFAULT_TITLE = 'Maritime Emergency Medicine';
+/** Default meta description for pages without custom description */
 const DEFAULT_DESCRIPTION = 'Your complete resource for emergency medicine at sea. Flag state regulations, advanced training courses, knowledge articles, and tested equipment.';
+/** Default Open Graph image URL */
 const DEFAULT_IMAGE = 'https://www.bluecross.tech/og-image.jpg';
+/** Site canonical URL */
 const SITE_URL = 'https://www.bluecross.tech';
 
+/**
+ * SEO component for managing page meta tags and structured data.
+ * Handles Open Graph, Twitter Cards, and JSON-LD schema markup.
+ * @param title - Page title (appended to site name)
+ * @param description - Meta description for search engines
+ * @param keywords - Array of keywords for meta tags
+ * @param image - Open Graph image URL
+ * @param url - Canonical URL path (relative to site)
+ * @param type - Content type for Open Graph
+ * @param publishedTime - Article publish date (ISO format)
+ * @param modifiedTime - Article modified date (ISO format)
+ * @param author - Content author name
+ * @param section - Article section/category
+ * @param noindex - Prevents search engine indexing when true
+ * @param jsonLd - Additional JSON-LD structured data object
+ */
 export default function SEOHead({
   title,
   description = DEFAULT_DESCRIPTION,

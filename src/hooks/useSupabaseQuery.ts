@@ -1,15 +1,30 @@
 import { useState, useEffect, useCallback } from 'react';
 
+/**
+ * State shape for query operations.
+ */
 interface QueryState<T> {
   data: T | null;
   isLoading: boolean;
   error: string | null;
 }
 
+/**
+ * Options for configuring query behavior.
+ */
 interface UseSupabaseQueryOptions {
   enabled?: boolean;
 }
 
+/**
+ * React hook for fetching data with loading and error states.
+ * Provides automatic refetching when dependencies change.
+ * @param queryFn - Async function that returns the data
+ * @param dependencies - Array of dependencies that trigger refetch when changed
+ * @param options - Configuration options
+ * @param options.enabled - Whether the query should execute (default: true)
+ * @returns Query state with data, isLoading, error, and refetch function
+ */
 export function useSupabaseQuery<T>(
   queryFn: () => Promise<T>,
   dependencies: unknown[] = [],
@@ -51,13 +66,21 @@ export function useSupabaseQuery<T>(
   return { ...state, refetch };
 }
 
-// Simplified mutation hook
+/**
+ * State shape for mutation operations.
+ */
 interface MutationState<T> {
   data: T | null;
   isLoading: boolean;
   error: string | null;
 }
 
+/**
+ * React hook for performing mutations (create, update, delete operations).
+ * Provides loading state, error handling, and reset functionality.
+ * @param mutationFn - Async function that performs the mutation
+ * @returns Mutation state with mutate function, reset function, and state values
+ */
 export function useSupabaseMutation<TData, TVariables>(
   mutationFn: (variables: TVariables) => Promise<TData>
 ): MutationState<TData> & {

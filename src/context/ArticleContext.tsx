@@ -5,6 +5,9 @@ import { BlogPost } from '../lib/types';
 
 const isDev = import.meta.env.DEV;
 
+/**
+ * Shape of the article context value.
+ */
 interface ArticleContextType {
   articles: BlogPost[];
   loading: boolean;
@@ -16,9 +19,15 @@ interface ArticleContextType {
 
 const ArticleContext = createContext<ArticleContextType | undefined>(undefined);
 
-// API endpoint for fetching blog posts
+/** API endpoint for fetching blog posts */
 const API_URL = '/api/blog-posts';
 
+/**
+ * Provider component for blog article state management.
+ * Fetches articles from API (production) or uses mock data (development).
+ * Provides methods to get, update, and refetch articles.
+ * @param children - Child components that need access to article context
+ */
 export function ArticleProvider({ children }: { children: ReactNode }) {
   const [articles, setArticles] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
@@ -81,6 +90,12 @@ export function ArticleProvider({ children }: { children: ReactNode }) {
   );
 }
 
+/**
+ * Hook to access article context for blog post data and operations.
+ * Must be used within an ArticleProvider.
+ * @returns Article context with articles array, loading state, error, and helper functions
+ * @throws Error if used outside of ArticleProvider
+ */
 export function useArticles() {
   const context = useContext(ArticleContext);
   if (context === undefined) {

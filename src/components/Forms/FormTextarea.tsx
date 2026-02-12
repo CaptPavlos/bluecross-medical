@@ -1,12 +1,22 @@
 import { forwardRef } from 'react';
 import { cn } from '../../lib/utils';
 
+/**
+ * Props for the FormTextarea component.
+ */
 interface FormTextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string;
   error?: string;
   helperText?: string;
 }
 
+/**
+ * Accessible form textarea component with label, validation, and helper text.
+ * Supports vertical resizing with minimum height.
+ * @param label - Label text displayed above textarea
+ * @param error - Error message to display (triggers error styling)
+ * @param helperText - Helper text shown below textarea when no error
+ */
 const FormTextarea = forwardRef<HTMLTextAreaElement, FormTextareaProps>(
   ({ className, label, error, helperText, id, ...props }, ref) => {
     const textareaId = id || props.name;

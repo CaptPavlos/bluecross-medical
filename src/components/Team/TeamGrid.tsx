@@ -4,10 +4,18 @@ import type { Team } from '../../lib/types';
 import TeamCard from './TeamCard';
 import { SkeletonTeamCard } from '../Common/Skeleton';
 
+/**
+ * Props for the TeamGrid component.
+ */
 interface TeamGridProps {
   limit?: number;
 }
 
+/**
+ * Responsive grid layout for displaying team member cards.
+ * Handles data fetching, loading states, and empty states.
+ * @param limit - Maximum number of team members to display
+ */
 function TeamGrid({ limit }: TeamGridProps) {
   const [team, setTeam] = useState<Team[]>([]);
   const [isLoading, setIsLoading] = useState(true);

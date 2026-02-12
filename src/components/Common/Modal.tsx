@@ -2,6 +2,9 @@ import { useEffect, useCallback } from 'react';
 import { X } from 'lucide-react';
 import { cn } from '../../lib/utils';
 
+/**
+ * Props for the Modal component.
+ */
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -14,6 +17,17 @@ interface ModalProps {
   className?: string;
 }
 
+/**
+ * Accessible modal dialog component with overlay backdrop.
+ * Supports keyboard navigation (Escape to close), body scroll lock, and animations.
+ * @param isOpen - Controls modal visibility
+ * @param onClose - Callback when modal should close
+ * @param title - Optional header title
+ * @param size - Modal width: sm, md, lg, xl, or full
+ * @param showCloseButton - Shows X button in header when true
+ * @param closeOnOverlayClick - Closes when clicking backdrop when true
+ * @param closeOnEscape - Closes on Escape key when true
+ */
 function Modal({
   isOpen,
   onClose,

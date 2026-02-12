@@ -1,3 +1,6 @@
+/**
+ * @fileoverview Contact page with form and company information.
+ */
 import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, Clock } from 'lucide-react';
 import { ContactForm } from '../components/Forms';
@@ -7,6 +10,10 @@ import Card from '../components/Common/Card';
 import { COMPANY_INFO } from '../lib/constants';
 import { SEOHead } from '../components/SEO';
 
+/**
+ * Contact page displaying company information and contact form.
+ * Includes email, phone, address, and working hours.
+ */
 function Contact() {
   const contactInfo = [
     { icon: Mail, label: 'Email', value: COMPANY_INFO.email, href: `mailto:${COMPANY_INFO.email}` },

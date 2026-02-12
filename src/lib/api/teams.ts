@@ -2,6 +2,11 @@ import { supabase, isSupabaseConfigured } from '../supabase';
 import { MOCK_TEAM } from '../constants';
 import type { Team } from '../types';
 
+/**
+ * Fetches all active team members.
+ * Falls back to mock data if Supabase is not configured.
+ * @returns Array of active team members ordered by display index
+ */
 export async function getTeamMembers(): Promise<Team[]> {
   if (!isSupabaseConfigured()) {
     // Return mock data when Supabase is not configured
@@ -22,6 +27,12 @@ export async function getTeamMembers(): Promise<Team[]> {
   return data || MOCK_TEAM;
 }
 
+/**
+ * Fetches a single team member by their unique ID.
+ * Falls back to mock data if Supabase is not configured.
+ * @param id - Unique identifier for the team member
+ * @returns The matching team member or null if not found
+ */
 export async function getTeamMemberById(id: string): Promise<Team | null> {
   if (!isSupabaseConfigured()) {
     return MOCK_TEAM.find(member => member.id === id) || null;

@@ -1,9 +1,10 @@
-// Framer Motion animation configurations
-// Phase 1: Basic setup - to be enhanced in Phase 2 with Claude 3 Opus
-
+/**
+ * @fileoverview Framer Motion animation variant configurations.
+ * Reusable animation presets for consistent motion design across the app.
+ */
 import { Variants } from 'framer-motion';
 
-// Basic fade-in on scroll
+/** Fade in from bottom animation - commonly used for scroll reveals */
 export const fadeInUp: Variants = {
   hidden: { opacity: 0, y: 20 },
   visible: {
@@ -13,7 +14,7 @@ export const fadeInUp: Variants = {
   },
 };
 
-// Fade in from left
+/** Fade in from left animation - for slide-in content */
 export const fadeInLeft: Variants = {
   hidden: { opacity: 0, x: -20 },
   visible: {
@@ -23,7 +24,7 @@ export const fadeInLeft: Variants = {
   },
 };
 
-// Fade in from right
+/** Fade in from right animation - for slide-in content */
 export const fadeInRight: Variants = {
   hidden: { opacity: 0, x: 20 },
   visible: {
@@ -33,7 +34,7 @@ export const fadeInRight: Variants = {
   },
 };
 
-// Scale fade
+/** Scale up with fade animation - for emphasis effects */
 export const scaleFade: Variants = {
   hidden: { opacity: 0, scale: 0.95 },
   visible: {
@@ -43,7 +44,7 @@ export const scaleFade: Variants = {
   },
 };
 
-// Stagger children container
+/** Container variants with staggered children animation */
 export const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
@@ -55,7 +56,7 @@ export const containerVariants: Variants = {
   },
 };
 
-// Item variants for staggered lists
+/** Item variants for use within staggered containers */
 export const itemVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
   visible: {
@@ -65,26 +66,27 @@ export const itemVariants: Variants = {
   },
 };
 
-// Button hover and tap animations
+/** Button micro-interactions for hover and tap */
 export const buttonVariants = {
   hover: { scale: 1.02 },
   tap: { scale: 0.98 },
 };
 
-// Card hover
+/** Card hover lift effect */
 export const cardHover = {
   y: -4,
   boxShadow: '0 10px 25px rgba(0, 0, 0, 0.12)',
   transition: { duration: 0.2 },
 };
 
-// Modal/overlay animations
+/** Modal overlay fade animation */
 export const overlayVariants: Variants = {
   hidden: { opacity: 0 },
   visible: { opacity: 1 },
   exit: { opacity: 0 },
 };
 
+/** Modal content spring animation with scale and position */
 export const modalVariants: Variants = {
   hidden: { opacity: 0, scale: 0.95, y: 20 },
   visible: {
@@ -101,7 +103,7 @@ export const modalVariants: Variants = {
   },
 };
 
-// Page transition
+/** Page transition animation for route changes */
 export const pageVariants: Variants = {
   initial: { opacity: 0, y: 10 },
   enter: {
@@ -116,7 +118,7 @@ export const pageVariants: Variants = {
   },
 };
 
-// Slide from bottom (for mobile nav, modals)
+/** Slide from bottom animation for mobile sheets and modals */
 export const slideFromBottom: Variants = {
   hidden: { y: '100%' },
   visible: {
@@ -129,7 +131,7 @@ export const slideFromBottom: Variants = {
   },
 };
 
-// Pulse animation for status indicators
+/** Continuous pulse animation for status indicators and alerts */
 export const pulseVariants: Variants = {
   pulse: {
     scale: [1, 1.05, 1],

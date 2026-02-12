@@ -1,3 +1,6 @@
+/**
+ * @fileoverview Knowledge base page with articles and resources.
+ */
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { BookOpen, FileText, Video, Download, ExternalLink, Search, ArrowRight, Flag, Stethoscope, Ship, AlertTriangle } from 'lucide-react';
@@ -7,6 +10,7 @@ import Button from '../components/Common/Button';
 import { useArticles } from '../context/ArticleContext';
 import { SEOHead } from '../components/SEO';
 
+/** Article category filters with icons */
 const categories = [
   { id: 'all', label: 'All', icon: BookOpen },
   { id: 'regulations', label: 'Regulations', icon: Flag },
