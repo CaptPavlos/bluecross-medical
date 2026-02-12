@@ -5,6 +5,11 @@ import { getSystemStatus } from '../../lib/api/status';
 import type { SystemStatus } from '../../lib/types';
 import { cn } from '../../lib/utils';
 
+/**
+ * Dismissible status banner showing system operational state.
+ * Displays at top of page with appropriate color based on status.
+ * Supports operational, degraded, and maintenance states.
+ */
 function StatusBanner() {
   const [status, setStatus] = useState<SystemStatus | null>(null);
   const [isVisible, setIsVisible] = useState(true);

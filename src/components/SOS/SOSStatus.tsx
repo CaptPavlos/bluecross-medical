@@ -1,14 +1,19 @@
 import { AlertCircle, CheckCircle, Clock } from 'lucide-react';
 import { cn } from '../../lib/utils';
 
+/** Possible states for an SOS alert */
 type SOSStatusType = 'pending' | 'escalated' | 'resolved';
 
+/**
+ * Props for the SOSStatus component.
+ */
 interface SOSStatusProps {
   status: SOSStatusType;
   timestamp?: string;
   className?: string;
 }
 
+/** Visual configuration for each status type */
 const statusConfig = {
   pending: {
     icon: Clock,
@@ -30,6 +35,13 @@ const statusConfig = {
   },
 };
 
+/**
+ * Status indicator component for SOS alert tracking.
+ * Displays icon and label based on current alert status.
+ * @param status - Current SOS status: pending, escalated, or resolved
+ * @param timestamp - Optional timestamp string to display
+ * @param className - Additional CSS classes
+ */
 function SOSStatus({ status, timestamp, className }: SOSStatusProps) {
   const config = statusConfig[status];
   const Icon = config.icon;

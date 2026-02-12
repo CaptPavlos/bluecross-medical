@@ -1,3 +1,6 @@
+/**
+ * @fileoverview Products page displaying medical equipment catalog.
+ */
 import { motion } from 'framer-motion';
 import { Clock, Package, Truck } from 'lucide-react';
 import { ProductGrid } from '../components/Features';
@@ -5,6 +8,10 @@ import { ScrollReveal } from '../components/Animations';
 import Container from '../components/Common/Container';
 import { SEOHead } from '../components/SEO';
 
+/**
+ * Products catalog page showcasing maritime medical equipment.
+ * Features product grid with filtering and ordering information.
+ */
 function Products() {
   return (
     <main className="flex-1">

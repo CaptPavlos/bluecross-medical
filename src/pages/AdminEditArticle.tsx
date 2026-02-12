@@ -1,3 +1,6 @@
+/**
+ * @fileoverview Admin article editor page.
+ */
 import { useState, useMemo } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -7,6 +10,10 @@ import Button from '../components/Common/Button';
 import { useAuth } from '../context/AuthContext';
 import { useArticles } from '../context/ArticleContext';
 
+/**
+ * Article editor page for admins to edit blog post content.
+ * Includes markdown preview and image management.
+ */
 function AdminEditArticle() {
   const { slug } = useParams<{ slug: string }>();
   const { isAdmin } = useAuth();

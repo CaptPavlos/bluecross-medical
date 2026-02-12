@@ -1,9 +1,16 @@
+/**
+ * @fileoverview 404 Not Found error page.
+ */
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Home, ArrowLeft } from 'lucide-react';
 import Container from '../components/Common/Container';
 import Button from '../components/Common/Button';
 
+/**
+ * 404 error page shown when a route is not found.
+ * Provides navigation back to home or previous page.
+ */
 function NotFound() {
   return (
     <main className="min-h-screen flex items-center justify-center pt-20 pb-16">

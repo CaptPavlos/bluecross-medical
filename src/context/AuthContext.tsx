@@ -1,6 +1,9 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState, ReactNode } from 'react';
 
+/**
+ * Shape of the authentication context value.
+ */
 interface AuthContextType {
   isAdmin: boolean;
   login: (username: string, password: string) => boolean;
@@ -9,10 +12,16 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Simple admin credentials (in production, use proper authentication)
+/** Admin username for authentication (use proper auth in production) */
 const ADMIN_USERNAME = 'dev@marsoft.ai';
+/** Admin password for authentication (use proper auth in production) */
 const ADMIN_PASSWORD = 'Admin';
 
+/**
+ * Authentication provider component that manages admin login state.
+ * Persists login state to localStorage for session persistence.
+ * @param children - Child components that need access to auth context
+ */
 export function AuthProvider({ children }: { children: ReactNode }) {
   // Initialize state from localStorage
   const [isAdmin, setIsAdmin] = useState(() => {
@@ -41,6 +50,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 }
 
+/**
+ * Hook to access authentication context.
+ * Must be used within an AuthProvider.
+ * @returns Auth context with isAdmin state, login, and logout functions
+ * @throws Error if used outside of AuthProvider
+ */
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {

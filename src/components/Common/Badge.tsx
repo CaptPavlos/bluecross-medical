@@ -1,11 +1,20 @@
 import { forwardRef } from 'react';
 import { cn } from '../../lib/utils';
 
+/**
+ * Props for the Badge component.
+ */
 interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   variant?: 'default' | 'success' | 'warning' | 'danger' | 'info';
   size?: 'sm' | 'md';
 }
 
+/**
+ * Small label component for status indicators, tags, or categories.
+ * Displays as a rounded pill with color variants for different states.
+ * @param variant - Color scheme: default, success, warning, danger, or info
+ * @param size - Badge size: sm or md
+ */
 const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
   ({ className, variant = 'default', size = 'sm', children, ...props }, ref) => {
     const baseStyles =

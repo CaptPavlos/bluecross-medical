@@ -1,3 +1,6 @@
+/**
+ * @fileoverview Flag state database page with search and filtering.
+ */
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -7,8 +10,13 @@ import { FLAG_STATES } from '../lib/flagStates';
 import type { FlagState } from '../lib/types';
 import { SEOHead } from '../components/SEO';
 
+/** Paris MOU status filter options */
 type FilterStatus = 'all' | 'white' | 'grey' | 'black';
 
+/**
+ * Flag state database listing page with search and MOU status filters.
+ * Allows browsing maritime flag state medical requirements.
+ */
 function FlagDatabase() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState<FilterStatus>('all');

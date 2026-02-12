@@ -1,3 +1,6 @@
+/**
+ * @fileoverview Flag state detail page showing medical requirements.
+ */
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, ExternalLink, CheckCircle, AlertTriangle } from 'lucide-react';
@@ -5,6 +8,10 @@ import Container from '../components/Common/Container';
 import { FLAG_STATES } from '../lib/flagStates';
 import { SEOHead } from '../components/SEO';
 
+/**
+ * Detailed view of a single flag state's medical regulations and requirements.
+ * Includes TMAS info, yacht requirements, and equipment differences.
+ */
 function FlagDetail() {
   const { slug } = useParams<{ slug: string }>();
   const flag = FLAG_STATES.find(f => f.slug === slug);

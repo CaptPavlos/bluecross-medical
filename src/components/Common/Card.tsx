@@ -1,12 +1,22 @@
 import { forwardRef } from 'react';
 import { cn } from '../../lib/utils';
 
+/**
+ * Props for the Card component.
+ */
 interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: 'default' | 'elevated' | 'outlined';
   padding?: 'none' | 'sm' | 'md' | 'lg';
   hoverable?: boolean;
 }
 
+/**
+ * Flexible card container component with shadow, border, and hover variants.
+ * Supports configurable padding and optional hover lift effect.
+ * @param variant - Visual style: default (shadow), elevated (more shadow), or outlined (border)
+ * @param padding - Internal padding: none, sm, md, or lg
+ * @param hoverable - Adds hover lift animation when true
+ */
 const Card = forwardRef<HTMLDivElement, CardProps>(
   (
     {
@@ -58,7 +68,10 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
 
 Card.displayName = 'Card';
 
-// Card subcomponents
+/**
+ * Card header subcomponent with bottom border styling.
+ * Use within a Card component for consistent header layout.
+ */
 type CardHeaderProps = React.HTMLAttributes<HTMLDivElement>
 
 export const CardHeader = forwardRef<HTMLDivElement, CardHeaderProps>(
@@ -73,6 +86,10 @@ export const CardHeader = forwardRef<HTMLDivElement, CardHeaderProps>(
 
 CardHeader.displayName = 'CardHeader';
 
+/**
+ * Card content subcomponent for the main body area.
+ * Use within a Card component for consistent content spacing.
+ */
 type CardContentProps = React.HTMLAttributes<HTMLDivElement>
 
 export const CardContent = forwardRef<HTMLDivElement, CardContentProps>(
@@ -83,6 +100,10 @@ export const CardContent = forwardRef<HTMLDivElement, CardContentProps>(
 
 CardContent.displayName = 'CardContent';
 
+/**
+ * Card footer subcomponent with top border styling.
+ * Use within a Card component for actions or metadata.
+ */
 type CardFooterProps = React.HTMLAttributes<HTMLDivElement>
 
 export const CardFooter = forwardRef<HTMLDivElement, CardFooterProps>(

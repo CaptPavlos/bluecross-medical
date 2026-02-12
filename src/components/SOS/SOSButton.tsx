@@ -1,12 +1,22 @@
 import { AlertCircle } from 'lucide-react';
 import { cn } from '../../lib/utils';
 
+/**
+ * Props for the SOSButton component.
+ */
 interface SOSButtonProps {
   onClick: () => void;
   size?: 'sm' | 'md' | 'lg';
   className?: string;
 }
 
+/**
+ * Emergency SOS button with pulsing animation and alert icon.
+ * Designed for high visibility in emergency situations.
+ * @param onClick - Handler called when button is pressed
+ * @param size - Button size variant: sm, md, or lg
+ * @param className - Additional CSS classes
+ */
 function SOSButton({ onClick, size = 'md', className }: SOSButtonProps) {
   const sizes = {
     sm: 'w-12 h-12',
