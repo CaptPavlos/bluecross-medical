@@ -1,0 +1,155 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 
+ * Dark Medical Theme
+ * Ported from Electron Viatom Checkme app
+ */
+
+:root {
+  --bg-primary: #1a1a2e;
+  --bg-secondary: #16213e;
+  --bg-card: #0f3460;
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0a0;
+  --accent-green: #00ff88;
+  --accent-red: #ff6b6b;
+  --accent-blue: #45b7d1;
+  --accent-yellow: #f9ca24;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+}
+
+/* ============================================
+   Button Styles (from Electron app)
+   ============================================ */
+
+.btn-primary {
+  @apply px-4 py-2 font-semibold rounded-lg cursor-pointer transition-all duration-200;
+  background: var(--accent-green);
+  color: var(--bg-primary);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 255, 136, 0.3);
+}
+
+.btn-primary:disabled {
+  @apply opacity-50 cursor-not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.btn-secondary {
+  @apply px-4 py-2 font-medium rounded-lg cursor-pointer transition-all duration-200;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-secondary:hover {
+  background: var(--bg-secondary);
+}
+
+.btn-danger {
+  @apply px-4 py-2 font-semibold rounded-lg cursor-pointer;
+  background: var(--accent-red);
+  color: white;
+}
+
+.btn-danger:hover {
+  opacity: 0.9;
+}
+
+.btn-outline {
+  @apply px-4 py-2 rounded-lg cursor-pointer transition-all duration-200;
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-outline:hover {
+  border-color: var(--accent-green);
+  color: var(--accent-green);
+}
+
+/* ============================================
+   ECG Waveform Styles
+   ============================================ */
+
+.ecg-waveform-container {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.ecg-canvas {
+  display: block;
+  width: 100%;
+}
+
+/* ============================================
+   Scrollbar (dark theme)
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-card);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* ============================================
+   Animations
+   ============================================ */
+
+@keyframes pulse-vital {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes blink-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ============================================
+   Utilities
+   ============================================ */
+
+.text-accent-green { color: var(--accent-green); }
+.text-accent-red { color: var(--accent-red); }
+.text-accent-blue { color: var(--accent-blue); }
+.text-accent-yellow { color: var(--accent-yellow); }
+
+.bg-accent-green { background: var(--accent-green); }
+.bg-accent-red { background: var(--accent-red); }
+.bg-accent-blue { background: var(--accent-blue); }
+.bg-accent-yellow { background: var(--accent-yellow); }
+
+.border-accent-green { border-color: var(--accent-green); }
+.border-accent-red { border-color: var(--accent-red); }

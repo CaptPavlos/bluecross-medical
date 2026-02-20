@@ -1,3 +1,6 @@
+/**
+ * @fileoverview Admin panel dashboard for content management.
+ */
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { LogOut, FileText, Edit, Image, Clock, Shield, RefreshCw } from 'lucide-react';
@@ -6,6 +9,10 @@ import Button from '../components/Common/Button';
 import { useAuth } from '../context/AuthContext';
 import { useArticles } from '../context/ArticleContext';
 
+/**
+ * Admin dashboard for managing articles and site content.
+ * Protected route requiring admin authentication.
+ */
 function AdminPanel() {
   const { isAdmin, logout } = useAuth();
   const { articles } = useArticles();

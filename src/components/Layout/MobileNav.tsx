@@ -2,6 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Flag, GraduationCap, BookOpen, Package, Mail } from 'lucide-react';
 import { cn } from '../../lib/utils';
 
+/** Navigation items for mobile bottom bar with icons and labels */
 const navItems = [
   { label: 'Regs', path: '/flags', icon: Flag },
   { label: 'Train', path: '/training', icon: GraduationCap },
@@ -10,6 +11,11 @@ const navItems = [
   { label: 'Contact', path: '/contact', icon: Mail },
 ];
 
+/**
+ * Fixed bottom navigation bar for mobile devices.
+ * Shows icon tabs with active state highlighting based on current route.
+ * Hidden on desktop viewports (md breakpoint and up).
+ */
 function MobileNav() {
   const location = useLocation();
 

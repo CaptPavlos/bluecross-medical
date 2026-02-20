@@ -1,0 +1,13 @@
+package androidx.leanback.widget;
+
+/* compiled from: r8-map-id-41d83e727936d3330b608d725ba7b7c2e83c0817dc12ceb2aead6fdefac83833 */
+/* loaded from: classes.dex */
+public abstract class DiffCallback<Value> {
+    public abstract boolean areContentsTheSame(Value value, Value value2);
+
+    public abstract boolean areItemsTheSame(Value value, Value value2);
+
+    public Object getChangePayload(Value value, Value value2) {
+        return null;
+    }
+}

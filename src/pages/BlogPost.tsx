@@ -1,3 +1,12 @@
+/**
+ * Blog Post Page
+ *
+ * Individual blog article view with full content, author info,
+ * reading time, and social sharing buttons.
+ * Fetches post data based on URL slug parameter.
+ *
+ * @module pages/BlogPost
+ */
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -9,6 +18,9 @@ import Container from '../components/Common/Container';
 import Badge from '../components/Common/Badge';
 import { Skeleton } from '../components/Common';
 
+/**
+ * Single blog post view with loading state and social sharing.
+ */
 function BlogPost() {
   const { slug } = useParams<{ slug: string }>();
   const [post, setPost] = useState<BlogPostType | null>(null);

@@ -5,7 +5,11 @@ import Container from '../Common/Container';
 import Button from '../Common/Button';
 import { COMPANY_INFO } from '../../lib/constants';
 
-// Highlight word component with fade effect and delayed red color + underline
+/**
+ * Animated text component that highlights a specific word with color and underline.
+ * @param text - Full text string to display
+ * @param highlightWord - Word within text to highlight with red color and underline
+ */
 function HighlightedText({ text, highlightWord }: { text: string; highlightWord: string }) {
   const parts = text.split(highlightWord);
   
@@ -49,6 +53,11 @@ function HighlightedText({ text, highlightWord }: { text: string; highlightWord:
   );
 }
 
+/**
+ * Full-height hero section component for the homepage.
+ * Features animated title, call-to-action buttons, and flag state preview cards.
+ * Includes decorative gradient background and blur effects.
+ */
 function HeroSection() {
   const features = [
     { icon: Flag, text: '62 Flag States' },

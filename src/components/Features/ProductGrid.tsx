@@ -5,11 +5,20 @@ import ProductCard from './ProductCard';
 import { SkeletonCard } from '../Common/Skeleton';
 import Button from '../Common/Button';
 
+/**
+ * Props for the ProductGrid component.
+ */
 interface ProductGridProps {
   limit?: number;
   showFilters?: boolean;
 }
 
+/**
+ * Responsive grid layout for displaying product cards.
+ * Supports optional status filters and handles loading/empty states.
+ * @param limit - Maximum number of products to display
+ * @param showFilters - Shows status filter buttons when true
+ */
 function ProductGrid({ limit, showFilters = false }: ProductGridProps) {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);

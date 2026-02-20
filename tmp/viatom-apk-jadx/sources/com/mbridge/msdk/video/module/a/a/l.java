@@ -1,0 +1,14 @@
+package com.mbridge.msdk.video.module.a.a;
+
+/* compiled from: r8-map-id-41d83e727936d3330b608d725ba7b7c2e83c0817dc12ceb2aead6fdefac83833 */
+/* loaded from: classes3.dex */
+public final class l extends i {
+    public l(com.mbridge.msdk.video.module.a.a aVar) {
+        super(aVar);
+    }
+
+    @Override // com.mbridge.msdk.video.module.a.a.i, com.mbridge.msdk.video.module.a.a.f, com.mbridge.msdk.video.module.a.a
+    public final void a(int i10, Object obj) {
+        super.a(i10, obj);
+    }
+}

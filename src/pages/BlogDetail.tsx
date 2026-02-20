@@ -1,3 +1,6 @@
+/**
+ * @fileoverview Blog post detail page with full article content.
+ */
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
@@ -8,6 +11,10 @@ import { useArticles } from '../context/ArticleContext';
 import { useAuth } from '../context/AuthContext';
 import { SEOHead } from '../components/SEO';
 
+/**
+ * Blog post detail page showing full article content.
+ * Includes metadata, table of contents, and admin edit link.
+ */
 function BlogDetail() {
   const { slug } = useParams<{ slug: string }>();
   const { getArticle, articles } = useArticles();

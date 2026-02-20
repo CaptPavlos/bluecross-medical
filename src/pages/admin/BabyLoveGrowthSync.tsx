@@ -1,3 +1,12 @@
+/**
+ * BabyLoveGrowth Article Sync Admin Page
+ *
+ * Admin interface for syncing medical articles from BabyLoveGrowth CMS.
+ * Allows viewing, previewing, and publishing articles to the blog.
+ * Requires admin authentication.
+ *
+ * @module pages/admin/BabyLoveGrowthSync
+ */
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { RefreshCw, Check, X, FileText, Clock, AlertCircle, ExternalLink, Webhook } from 'lucide-react';

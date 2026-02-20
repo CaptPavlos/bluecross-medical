@@ -1,7 +1,13 @@
+/**
+ * @fileoverview Privacy policy legal page.
+ */
 import { motion } from 'framer-motion';
 import { Shield, Globe, Lock, Eye, UserCheck, Mail } from 'lucide-react';
 import Container from '../components/Common/Container';
 
+/**
+ * Privacy policy page detailing data collection and usage practices.
+ */
 function PrivacyPolicy() {
   return (
     <main className="flex-1">

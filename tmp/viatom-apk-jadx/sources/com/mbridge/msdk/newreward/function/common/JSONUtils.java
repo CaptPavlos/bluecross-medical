@@ -1,0 +1,18 @@
+package com.mbridge.msdk.newreward.function.common;
+
+import org.json.JSONObject;
+
+/* compiled from: r8-map-id-41d83e727936d3330b608d725ba7b7c2e83c0817dc12ceb2aead6fdefac83833 */
+/* loaded from: classes3.dex */
+public class JSONUtils {
+    public static JSONObject parse(String str) {
+        if (str == null) {
+            return null;
+        }
+        try {
+            return new JSONObject(str);
+        } catch (Exception unused) {
+            return null;
+        }
+    }
+}

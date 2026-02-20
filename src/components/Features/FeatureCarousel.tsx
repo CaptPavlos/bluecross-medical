@@ -2,18 +2,31 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '../../lib/utils';
 
+/**
+ * Feature item data structure.
+ */
 interface Feature {
   title: string;
   description: string;
   icon: React.ReactNode;
 }
 
+/**
+ * Props for the FeatureCarousel component.
+ */
 interface FeatureCarouselProps {
   features: Feature[];
   autoPlay?: boolean;
   interval?: number;
 }
 
+/**
+ * Auto-playing carousel component for showcasing features.
+ * Includes navigation arrows, dot indicators, and auto-advance.
+ * @param features - Array of feature items to display
+ * @param autoPlay - Enable auto-advance when true
+ * @param interval - Milliseconds between auto-advance
+ */
 function FeatureCarousel({ features, autoPlay = true, interval = 5000 }: FeatureCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);

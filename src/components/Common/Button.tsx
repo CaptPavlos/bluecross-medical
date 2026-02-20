@@ -1,6 +1,9 @@
 import { forwardRef } from 'react';
 import { cn } from '../../lib/utils';
 
+/**
+ * Props for the Button component.
+ */
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
   size?: 'sm' | 'md' | 'lg';
@@ -9,6 +12,15 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   rightIcon?: React.ReactNode;
 }
 
+/**
+ * Reusable button component with multiple variants, sizes, and loading state.
+ * Supports icons on left/right sides and forwards refs for DOM access.
+ * @param variant - Visual style: primary, secondary, outline, ghost, or danger
+ * @param size - Button size: sm, md, or lg
+ * @param isLoading - Shows spinner and disables button when true
+ * @param leftIcon - Optional icon to display before button text
+ * @param rightIcon - Optional icon to display after button text
+ */
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {

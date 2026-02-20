@@ -1,7 +1,13 @@
+/**
+ * @fileoverview Terms of service legal page.
+ */
 import { motion } from 'framer-motion';
 import { FileText, ShoppingCart, Package, AlertTriangle, Scale, RefreshCw, Mail } from 'lucide-react';
 import Container from '../components/Common/Container';
 
+/**
+ * Terms of service page outlining usage conditions and policies.
+ */
 function TermsOfService() {
   return (
     <main className="flex-1">

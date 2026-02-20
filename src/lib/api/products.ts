@@ -2,6 +2,12 @@ import { supabase, isSupabaseConfigured } from '../supabase';
 import { MOCK_PRODUCTS } from '../constants';
 import type { Product, ProductStatus } from '../types';
 
+/**
+ * Fetches all products, optionally filtered by status.
+ * Falls back to mock data if Supabase is not configured.
+ * @param status - Optional product status filter (active, beta, deprecated)
+ * @returns Array of products ordered by display index
+ */
 export async function getProducts(status?: ProductStatus): Promise<Product[]> {
   if (!isSupabaseConfigured()) {
     if (status) {
@@ -29,6 +35,12 @@ export async function getProducts(status?: ProductStatus): Promise<Product[]> {
   return data || MOCK_PRODUCTS;
 }
 
+/**
+ * Fetches a single product by its URL slug.
+ * Falls back to mock data if Supabase is not configured.
+ * @param slug - URL-friendly identifier for the product
+ * @returns The matching product or null if not found
+ */
 export async function getProductBySlug(slug: string): Promise<Product | null> {
   if (!isSupabaseConfigured()) {
     return MOCK_PRODUCTS.find(p => p.slug === slug) || null;

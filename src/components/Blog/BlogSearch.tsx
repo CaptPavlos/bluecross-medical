@@ -2,11 +2,20 @@ import { useState, useMemo } from 'react';
 import { Search, X } from 'lucide-react';
 import { debounce } from '../../lib/utils';
 
+/**
+ * Props for the BlogSearch component.
+ */
 interface BlogSearchProps {
   onSearch: (query: string) => void;
   placeholder?: string;
 }
 
+/**
+ * Search input component with debounced search callback.
+ * Features search icon, clear button, and 300ms debounce delay.
+ * @param onSearch - Callback fired with search query (debounced)
+ * @param placeholder - Input placeholder text
+ */
 function BlogSearch({ onSearch, placeholder = 'Search articles...' }: BlogSearchProps) {
   const [value, setValue] = useState('');
 

@@ -1,6 +1,15 @@
+/**
+ * Maritime Flag States and TMAS Directory
+ *
+ * Contains flag state medical requirements for maritime vessels
+ * and the global TMAS (Telemedical Maritime Assistance Services)
+ * contact directory for emergency medical consultations.
+ *
+ * @module lib/flagStates
+ */
 import type { FlagState, TMASContact } from './types';
 
-// TMAS Contact Directory (Telemedical Maritime Assistance Services)
+/** TMAS Contact Directory - Telemedical Maritime Assistance Services worldwide */
 export const TMAS_DIRECTORY: Record<string, TMASContact> = {
   CIRM_ITALY: {
     name: 'CIRM - Centro Internazionale Radio Medico',

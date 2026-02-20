@@ -1,7 +1,13 @@
+/**
+ * @fileoverview HIPAA compliance information page.
+ */
 import { motion } from 'framer-motion';
 import { ShieldCheck, Database, Lock, Server, FileCheck, AlertCircle, Mail, ExternalLink } from 'lucide-react';
 import Container from '../components/Common/Container';
 
+/**
+ * HIPAA compliance page detailing health information privacy practices.
+ */
 function HipaaCompliance() {
   return (
     <main className="flex-1">

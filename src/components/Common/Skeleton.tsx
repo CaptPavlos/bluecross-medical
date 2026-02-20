@@ -1,11 +1,21 @@
 import { cn } from '../../lib/utils';
 
+/**
+ * Props for the Skeleton component.
+ */
 interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: 'text' | 'circular' | 'rectangular';
   width?: string | number;
   height?: string | number;
 }
 
+/**
+ * Loading placeholder component with pulse animation.
+ * Use to indicate content is loading while maintaining layout.
+ * @param variant - Shape type: text (rounded), circular, or rectangular
+ * @param width - Custom width (CSS value or number for pixels)
+ * @param height - Custom height (CSS value or number for pixels)
+ */
 function Skeleton({
   className,
   variant = 'text',
@@ -35,7 +45,10 @@ function Skeleton({
   );
 }
 
-// Preset skeleton components
+/**
+ * Pre-configured skeleton for generic card content.
+ * Includes image placeholder, title, and description lines.
+ */
 export function SkeletonCard() {
   return (
     <div className="p-4 bg-white rounded-lg shadow-sm">
@@ -47,6 +60,10 @@ export function SkeletonCard() {
   );
 }
 
+/**
+ * Pre-configured skeleton for team member cards.
+ * Includes circular avatar, name, role, and bio placeholders.
+ */
 export function SkeletonTeamCard() {
   return (
     <div className="p-4 bg-white rounded-lg shadow-sm text-center">
@@ -58,6 +75,10 @@ export function SkeletonTeamCard() {
   );
 }
 
+/**
+ * Pre-configured skeleton for blog post cards.
+ * Includes featured image, date, title, and excerpt placeholders.
+ */
 export function SkeletonBlogCard() {
   return (
     <div className="bg-white rounded-lg shadow-sm overflow-hidden">

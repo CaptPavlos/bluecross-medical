@@ -1,8 +1,14 @@
+/**
+ * @fileoverview Team page displaying company team members.
+ */
 import { motion } from 'framer-motion';
 import { TeamGrid } from '../components/Team';
 import { ScrollReveal } from '../components/Animations';
 import Container from '../components/Common/Container';
 
+/**
+ * Team page showing company team member profiles and roles.
+ */
 function Team() {
   return (
     <main className="flex-1">

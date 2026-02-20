@@ -3,13 +3,23 @@ import { AlertCircle, Phone, CheckCircle, Clock } from 'lucide-react';
 import Modal from '../Common/Modal';
 import Button from '../Common/Button';
 
+/**
+ * Props for the SOSModal component.
+ */
 interface SOSModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
+/** States for the SOS workflow: idle, confirming, sending, sent */
 type SOSStatus = 'idle' | 'confirming' | 'sending' | 'sent';
 
+/**
+ * Emergency SOS modal with multi-step confirmation workflow.
+ * Guides user through confirmation before sending emergency alert.
+ * @param isOpen - Controls modal visibility
+ * @param onClose - Callback when modal should close
+ */
 function SOSModal({ isOpen, onClose }: SOSModalProps) {
   const [status, setStatus] = useState<SOSStatus>('idle');
 

@@ -1,3 +1,6 @@
+/**
+ * @fileoverview Training page showcasing advanced medical courses.
+ */
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useState, useRef } from 'react';
@@ -6,7 +9,7 @@ import Container from '../components/Common/Container';
 import Button from '../components/Common/Button';
 import { SEOHead } from '../components/SEO';
 
-// Advanced medical training courses that EXCEED STCW requirements
+/** Advanced medical training courses that EXCEED STCW requirements */
 // These courses do NOT require a medical license and go beyond standard Captain's Medical
 // We do NOT list STCW courses - those are regulatory minimums
 const recommendedCourses = [
