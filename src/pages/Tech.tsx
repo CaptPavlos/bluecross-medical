@@ -1,3 +1,6 @@
+/**
+ * @fileoverview Tech page with software downloads and device information.
+ */
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Download, Monitor, Apple, Award, CheckCircle, ExternalLink, FileCheck } from 'lucide-react';
 import { useRef } from 'react';
@@ -5,6 +8,7 @@ import Container from '../components/Common/Container';
 import Badge from '../components/Common/Badge';
 import Button from '../components/Common/Button';
 
+/** Windows software downloads with descriptions and URLs */
 const windowsSoftware = [
   { 
     name: 'Vital Signs Pro+', 

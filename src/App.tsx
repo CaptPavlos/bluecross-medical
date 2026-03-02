@@ -1,3 +1,7 @@
+/**
+ * @fileoverview Main application component with routing configuration.
+ * Sets up React Router, context providers, and lazy-loaded page components.
+ */
 import { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Navigation, Footer } from './components/Layout';
@@ -7,7 +11,7 @@ import { AuthProvider } from './context/AuthContext';
 import { ArticleProvider } from './context/ArticleContext';
 import './styles/globals.css';
 
-// Lazy load pages for code splitting
+/** Lazy-loaded page components for code splitting and better initial load performance */
 const Home = lazy(() => import('./pages/Home'));
 const Products = lazy(() => import('./pages/Products'));
 const ProductDetail = lazy(() => import('./pages/ProductDetail'));
@@ -29,7 +33,9 @@ const AdminPanel = lazy(() => import('./pages/AdminPanel'));
 const AdminEditArticle = lazy(() => import('./pages/AdminEditArticle'));
 const BabyLoveGrowthSync = lazy(() => import('./pages/admin/BabyLoveGrowthSync'));
 
-// Loading fallback
+/**
+ * Loading spinner displayed while lazy-loaded pages are being fetched.
+ */
 function PageLoader() {
   return (
     <div className="min-h-screen flex items-center justify-center">
@@ -38,6 +44,10 @@ function PageLoader() {
   );
 }
 
+/**
+ * Root application component that sets up routing, providers, and layout.
+ * Includes Vercel Analytics and Speed Insights for performance monitoring.
+ */
 function App() {
   return (
     <Router>

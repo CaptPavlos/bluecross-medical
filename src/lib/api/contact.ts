@@ -1,13 +1,22 @@
 import type { ContactSubmission } from '../types';
 
-// Contact email
-const CONTACT_EMAIL = 'bluecross@marsoft.ai';
+/** Default contact email address for form submissions */
+const CONTACT_EMAIL = 'sales@bluecross.tech';
 
+/**
+ * Response shape from contact form submission.
+ */
 export interface ContactResponse {
   success: boolean;
   message: string;
 }
 
+/**
+ * Submits a contact form by opening the user's email client.
+ * Validates required fields and email format before submission.
+ * @param submission - Contact form data including name, email, subject, and message
+ * @returns Response indicating success/failure with a user-friendly message
+ */
 export async function submitContactForm(
   submission: ContactSubmission
 ): Promise<ContactResponse> {

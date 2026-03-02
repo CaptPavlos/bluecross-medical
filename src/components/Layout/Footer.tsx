@@ -4,6 +4,11 @@ import { COMPANY_INFO } from '../../lib/constants';
 import Container from '../Common/Container';
 import { useAuth } from '../../context/AuthContext';
 
+/**
+ * Site footer component with responsive mobile and desktop layouts.
+ * Mobile: Minimal legal links only.
+ * Desktop: Full footer with brand info, contact details, and navigation.
+ */
 function Footer() {
   const currentYear = new Date().getFullYear();
   const { isAdmin } = useAuth();

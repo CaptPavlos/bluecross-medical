@@ -4,6 +4,7 @@ import Card from '../Common/Card';
 import Badge from '../Common/Badge';
 import type { Product } from '../../lib/types';
 
+/** Mapping of icon names to Lucide icon components */
 const iconMap: Record<string, LucideIcon> = {
   Package,
   Heart,
@@ -16,10 +17,18 @@ const iconMap: Record<string, LucideIcon> = {
   Wind,
 };
 
+/**
+ * Props for the ProductCard component.
+ */
 interface ProductCardProps {
   product: Product;
 }
 
+/**
+ * Product preview card with image, status badge, features, and hover effects.
+ * Displays product details and links to the full product detail page.
+ * @param product - Product data to display
+ */
 function ProductCard({ product }: ProductCardProps) {
   const IconComponent = iconMap[product.icon_name || 'Package'] || Package;
 

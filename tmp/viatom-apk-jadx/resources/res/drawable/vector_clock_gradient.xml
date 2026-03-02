@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android" xmlns:aapt="http://schemas.android.com/aapt"
+    android:height="24dp"
+    android:width="24dp"
+    android:autoMirrored="true"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="@drawable/_vector_clock_gradient__0_res_0x7f080029"
+        android:pathData="M11.988,0A12,12 0,1 0,24 12,11.994 11.994,0 0,0 11.988,0ZM12,21.6A9.6,9.6 0,1 1,21.6 12,9.6 9.6,0 0,1 12,21.6ZM12.6,6L10.8,6v7.2l6.3,3.78L18,15.5l-5.4,-3.2Z"/>
+</vector>

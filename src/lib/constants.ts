@@ -1,6 +1,9 @@
+/**
+ * @fileoverview Application constants, mock data, and configuration.
+ */
 import type { NavItem, Team, Product, BlogPost, SystemStatus } from './types';
 
-// Navigation items
+/** Main navigation menu items for desktop header */
 export const NAV_ITEMS: NavItem[] = [
   { label: 'Flag Regulations', path: '/flags', icon: 'Flag' },
   { label: 'Training', path: '/training', icon: 'GraduationCap' },

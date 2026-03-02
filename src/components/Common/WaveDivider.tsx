@@ -1,3 +1,8 @@
+/**
+ * Animated section divider with pulse line effect.
+ * Creates a medical-themed heartbeat/pulse visual between page sections.
+ * Features animated traveling pulses and pulsing dots.
+ */
 function WaveDivider() {
   return (
     <div className="relative w-full bg-brand-navy overflow-hidden">

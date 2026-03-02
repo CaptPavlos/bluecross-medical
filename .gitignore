@@ -38,5 +38,14 @@ coverage/
 tmp/
 *.tmp
 
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
 # Exclude entire vital-signs subdirectory (separate project, not part of this repo)
 vital-signs/

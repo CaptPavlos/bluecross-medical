@@ -8,6 +8,9 @@ import { submitContactForm } from '../../lib/api/contact';
 import { isValidEmail } from '../../lib/utils';
 import type { ContactSubmission } from '../../lib/types';
 
+/**
+ * Validation error messages for form fields.
+ */
 interface FormErrors {
   name?: string;
   email?: string;
@@ -15,6 +18,11 @@ interface FormErrors {
   message?: string;
 }
 
+/**
+ * Contact form component with validation and submission handling.
+ * Validates all fields client-side before submission.
+ * Displays success/error feedback with animated transitions.
+ */
 function ContactForm() {
   const [formData, setFormData] = useState<ContactSubmission>({
     name: '',

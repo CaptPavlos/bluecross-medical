@@ -6,12 +6,23 @@ import Badge from '../Common/Badge';
 import type { BlogPost } from '../../lib/types';
 import { formatDate } from '../../lib/utils';
 
+/**
+ * Props for the BlogCard component.
+ */
 interface BlogCardProps {
   post: BlogPost;
   index?: number;
   featured?: boolean;
 }
 
+/**
+ * Blog post preview card component with hover animation.
+ * Displays featured image, tags, title, excerpt, and metadata.
+ * Links to the full blog post detail page.
+ * @param post - Blog post data to display
+ * @param index - Position in list for staggered animation delay
+ * @param featured - Renders larger card spanning two columns when true
+ */
 function BlogCard({ post, index = 0, featured = false }: BlogCardProps) {
   return (
     <motion.div

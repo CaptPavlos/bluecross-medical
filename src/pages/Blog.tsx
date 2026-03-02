@@ -1,9 +1,20 @@
+/**
+ * Blog Page
+ *
+ * Main blog listing page with search functionality and article grid.
+ * Features a gradient hero section and animated content reveal.
+ *
+ * @module pages/Blog
+ */
 import { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { BlogGrid, BlogSearch } from '../components/Blog';
 import { ScrollReveal } from '../components/Animations';
 import Container from '../components/Common/Container';
 
+/**
+ * Blog page component with search and article listing.
+ */
 function Blog() {
   const [searchQuery, setSearchQuery] = useState('');
 

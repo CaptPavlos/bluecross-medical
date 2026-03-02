@@ -1,5 +1,11 @@
-// Core TypeScript interfaces for BlueCross Medical
+/**
+ * @fileoverview Core TypeScript interfaces and types for BlueCross Medical.
+ * Defines data structures for teams, products, blog posts, and flag states.
+ */
 
+/**
+ * Team member profile data.
+ */
 export interface Team {
   id: string;
   name: string;
@@ -14,12 +20,18 @@ export interface Team {
   updated_at: string;
 }
 
+/**
+ * Social media profile links for team members.
+ */
 export interface SocialLinks {
   linkedin?: string;
   twitter?: string;
   github?: string;
 }
 
+/**
+ * Medical product or equipment data.
+ */
 export interface Product {
   id: string;
   name: string;
@@ -37,8 +49,12 @@ export interface Product {
   updated_at: string;
 }
 
+/** Product availability status */
 export type ProductStatus = 'in-stock' | 'to-order' | 'not-available';
 
+/**
+ * Blog post or knowledge article data.
+ */
 export interface BlogPost {
   id: string;
   title: string;
@@ -56,6 +72,9 @@ export interface BlogPost {
   updated_at: string;
 }
 
+/**
+ * Telemedical Maritime Assistance Service (TMAS) contact information.
+ */
 export interface TMASContact {
   name: string;
   phone: string;
@@ -66,6 +85,9 @@ export interface TMASContact {
   notes?: string;
 }
 
+/**
+ * Yacht-specific medical requirements for a flag state.
+ */
 export interface YachtRequirements {
   applicable: boolean; // Whether special yacht regulations exist
   code_name?: string; // e.g., "LY3", "REG Yachting"
@@ -76,6 +98,9 @@ export interface YachtRequirements {
   doctor_required_passengers?: number; // Number of passengers requiring onboard doctor
 }
 
+/**
+ * Flag state differences from standard WHO medical equipment guidelines.
+ */
 export interface EquipmentDifferences {
   aed_required: boolean;
   aed_recommendation?: string; // e.g., "Strongly recommended", "Required for passenger vessels"
@@ -86,6 +111,9 @@ export interface EquipmentDifferences {
   who_guide_deviations?: string[]; // Differences from WHO International Medical Guide
 }
 
+/**
+ * Maritime flag state with medical regulations and requirements.
+ */
 export interface FlagState {
   id: string;
   country_name: string;
@@ -110,6 +138,9 @@ export interface FlagState {
   updated_at: string;
 }
 
+/**
+ * Contact form submission data.
+ */
 export interface ContactSubmission {
   name: string;
   email: string;
@@ -117,6 +148,9 @@ export interface ContactSubmission {
   message: string;
 }
 
+/**
+ * System operational status data.
+ */
 export interface SystemStatus {
   id: string;
   status: SystemStatusType;
@@ -125,39 +159,54 @@ export interface SystemStatus {
   updated_at: string;
 }
 
+/** System status type values */
 export type SystemStatusType = 'operational' | 'degraded' | 'maintenance';
 
-// API Response types
+/**
+ * Generic API response wrapper with data and error.
+ */
 export interface ApiResponse<T> {
   data: T | null;
   error: ApiError | null;
 }
 
+/**
+ * API error response structure.
+ */
 export interface ApiError {
   message: string;
   code?: string;
 }
 
-// Form states
+/**
+ * Common form state for submission handling.
+ */
 export interface FormState {
   isSubmitting: boolean;
   isSuccess: boolean;
   error: string | null;
 }
 
-// Navigation types
+/**
+ * Navigation menu item structure.
+ */
 export interface NavItem {
   label: string;
   path: string;
   icon?: string;
 }
 
-// Component prop types
+/**
+ * Base props shared by most components.
+ */
 export interface BaseComponentProps {
   className?: string;
   children?: React.ReactNode;
 }
 
+/**
+ * Common loading state for async operations.
+ */
 export interface LoadingState {
   isLoading: boolean;
   error: string | null;

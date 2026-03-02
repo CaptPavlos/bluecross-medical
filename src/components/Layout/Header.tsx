@@ -6,7 +6,7 @@ import { NAV_ITEMS } from '../../lib/constants';
 import { cn } from '../../lib/utils';
 import Container from '../Common/Container';
 
-// Ecwid type declarations
+/** Ecwid e-commerce platform type declarations for cart integration */
 declare global {
   interface Window {
     Ecwid?: {
@@ -24,6 +24,11 @@ declare global {
   }
 }
 
+/**
+ * Fixed header component with navigation links, logo, and shopping cart.
+ * Adapts styling based on scroll position and current page.
+ * Uses transparent background on dark hero pages, white when scrolled.
+ */
 function Header() {
   const [cartCount, setCartCount] = useState(0);
   const isScrolled = useIsScrolled(50);

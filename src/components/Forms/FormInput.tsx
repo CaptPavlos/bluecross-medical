@@ -1,12 +1,22 @@
 import { forwardRef } from 'react';
 import { cn } from '../../lib/utils';
 
+/**
+ * Props for the FormInput component.
+ */
 interface FormInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: string;
   helperText?: string;
 }
 
+/**
+ * Accessible form input component with label, validation, and helper text.
+ * Includes ARIA attributes for screen readers and error states.
+ * @param label - Label text displayed above input
+ * @param error - Error message to display (triggers error styling)
+ * @param helperText - Helper text shown below input when no error
+ */
 const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
   ({ className, label, error, helperText, id, ...props }, ref) => {
     const inputId = id || props.name;

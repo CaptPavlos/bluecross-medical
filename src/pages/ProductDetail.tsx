@@ -1,3 +1,12 @@
+/**
+ * Product Detail Page
+ *
+ * Individual product view with full specifications, pricing,
+ * certifications, and add-to-cart functionality via Ecwid.
+ * Includes related products and maritime compliance badges.
+ *
+ * @module pages/ProductDetail
+ */
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, CheckCircle, Star, ExternalLink, AlertTriangle, Phone, Mail } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -7,7 +16,22 @@ import { Badge } from '../components/Common';
 import { ScrollReveal } from '../components/Animations';
 import { MOCK_PRODUCTS } from '../lib/constants';
 
-const QUOTE_EMAIL = 'bluecross@marsoft.ai';
+/** Contact email for product inquiries */
+const QUOTE_EMAIL = 'sales@bluecross.tech';
+
+/** Ecwid e-commerce integration type declarations */
+declare global {
+  interface Window {
+    ecwidAddToCart?: (productId: number, callback?: (success: boolean) => void) => void;
+  }
+}
+
+// Add to cart using Ecwid embedded cart
+const handleAddToCart = (productId: string) => {
+  if (window.ecwidAddToCart) {
+    window.ecwidAddToCart(parseInt(productId));
+  }
+};
 
 // Helper to format long description into readable sections
 function formatDescription(text: string) {

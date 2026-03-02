@@ -1,0 +1,13 @@
+package com.mbridge.msdk.click;
+
+/* compiled from: r8-map-id-41d83e727936d3330b608d725ba7b7c2e83c0817dc12ceb2aead6fdefac83833 */
+/* loaded from: classes3.dex */
+public class e {
+
+    /* renamed from: a, reason: collision with root package name */
+    private int f2803a = 1;
+
+    public void a() {
+        this.f2803a = 8;
+    }
+}

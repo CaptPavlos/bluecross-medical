@@ -1,10 +1,18 @@
 import { forwardRef } from 'react';
 import { cn } from '../../lib/utils';
 
+/**
+ * Props for the Container component.
+ */
 interface ContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
 }
 
+/**
+ * Responsive container component that centers content with max-width constraints.
+ * Includes responsive horizontal padding for consistent page layouts.
+ * @param size - Maximum width: sm (2xl), md (4xl), lg (6xl), xl (7xl), or full
+ */
 const Container = forwardRef<HTMLDivElement, ContainerProps>(
   ({ className, size = 'lg', children, ...props }, ref) => {
     const sizes = {
