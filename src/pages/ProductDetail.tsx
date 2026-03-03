@@ -26,12 +26,7 @@ declare global {
   }
 }
 
-// Add to cart using Ecwid embedded cart
-const handleAddToCart = (productId: string) => {
-  if (window.ecwidAddToCart) {
-    window.ecwidAddToCart(parseInt(productId));
-  }
-};
+// Ecwid e-commerce cart integration is handled via global script
 
 // Helper to format long description into readable sections
 function formatDescription(text: string) {

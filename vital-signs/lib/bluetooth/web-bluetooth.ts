@@ -19,7 +19,7 @@
  *    pulse_mark(1B), note(1B), 0xF1, battery(1B), CRC]
  */
 
-import { ECGSample, SpO2Reading, BLECallbacks, ConnectionStatus, CheckmeDeviceInfo, StoredRecord } from '@/lib/types';
+import { ECGSample, BLECallbacks, CheckmeDeviceInfo, StoredRecord } from '@/lib/types';
 
 // Viatom GATT UUIDs
 const VIATOM_SERVICE_UUID = '14839ac4-7d7e-415c-9a42-167340cf2339';
@@ -34,7 +34,6 @@ const PACKET_INTERVAL_MS = 40;
 const CMD_HEADER = 0xAA;
 const CMD_PING = 0x15;
 const CMD_GET_INFO = 0x14;
-const CMD_SYNC_TIME = 0x06;
 const CMD_READ_START = 0x03;
 const CMD_READ_PKG = 0x04;
 const CMD_READ_END = 0x05;

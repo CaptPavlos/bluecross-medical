@@ -6,7 +6,7 @@
  */
 
 import { create } from 'zustand';
-import { ECGSample, BloodPressure, SpO2Reading, ConnectionStatus, ECGAnalysis, CheckmeDeviceInfo, StoredRecord } from '@/lib/types';
+import { ECGSample, BloodPressure, ConnectionStatus, ECGAnalysis, CheckmeDeviceInfo, StoredRecord } from '@/lib/types';
 
 interface VitalsState {
   // Connection

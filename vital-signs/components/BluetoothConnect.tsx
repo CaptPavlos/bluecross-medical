@@ -21,13 +21,9 @@ interface BluetoothConnectProps {
 
 export const BluetoothConnect: React.FC<BluetoothConnectProps> = ({ onDemoMode, bleManagerRef }) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [isSupported, setIsSupported] = useState<boolean | null>(null);
+  const [isSupported] = useState<boolean>(() => isWebBluetoothSupported());
   const internalRef = useRef<WebBluetoothManager | null>(null);
   const managerRef = bleManagerRef || internalRef;
-
-  useEffect(() => {
-    setIsSupported(isWebBluetoothSupported());
-  }, []);
 
   const {
     connectionStatus,
@@ -59,15 +55,12 @@ export const BluetoothConnect: React.FC<BluetoothConnectProps> = ({ onDemoMode, 
     };
   }, [addECGData, setSpO2, setBloodPressure, setTemperature, setConnectionStatus, setDeviceInfo, setStoredRecords, managerRef]);
 
+  // eslint-disable-next-line react-hooks/preserve-manual-memoization
   const handleConnect = useCallback(async () => {
     setErrorMessage(null);
     if (managerRef.current) {
       await managerRef.current.requestDevice();
     }
-  }, [managerRef]);
-
-  const handleDisconnect = useCallback(() => {
-    managerRef.current?.disconnect();
   }, [managerRef]);
 
   if (isSupported === null) {
