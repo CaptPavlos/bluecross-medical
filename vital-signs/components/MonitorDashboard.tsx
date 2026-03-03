@@ -27,7 +27,7 @@ import { ECGSessionRecord, VitalRecord } from '@/lib/types';
 import { WebBluetoothManager } from '@/lib/bluetooth/web-bluetooth';
 
 export const MonitorDashboard: React.FC = () => {
-  const [isMounted, setIsMounted] = useState(false);
+  const [isMounted] = useState(() => typeof window !== 'undefined');
   const processorRef = useRef(new ECGProcessor());
   const recordedSamplesRef = useRef<Array<{ timestamp: number; value: number }>>([]);
   const bleManagerRef = useRef<WebBluetoothManager | null>(null);
@@ -55,11 +55,6 @@ export const MonitorDashboard: React.FC = () => {
   } = useVitalsStore();
 
   const { startDemo, stopDemo } = useDemoMode();
-
-  // Prevent hydration mismatch — only render dynamic content after mount
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   const isConnected = connectionStatus === 'connected';
   const isStreaming = isConnected && ecgData.length > 0;
