@@ -2,8 +2,9 @@
  * @fileoverview About page with company mission and founder information.
  */
 import { motion } from 'framer-motion';
-import { Mail, Linkedin, Anchor, Ship, Award, Heart } from 'lucide-react';
+import { Mail, Anchor, Ship, Award, Heart } from 'lucide-react';
 import Container from '../components/Common/Container';
+import { SocialIcon } from '../components/Common/SocialIcon';
 import { SEOHead } from '../components/SEO';
 
 /**
@@ -100,7 +101,7 @@ function About() {
                     rel="noopener noreferrer"
                     className="flex items-center gap-2 text-sm text-brand-ocean hover:text-brand-navy transition-colors"
                   >
-                    <Linkedin size={16} />
+                    <SocialIcon platform="linkedin" size={16} />
                     LinkedIn
                   </a>
                 </div>

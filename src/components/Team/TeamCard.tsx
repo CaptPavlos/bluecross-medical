@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
-import { Mail, Linkedin, Twitter, Github } from 'lucide-react';
+import { Mail } from 'lucide-react';
 import Card from '../Common/Card';
+import { SocialIcon } from '../Common/SocialIcon';
 import type { Team } from '../../lib/types';
 
 /**
@@ -18,12 +19,6 @@ interface TeamCardProps {
  * @param index - Position in list for animation delay
  */
 function TeamCard({ member, index = 0 }: TeamCardProps) {
-  const socialIcons = {
-    linkedin: Linkedin,
-    twitter: Twitter,
-    github: Github,
-  };
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -70,8 +65,10 @@ function TeamCard({ member, index = 0 }: TeamCardProps) {
             </a>
           )}
           {member.social_links && Object.entries(member.social_links).map(([platform, url]) => {
-            const Icon = socialIcons[platform as keyof typeof socialIcons];
-            if (!Icon || !url) return null;
+            if (!url || !['linkedin', 'twitter', 'github', 'facebook'].includes(platform)) {
+              return null;
+            }
+
             return (
               <a
                 key={platform}
@@ -81,7 +78,7 @@ function TeamCard({ member, index = 0 }: TeamCardProps) {
                 className="p-2 text-brand-gray hover:text-brand-ocean hover:bg-brand-ocean/10 rounded-full transition-colors"
                 aria-label={`${member.name} on ${platform}`}
               >
-                <Icon size={18} />
+                <SocialIcon platform={platform as 'linkedin' | 'twitter' | 'github' | 'facebook'} size={18} />
               </a>
             );
           })}

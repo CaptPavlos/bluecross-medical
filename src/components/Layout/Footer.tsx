@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
-import { Mail, Phone, MapPin, Linkedin, Lock } from 'lucide-react';
+import { Mail, Phone, MapPin, Lock } from 'lucide-react';
 import { COMPANY_INFO } from '../../lib/constants';
 import Container from '../Common/Container';
+import { SocialIcon } from '../Common/SocialIcon';
 import { useAuth } from '../../context/AuthContext';
 
 /**
@@ -75,7 +76,7 @@ function Footer() {
                   className="p-2 bg-white/10 rounded-lg hover:bg-brand-ocean transition-colors"
                   aria-label="Mariners Medico Guide"
                 >
-                  <Linkedin size={18} />
+                  <SocialIcon platform="linkedin" size={18} />
                 </a>
               </div>
             </div>

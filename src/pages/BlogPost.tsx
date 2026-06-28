@@ -10,13 +10,14 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Calendar, Clock, User, Share2, Twitter, Linkedin, Facebook } from 'lucide-react';
+import { ArrowLeft, Calendar, Clock, User, Share2 } from 'lucide-react';
 import { getBlogPostBySlug } from '../lib/api/blog';
 import type { BlogPost as BlogPostType } from '../lib/types';
 import { formatDate } from '../lib/utils';
 import Container from '../components/Common/Container';
 import Badge from '../components/Common/Badge';
 import { Skeleton } from '../components/Common';
+import { SocialIcon } from '../components/Common/SocialIcon';
 
 /**
  * Single blog post view with loading state and social sharing.
@@ -153,13 +154,13 @@ function BlogPost() {
                 </span>
                 <div className="flex gap-2">
                   <a href="#" className="p-2 text-brand-gray hover:text-brand-ocean hover:bg-brand-ocean/10 rounded-full transition-colors">
-                    <Twitter size={18} />
+                    <SocialIcon platform="twitter" size={18} />
                   </a>
                   <a href="#" className="p-2 text-brand-gray hover:text-brand-ocean hover:bg-brand-ocean/10 rounded-full transition-colors">
-                    <Linkedin size={18} />
+                    <SocialIcon platform="linkedin" size={18} />
                   </a>
                   <a href="#" className="p-2 text-brand-gray hover:text-brand-ocean hover:bg-brand-ocean/10 rounded-full transition-colors">
-                    <Facebook size={18} />
+                    <SocialIcon platform="facebook" size={18} />
                   </a>
                 </div>
               </div>
