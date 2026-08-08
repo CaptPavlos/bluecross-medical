@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">BlueCross Medical social preview</title>
+  <desc id="desc">BlueCross Medical branding with a ship, medical cross, and the message Maritime medical clarity, from flag to first response.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#071426"/><stop offset=".55" stop-color="#123b61"/><stop offset="1" stop-color="#006f9f"/>
+    </linearGradient>
+    <linearGradient id="sea" x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="#0077b6"/><stop offset="1" stop-color="#48cae4"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="170%" height="180%">
+      <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#020913" flood-opacity=".42"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="630" fill="url(#background)"/>
+  <circle cx="1060" cy="70" r="270" fill="#48cae4" opacity=".09"/>
+  <circle cx="1040" cy="82" r="174" fill="#48cae4" opacity=".07"/>
+  <circle cx="92" cy="601" r="300" fill="#0077b6" opacity=".13"/>
+  <path d="M0 500c168-52 299 57 459 14 178-48 299-85 474-21 102 38 178 27 267-5v142H0z" fill="#071426" opacity=".72"/>
+  <path d="M0 533c169-49 298 57 459 14 177-48 299-85 474-21 102 37 178 26 267-5" fill="none" stroke="url(#sea)" stroke-width="11" opacity=".9"/>
+
+  <g transform="translate(84 72)">
+    <rect width="104" height="104" rx="25" fill="#0077b6"/>
+    <text x="52" y="72" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="58" font-weight="700">B+</text>
+    <text x="130" y="45" fill="#ffffff" font-family="Arial, sans-serif" font-size="34" font-weight="700">BlueCross</text>
+    <text x="130" y="82" fill="#90e0ef" font-family="Arial, sans-serif" font-size="25" font-weight="700" letter-spacing="4">MEDICAL</text>
+  </g>
+
+  <g transform="translate(84 225)">
+    <text x="0" y="0" fill="#ffffff" font-family="Arial, sans-serif" font-size="55" font-weight="700">Maritime medical clarity,</text>
+    <text x="0" y="67" fill="#ffffff" font-family="Arial, sans-serif" font-size="55" font-weight="700">from flag to</text>
+    <text x="0" y="134" fill="#ffffff" font-family="Arial, sans-serif" font-size="55" font-weight="700">first response.</text>
+    <text x="2" y="187" fill="#c9f5fb" font-family="Arial, sans-serif" font-size="23">
+      Flag regulations · practical training · onboard equipment
+    </text>
+  </g>
+
+  <g filter="url(#shadow)" transform="translate(883 203)">
+    <path d="M39 198h224l-29 62H75z" fill="#e8f8fb"/>
+    <path d="M87 198V89h119v109" fill="#f7fcfd"/>
+    <path d="M116 89V40h61v49" fill="#d4eff5"/>
+    <path d="M146 17v85" stroke="#90e0ef" stroke-width="7"/>
+    <path d="M146 17l66 25-66 26z" fill="#48cae4"/>
+    <rect x="104" y="115" width="84" height="58" rx="8" fill="#0d2943"/>
+    <path d="M146 125v38M127 144h38" stroke="#e63946" stroke-width="12" stroke-linecap="round"/>
+    <path d="M10 260c66 25 108-23 170 0 51 19 91 1 123-14" fill="none" stroke="#48cae4" stroke-width="11" stroke-linecap="round"/>
+  </g>
+
+  <g transform="translate(84 548)">
+    <rect width="272" height="43" rx="21.5" fill="#ffffff" opacity=".12"/>
+    <circle cx="25" cy="21.5" r="7" fill="#10b981"/>
+    <text x="44" y="28" fill="#e8fbff" font-family="Arial, sans-serif" font-size="17" font-weight="700">BLUECROSS.TECH</text>
+  </g>
+</svg>

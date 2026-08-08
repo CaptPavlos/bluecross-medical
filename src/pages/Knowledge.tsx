@@ -23,7 +23,7 @@ const officialDocs = [
   {
     title: 'WHO International Medical Guide for Ships',
     description: 'The definitive reference for medical care at sea. Third edition.',
-    url: 'https://apps.who.int/iris/bitstream/handle/10665/43814/9789240682313_eng.pdf',
+    url: 'https://iris.who.int/server/api/core/bitstreams/d834ff4a-6e90-4812-b2b1-b89785c30c35/content',
     type: 'PDF',
     icon: FileText,
   },

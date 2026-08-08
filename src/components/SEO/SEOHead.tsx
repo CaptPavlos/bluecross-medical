@@ -1,13 +1,12 @@
 import { Helmet } from 'react-helmet-async';
 
-/**
- * Props for the SEOHead component.
- */
+/** Props for route-level search and social metadata. */
 interface SEOHeadProps {
   title?: string;
   description?: string;
   keywords?: string[];
   image?: string;
+  imageAlt?: string;
   url?: string;
   type?: 'website' | 'article' | 'product';
   publishedTime?: string;
@@ -18,38 +17,30 @@ interface SEOHeadProps {
   jsonLd?: object;
 }
 
-/** Site name for SEO titles */
 const SITE_NAME = 'BlueCross Medical';
-/** Default page title suffix */
 const DEFAULT_TITLE = 'Maritime Emergency Medicine';
-/** Default meta description for pages without custom description */
-const DEFAULT_DESCRIPTION = 'Your complete resource for emergency medicine at sea. Flag state regulations, advanced training courses, knowledge articles, and tested equipment.';
-/** Default Open Graph image URL */
-const DEFAULT_IMAGE = 'https://www.bluecross.tech/og-image.jpg';
-/** Site canonical URL */
+const DEFAULT_DESCRIPTION = 'Flag-state guidance, maritime medical training, practical knowledge, and onboard medical equipment for ships and yachts.';
+const DEFAULT_IMAGE = '/og-image.png';
+const DEFAULT_IMAGE_ALT = 'BlueCross Medical — maritime medical clarity from flag to first response';
 const SITE_URL = 'https://www.bluecross.tech';
+const ORGANIZATION_ID = `${SITE_URL}/#organization`;
+const WEBSITE_ID = `${SITE_URL}/#website`;
+
+function canonicalizeUrl(url = '/') {
+  const requestedUrl = new URL(url, `${SITE_URL}/`);
+  return new URL(`${requestedUrl.pathname}${requestedUrl.search}`, `${SITE_URL}/`).toString();
+}
 
 /**
- * SEO component for managing page meta tags and structured data.
- * Handles Open Graph, Twitter Cards, and JSON-LD schema markup.
- * @param title - Page title (appended to site name)
- * @param description - Meta description for search engines
- * @param keywords - Array of keywords for meta tags
- * @param image - Open Graph image URL
- * @param url - Canonical URL path (relative to site)
- * @param type - Content type for Open Graph
- * @param publishedTime - Article publish date (ISO format)
- * @param modifiedTime - Article modified date (ISO format)
- * @param author - Content author name
- * @param section - Article section/category
- * @param noindex - Prevents search engine indexing when true
- * @param jsonLd - Additional JSON-LD structured data object
+ * Owns metadata for the currently rendered route. Static HTML intentionally
+ * contains no canonical, social tags, or JSON-LD so there is one live source.
  */
 export default function SEOHead({
   title,
   description = DEFAULT_DESCRIPTION,
   keywords = [],
   image = DEFAULT_IMAGE,
+  imageAlt = DEFAULT_IMAGE_ALT,
   url,
   type = 'website',
   publishedTime,
@@ -60,100 +51,84 @@ export default function SEOHead({
   jsonLd,
 }: SEOHeadProps) {
   const fullTitle = title ? `${title} | ${SITE_NAME}` : `${SITE_NAME} | ${DEFAULT_TITLE}`;
-  const canonicalUrl = url ? `${SITE_URL}${url}` : SITE_URL;
-  const safeImage = image || DEFAULT_IMAGE;
-  const fullImageUrl = safeImage.startsWith('http') ? safeImage : `${SITE_URL}${safeImage}`;
+  const canonicalUrl = canonicalizeUrl(url);
+  const fullImageUrl = new URL(image, `${SITE_URL}/`).toString();
+  const webPageId = `${canonicalUrl}#webpage`;
 
-  // Default organization schema
-  const organizationSchema = {
+  const baseSchema = {
     '@context': 'https://schema.org',
-    '@type': 'Organization',
-    name: 'BlueCross Medical',
-    url: SITE_URL,
-    logo: `${SITE_URL}/favicon.svg`,
-    description: DEFAULT_DESCRIPTION,
-    sameAs: [
-      // Add social media URLs when available
+    '@graph': [
+      {
+        '@type': 'Organization',
+        '@id': ORGANIZATION_ID,
+        name: SITE_NAME,
+        url: `${SITE_URL}/`,
+        logo: {
+          '@type': 'ImageObject',
+          url: `${SITE_URL}/favicon.svg`,
+        },
+        description: DEFAULT_DESCRIPTION,
+        contactPoint: {
+          '@type': 'ContactPoint',
+          email: 'bluecross@marsoft.ai',
+          contactType: 'customer support',
+        },
+      },
+      {
+        '@type': 'WebSite',
+        '@id': WEBSITE_ID,
+        url: `${SITE_URL}/`,
+        name: SITE_NAME,
+        description: DEFAULT_DESCRIPTION,
+        publisher: { '@id': ORGANIZATION_ID },
+        inLanguage: 'en',
+      },
+      {
+        '@type': type === 'product' ? 'ItemPage' : 'WebPage',
+        '@id': webPageId,
+        url: canonicalUrl,
+        name: fullTitle,
+        description,
+        isPartOf: { '@id': WEBSITE_ID },
+        about: { '@id': ORGANIZATION_ID },
+        publisher: { '@id': ORGANIZATION_ID },
+        primaryImageOfPage: {
+          '@type': 'ImageObject',
+          url: fullImageUrl,
+          caption: imageAlt,
+        },
+        inLanguage: 'en',
+      },
     ],
-    contactPoint: {
-      '@type': 'ContactPoint',
-      email: 'bluecross@marsoft.ai',
-      contactType: 'sales',
-    },
   };
 
-  // Medical business schema
-  const medicalBusinessSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'MedicalBusiness',
-    name: 'BlueCross Medical',
-    url: SITE_URL,
-    description: 'Maritime emergency medicine training, equipment, and consulting services.',
-    priceRange: '$$',
-    areaServed: {
-      '@type': 'Place',
-      name: 'Worldwide',
-    },
-    hasOfferCatalog: {
-      '@type': 'OfferCatalog',
-      name: 'Maritime Medical Services',
-      itemListElement: [
-        {
-          '@type': 'Offer',
-          itemOffered: {
-            '@type': 'Service',
-            name: 'Maritime Medical Training',
-          },
-        },
-        {
-          '@type': 'Offer',
-          itemOffered: {
-            '@type': 'Product',
-            name: 'Maritime Medical Equipment',
-          },
-        },
-      ],
-    },
-  };
-
-  // Article schema for blog posts
   const articleSchema = type === 'article' ? {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    '@id': `${canonicalUrl}#article`,
     headline: title,
-    description: description,
+    description,
     image: fullImageUrl,
-    author: {
-      '@type': 'Person',
-      name: author || 'BlueCross Medical',
-    },
-    publisher: {
-      '@type': 'Organization',
-      name: 'BlueCross Medical',
-      logo: {
-        '@type': 'ImageObject',
-        url: `${SITE_URL}/favicon.svg`,
-      },
-    },
+    author: author && author !== SITE_NAME
+      ? { '@type': 'Person', name: author }
+      : { '@id': ORGANIZATION_ID },
+    publisher: { '@id': ORGANIZATION_ID },
     datePublished: publishedTime,
     dateModified: modifiedTime || publishedTime,
-    mainEntityOfPage: {
-      '@type': 'WebPage',
-      '@id': canonicalUrl,
-    },
+    mainEntityOfPage: { '@id': webPageId },
     articleSection: section,
   } : null;
 
-  // Breadcrumb schema
   const breadcrumbSchema = url && url !== '/' ? {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
+    '@id': `${canonicalUrl}#breadcrumb`,
     itemListElement: [
       {
         '@type': 'ListItem',
         position: 1,
         name: 'Home',
-        item: SITE_URL,
+        item: `${SITE_URL}/`,
       },
       {
         '@type': 'ListItem',
@@ -167,44 +142,39 @@ export default function SEOHead({
   const defaultKeywords = [
     'maritime medicine',
     'emergency medicine at sea',
-    'yacht medical',
-    'superyacht medical',
     'flag state regulations',
     'maritime medical training',
     'ship medical equipment',
-    'MLC medical',
-    'STCW medical',
   ];
-
-  const allKeywords = [...new Set([...keywords, ...defaultKeywords])];
+  const allKeywords = [...new Set([...keywords, ...defaultKeywords].filter(Boolean))];
 
   return (
     <Helmet>
-      {/* Basic Meta Tags */}
       <title>{fullTitle}</title>
       <meta name="description" content={description} />
       <meta name="keywords" content={allKeywords.join(', ')} />
-      {noindex && <meta name="robots" content="noindex, nofollow" />}
-      
-      {/* Canonical URL */}
+      <meta
+        name="robots"
+        content={noindex
+          ? 'noindex, nofollow'
+          : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'}
+      />
       <link rel="canonical" href={canonicalUrl} />
-      
-      {/* Language */}
+
       <html lang="en" />
       <meta httpEquiv="content-language" content="en" />
-      
-      {/* Open Graph / Facebook */}
+
       <meta property="og:type" content={type} />
       <meta property="og:url" content={canonicalUrl} />
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={description} />
       <meta property="og:image" content={fullImageUrl} />
+      <meta property="og:image:alt" content={imageAlt} />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
       <meta property="og:site_name" content={SITE_NAME} />
       <meta property="og:locale" content="en_US" />
-      
-      {/* Article specific OG tags */}
+
       {type === 'article' && publishedTime && (
         <meta property="article:published_time" content={publishedTime} />
       )}
@@ -217,50 +187,27 @@ export default function SEOHead({
       {type === 'article' && section && (
         <meta property="article:section" content={section} />
       )}
-      
-      {/* Twitter Card */}
+
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:url" content={canonicalUrl} />
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={fullImageUrl} />
-      
-      {/* Additional SEO Tags */}
-      <meta name="author" content={author || 'BlueCross Medical'} />
-      <meta name="publisher" content="BlueCross Medical" />
-      <meta name="copyright" content="BlueCross Medical" />
-      
-      {/* GEO Tags for local SEO */}
-      <meta name="geo.region" content="GR" />
-      <meta name="geo.placename" content="Athens" />
-      
-      {/* Mobile & PWA */}
-      <meta name="theme-color" content="#1e3a5f" />
-      <meta name="apple-mobile-web-app-capable" content="yes" />
-      <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-      <meta name="apple-mobile-web-app-title" content={SITE_NAME} />
-      
-      {/* JSON-LD Structured Data */}
-      <script type="application/ld+json">
-        {JSON.stringify(organizationSchema)}
-      </script>
-      <script type="application/ld+json">
-        {JSON.stringify(medicalBusinessSchema)}
-      </script>
+      <meta name="twitter:image:alt" content={imageAlt} />
+
+      <meta name="author" content={author || SITE_NAME} />
+      <meta name="publisher" content={SITE_NAME} />
+      <meta name="copyright" content={SITE_NAME} />
+
+      <script type="application/ld+json">{JSON.stringify(baseSchema)}</script>
       {articleSchema && (
-        <script type="application/ld+json">
-          {JSON.stringify(articleSchema)}
-        </script>
+        <script type="application/ld+json">{JSON.stringify(articleSchema)}</script>
       )}
       {breadcrumbSchema && (
-        <script type="application/ld+json">
-          {JSON.stringify(breadcrumbSchema)}
-        </script>
+        <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
       )}
       {jsonLd && (
-        <script type="application/ld+json">
-          {JSON.stringify(jsonLd)}
-        </script>
+        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       )}
     </Helmet>
   );

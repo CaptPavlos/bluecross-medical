@@ -7,9 +7,12 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "regulations:test": "node --test scripts/tests/paris-mou.test.mjs",
+    "regulations:update": "node scripts/update-paris-mou.mjs"
   },
   "dependencies": {
+    "@neondatabase/serverless": "1.0.2",
     "@supabase/supabase-js": "^2.45.0",
     "@tailwindcss/typography": "^0.5.19",
     "@vercel/analytics": "^1.5.0",
@@ -24,7 +27,6 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
-    "@neondatabase/serverless": "^1.0.2",
     "@types/node": "^20.10.0",
     "@types/react": "^18.2.45",
     "@types/react-dom": "^18.2.18",

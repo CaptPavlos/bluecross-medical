@@ -29,6 +29,12 @@
     @apply outline-none ring-2 ring-brand-ocean ring-offset-2;
   }
 
+  /* Route headings receive programmatic focus for screen-reader announcement. */
+  #main-content h1[tabindex='-1']:focus {
+    outline: none;
+    box-shadow: none;
+  }
+
   /* Remove default button styles */
   button {
     @apply cursor-pointer;

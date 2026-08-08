@@ -1,8 +1,7 @@
-import { useState, useEffect } from 'react';
-import { getProducts } from '../../lib/api/products';
-import type { Product, ProductStatus } from '../../lib/types';
+import { useMemo, useState } from 'react';
+import { MOCK_PRODUCTS } from '../../lib/constants';
+import type { ProductStatus } from '../../lib/types';
 import ProductCard from './ProductCard';
-import { SkeletonCard } from '../Common/Skeleton';
 import Button from '../Common/Button';
 
 /**
@@ -20,23 +19,14 @@ interface ProductGridProps {
  * @param showFilters - Shows status filter buttons when true
  */
 function ProductGrid({ limit, showFilters = false }: ProductGridProps) {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState<ProductStatus | 'all'>('all');
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      setIsLoading(true);
-      try {
-        const data = await getProducts(filter === 'all' ? undefined : filter);
-        setProducts(limit ? data.slice(0, limit) : data);
-      } catch (error) {
-        console.error('Error fetching products:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchProducts();
+  const products = useMemo(() => {
+    const filteredProducts = filter === 'all'
+      ? MOCK_PRODUCTS
+      : MOCK_PRODUCTS.filter((product) => product.status === filter);
+
+    return limit ? filteredProducts.slice(0, limit) : filteredProducts;
   }, [filter, limit]);
 
   const filters: { value: ProductStatus | 'all'; label: string }[] = [
@@ -49,13 +39,19 @@ function ProductGrid({ limit, showFilters = false }: ProductGridProps) {
   return (
     <div>
       {showFilters && (
-        <div className="flex flex-wrap gap-2 mb-6">
+        <div
+          className="-mx-1 mb-6 flex flex-nowrap gap-2 overflow-x-auto px-1 pb-2 scrollbar-hide sm:flex-wrap"
+          role="group"
+          aria-label="Filter equipment by availability"
+        >
           {filters.map((f) => (
             <Button
               key={f.value}
               variant={filter === f.value ? 'primary' : 'ghost'}
               size="sm"
+              className="shrink-0 whitespace-nowrap"
               onClick={() => setFilter(f.value)}
+              aria-pressed={filter === f.value}
             >
               {f.label}
             </Button>
@@ -63,14 +59,12 @@ function ProductGrid({ limit, showFilters = false }: ProductGridProps) {
         </div>
       )}
 
-      {isLoading ? (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {Array.from({ length: limit || 6 }).map((_, i) => (
-            <SkeletonCard key={i} />
-          ))}
-        </div>
-      ) : products.length > 0 ? (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <span className="sr-only" role="status" aria-live="polite">
+        {products.length} products shown.
+      </span>
+
+      {products.length > 0 ? (
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {products.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}

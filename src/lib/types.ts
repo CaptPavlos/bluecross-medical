@@ -111,6 +111,20 @@ export interface EquipmentDifferences {
   who_guide_deviations?: string[]; // Differences from WHO International Medical Guide
 }
 
+/** Paris MoU performance band for the current edition. */
+export type ParisMouStatus = 'white' | 'grey' | 'black' | 'not-listed';
+
+/** Human review state for flag-specific medical guidance. */
+export type MedicalReviewStatus = 'reviewed' | 'needs-authoritative-review';
+
+/** A source used to review a flag-specific medical regulation summary. */
+export interface MedicalRegulationSource {
+  title: string;
+  url: string;
+  authority?: string;
+  checked_on?: string | null;
+}
+
 /**
  * Maritime flag state with medical regulations and requirements.
  */
@@ -119,23 +133,34 @@ export interface FlagState {
   country_name: string;
   country_code: string; // ISO 3166-1 alpha-2
   flag_emoji: string;
-  paris_mou_status: 'white' | 'grey' | 'black';
-  paris_mou_rank?: number;
+  paris_mou_status: ParisMouStatus;
+  /** Global rank in the current Paris MoU edition; null when not listed. */
+  paris_mou_rank: number | null;
+  paris_mou_edition: number;
+  paris_mou_valid_from: string;
+  paris_mou_valid_until: string;
+  paris_mou_inspections: number | null;
+  paris_mou_detentions: number | null;
+  paris_mou_source_url: string;
   slug: string;
   content: string;
   excerpt: string;
-  medical_categories: string[]; // A, B, C categories
+  medical_categories: string[] | null; // Null means not yet authoritatively established.
   key_requirements: string[];
-  inspection_interval_months: number;
-  maritime_authority: string;
+  inspection_interval_months: number | null;
+  maritime_authority: string | null;
   authority_website?: string;
+  medical_review_status: MedicalReviewStatus;
+  medical_reviewed_on: string | null;
+  medical_sources: MedicalRegulationSource[];
+  medical_disclaimer: string;
   // Enhanced fields
   tmas?: TMASContact;
   yacht_requirements?: YachtRequirements;
   equipment_differences?: EquipmentDifferences;
   published: boolean;
-  created_at: string;
-  updated_at: string;
+  created_at: string | null;
+  updated_at: string | null;
 }
 
 /**

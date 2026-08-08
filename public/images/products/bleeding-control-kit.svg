@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450" role="img" aria-labelledby="title desc">
+  <title id="title">Illustration of a tactical bleeding control kit</title>
+  <desc id="desc">A clearly illustrative waterproof trauma pouch with a tourniquet, trauma shears, gauze, and pressure bandage.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#071426"/><stop offset="1" stop-color="#193e5d"/></linearGradient>
+    <linearGradient id="pouch" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d83441"/><stop offset="1" stop-color="#9f1f2b"/></linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="170%" height="190%"><feDropShadow dx="0" dy="19" stdDeviation="17" flood-opacity=".4"/></filter>
+  </defs>
+  <rect width="800" height="450" rx="28" fill="url(#bg)"/>
+  <circle cx="111" cy="81" r="144" fill="#0077b6" opacity=".13"/>
+  <path d="M0 350c147-47 256 30 402 5 166-28 251-72 398-25v120H0z" fill="#06101f" opacity=".64"/>
+  <g filter="url(#shadow)" transform="translate(162 72)">
+    <path d="M36 26h404c20 0 36 16 36 36v238H0V62c0-20 16-36 36-36z" fill="url(#pouch)"/>
+    <path d="M75 26V12C75 5 80 0 87 0h302c7 0 12 5 12 12v14" fill="none" stroke="#f19aa2" stroke-width="13"/>
+    <rect x="24" y="55" width="428" height="214" rx="21" fill="#f8fbfc"/>
+    <rect x="48" y="78" width="135" height="168" rx="17" fill="#263848"/>
+    <rect x="66" y="102" width="99" height="21" rx="10" fill="#e63946"/>
+    <text x="115" y="117" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="11" font-weight="700">TOURNIQUET</text>
+    <path d="M89 140h53v83H89z" fill="#111b24"/><path d="M99 151h33M99 164h33M99 177h33" stroke="#586a76" stroke-width="5"/>
+    <rect x="202" y="78" width="105" height="74" rx="14" fill="#e8f3f6" stroke="#a8cbd4" stroke-width="3"/>
+    <path d="M254 94v42M233 115h42" stroke="#e63946" stroke-width="8" stroke-linecap="round"/>
+    <rect x="326" y="78" width="102" height="74" rx="14" fill="#d5eef3"/>
+    <path d="M349 112h56" stroke="#0077b6" stroke-width="9" stroke-linecap="round"/>
+    <g transform="translate(217 167) rotate(-7)">
+      <circle cx="22" cy="63" r="19" fill="none" stroke="#596d7a" stroke-width="8"/><circle cx="58" cy="63" r="19" fill="none" stroke="#596d7a" stroke-width="8"/>
+      <path d="M36 49L86 0M46 49L10 2" stroke="#8da1ab" stroke-width="10" stroke-linecap="round"/>
+    </g>
+    <rect x="326" y="173" width="102" height="72" rx="15" fill="#f2debd"/>
+    <path d="M342 191h70M342 207h70M342 223h70" stroke="#bf9362" stroke-width="5" stroke-linecap="round"/>
+  </g>
+  <g transform="translate(523 320)">
+    <rect width="229" height="63" rx="18" fill="#ffffff" opacity=".95"/>
+    <text x="18" y="28" fill="#0a1628" font-family="Arial, sans-serif" font-size="14" font-weight="700">BLEEDING CONTROL</text>
+    <text x="18" y="46" fill="#526a7a" font-family="Arial, sans-serif" font-size="11">BRANDED ILLUSTRATION</text>
+  </g>
+</svg>

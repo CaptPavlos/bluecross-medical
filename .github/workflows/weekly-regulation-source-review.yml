@@ -1,0 +1,70 @@
+name: Weekly regulation source review
+
+on:
+  schedule:
+    - cron: '17 06 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: weekly-regulation-source-review
+  cancel-in-progress: false
+
+jobs:
+  update-paris-mou:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install PDF text extraction
+        run: sudo apt-get update && sudo apt-get install --yes poppler-utils
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify committed parser fixtures
+        run: npm run regulations:test
+
+      - name: Refresh official source data
+        run: npm run regulations:update
+
+      - name: Verify refreshed data and application
+        run: |
+          npm run regulations:test
+          npm run build
+
+      - name: Create or update review pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: automation/paris-mou-source-review
+          delete-branch: true
+          commit-message: 'chore(data): refresh regulation source checks'
+          title: 'Review weekly maritime regulation source changes'
+          body: |
+            Automated source-monitoring update.
+
+            - Paris MoU performance rows were parsed from the official current PDFs and validated for complete contiguous ranks.
+            - Medical authority documents were hash/ETag checked only.
+            - Any changed medical source remains `pending-review`; this automation does not publish legal or medical interpretations.
+
+            Before merging an annual edition or membership change, verify that `public/sitemap.xml`
+            still matches every published flag route. A qualified reviewer must verify source
+            changes and update medical guidance separately when appropriate.
+          labels: data-review
+          add-paths: |
+            src/data/parisMou/[0-9][0-9][0-9][0-9].json
+            src/data/parisMou/source-check.json
+            src/data/parisMou/current.ts
+            public/sitemap.xml

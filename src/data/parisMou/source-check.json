@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "paris_mou": {
+    "edition": 2025,
+    "performance_period": "2023-2025",
+    "valid_from": "2026-07-01",
+    "valid_until": "2027-07-06",
+    "landing_page_url": "https://parismou.org/Statistics%26Current-Lists/white-grey-and-black-list",
+    "sources": [
+      {
+        "id": "white-pdf",
+        "status": "white",
+        "url": "https://parismou.org/system/files/2026-06/Paris%20MoU%202025_WhiteList.pdf",
+        "final_url": "https://parismou.org/system/files/2026-06/Paris%20MoU%202025_WhiteList.pdf",
+        "content_type": "application/pdf",
+        "etag": null,
+        "last_modified": "Tue, 30 Jun 2026 13:28:55 GMT",
+        "byte_length": 111111,
+        "sha256": "00871e390be97a47a58ce29afb7ce1c31398e848c4f957427181a5f2d40b2f19"
+      },
+      {
+        "id": "grey-pdf",
+        "status": "grey",
+        "url": "https://parismou.org/system/files/2026-06/Paris%20MoU%202025_GreyList.pdf",
+        "final_url": "https://parismou.org/system/files/2026-06/Paris%20MoU%202025_GreyList.pdf",
+        "content_type": "application/pdf",
+        "etag": null,
+        "last_modified": "Tue, 30 Jun 2026 13:29:31 GMT",
+        "byte_length": 104992,
+        "sha256": "b92146f490e4d78b244b95f7d2104b15053ea51b0e2886e31c0826c2ab73f4ec"
+      },
+      {
+        "id": "black-pdf",
+        "status": "black",
+        "url": "https://parismou.org/system/files/2026-06/Paris%20MoU%202025_BlackList.pdf",
+        "final_url": "https://parismou.org/system/files/2026-06/Paris%20MoU%202025_BlackList.pdf",
+        "content_type": "application/pdf",
+        "etag": null,
+        "last_modified": "Tue, 30 Jun 2026 13:30:06 GMT",
+        "byte_length": 105295,
+        "sha256": "3b8110b16ef9ec7d03ca97dae2b6b7adfd204819eb2ce9b413d5a23289773724"
+      }
+    ]
+  },
+  "medical_source_policy": {
+    "purpose": "Change detection only; never convert source changes into medical or legal guidance automatically.",
+    "on_change": "pending-review",
+    "auto_publish_interpretations": false
+  },
+  "medical_authority_sources": [
+    {
+      "id": "who-international-medical-guide-for-ships",
+      "title": "WHO International Medical Guide for Ships",
+      "url": "https://iris.who.int/server/api/core/bitstreams/d834ff4a-6e90-4812-b2b1-b89785c30c35/content",
+      "applies_to": ["GLOBAL"],
+      "check_status": "ok",
+      "final_url": "https://iris.who.int/server/api/core/bitstreams/d834ff4a-6e90-4812-b2b1-b89785c30c35/content",
+      "content_type": "application/pdf;charset=UTF-8",
+      "etag": "\"bc76477c387ce94ca544e3d75678c5fb\"",
+      "last_modified": "Fri, 19 Sep 2025 17:18:11 GMT",
+      "byte_length": 2255125,
+      "sha256": "af8e588d5605cf792930ff8d3de69801cd32f9b1578ccd223b537a57f3040c91",
+      "review_status": "pending-review"
+    },
+    {
+      "id": "uk-msn-1905",
+      "title": "United Kingdom MSN 1905 (M+F)",
+      "url": "https://assets.publishing.service.gov.uk/media/6059f0c68fa8f545d879f0c6/MSN_1905__M+F_.pdf",
+      "applies_to": ["GB"],
+      "check_status": "ok",
+      "final_url": "https://assets.publishing.service.gov.uk/media/6059f0c68fa8f545d879f0c6/MSN_1905__M+F_.pdf",
+      "content_type": "application/pdf",
+      "etag": "\"6059f0c6-a18e3\"",
+      "last_modified": "Tue, 23 Mar 2021 13:44:38 GMT",
+      "byte_length": 661731,
+      "sha256": "487b71adecf3ccfaf5998fab3bac590ad1a5fd2f9ee125f8fdda43dd1d2cedea",
+      "review_status": "pending-review"
+    },
+    {
+      "id": "marshall-islands-mi-108",
+      "title": "Republic of the Marshall Islands MI-108",
+      "url": "https://www.register-iri.com/wp-content/uploads/MI-108.pdf",
+      "applies_to": ["MH"],
+      "check_status": "ok",
+      "final_url": "https://www.register-iri.com/wp-content/uploads/MI-108.pdf",
+      "content_type": "application/pdf",
+      "etag": "\"6a31b311-106a41\"",
+      "last_modified": "Tue, 16 Jun 2026 20:33:21 GMT",
+      "byte_length": 1075777,
+      "sha256": "37eb59ccca424e5c94dc8af565b5305dfeaebb8c304564f536fa254f76a46908",
+      "review_status": "pending-review"
+    },
+    {
+      "id": "panama-mmc-339",
+      "title": "Panama MMC-339 Medicine Chest and Medical Equipment",
+      "url": "https://www.panamashipregistry.com/wp-content/uploads/2021/03/MMC-339-MEDICINE-CHEST-AND-MEDICAL-EQUIPMENT.MARCH_.2021-rev.RB_.pdf",
+      "applies_to": ["PA"],
+      "check_status": "ok",
+      "final_url": "https://www.panamashipregistry.com/wp-content/uploads/2021/03/MMC-339-MEDICINE-CHEST-AND-MEDICAL-EQUIPMENT.MARCH_.2021-rev.RB_.pdf",
+      "content_type": "application/pdf",
+      "etag": "\"6054a6fa-5455b\"",
+      "last_modified": "Fri, 19 Mar 2021 13:28:26 GMT",
+      "byte_length": 345435,
+      "sha256": "a3873a84471543bc7f494056c0def6fb6b3a996c899ff1c750669bc3a373842c",
+      "review_status": "pending-review"
+    },
+    {
+      "id": "malta-medical-stores",
+      "title": "Malta Merchant Shipping (Maritime Labour Convention) Rules",
+      "url": "https://legislation.mt/getpdf/67adafe31b765e1e1c5e8c04",
+      "applies_to": ["MT"],
+      "check_status": "ok",
+      "final_url": "https://legislation.mt/getpdf/67adafe31b765e1e1c5e8c04",
+      "content_type": "application/pdf",
+      "etag": null,
+      "last_modified": null,
+      "byte_length": 813276,
+      "sha256": "bb152bfedda9a29c81a385e6ec2ea4aca85c8a5035f27d2e65512b719e0c1026",
+      "review_status": "pending-review"
+    }
+  ]
+}

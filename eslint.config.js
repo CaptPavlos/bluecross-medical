@@ -6,7 +6,8 @@ import tseslint from 'typescript-eslint'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
-  globalIgnores(['dist', 'vital-signs/.next', 'vital-signs/node_modules']),
+  // `vital-signs` is a separate Next.js application with its own lint toolchain.
+  globalIgnores(['dist', 'vital-signs/**']),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [

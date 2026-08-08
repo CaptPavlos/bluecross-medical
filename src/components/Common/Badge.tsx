@@ -22,10 +22,10 @@ const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
 
     const variants = {
       default: 'bg-gray-100 text-brand-slate border-gray-200',
-      success: 'bg-brand-green/10 text-brand-green border-brand-green/20',
-      warning: 'bg-brand-yellow/10 text-brand-yellow border-brand-yellow/20',
-      danger: 'bg-brand-red/10 text-brand-red border-brand-red/20',
-      info: 'bg-brand-ocean/10 text-brand-ocean border-brand-ocean/20',
+      success: 'border-green-200 bg-green-100 text-green-800',
+      warning: 'border-amber-200 bg-amber-100 text-amber-900',
+      danger: 'border-red-200 bg-red-100 text-red-800',
+      info: 'border-sky-200 bg-sky-100 text-sky-900',
     };
 
     const sizes = {

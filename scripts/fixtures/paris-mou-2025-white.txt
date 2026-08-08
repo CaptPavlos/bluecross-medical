@@ -1,0 +1,42 @@
+Paris MoU White performance list valid: 1 July 2026 until 6 July 2027
+INSPECTIONS 2023-2025 DETENTIONS 2023-2025
+  1     Cayman Islands, UK             299                 0                29              13                -1.95
+  2     Sweden                         312                 1                30              14                -1.81
+  3     Norway                        1,742               23               140             104                -1.72
+  4     Denmark                       1,163               15                96              67                -1.68
+  5     Japan                          244                 1                24              10                -1.67
+  6     Singapore                     1,727               27               139             103                -1.62
+  7     France                         292                 2                28              13                -1.61
+  8     Finland                        349                 3                33              16                -1.59
+  9     Netherlands                   2,610               46               205             161                -1.59
+  10    Luxembourg                     217                 1                22               9                -1.58
+  11    Italy                          817                14                70              45                -1.45
+  12    Hong Kong (China)             1,416               28               115              83                -1.44
+  13    Germany                        457                 8                41              23                -1.28
+  14    Portugal                      2,268               58               179             138                -1.28
+  15    Bahamas                       1,604               40               130              95                -1.26
+  16    Malta                          3637              101               280             229                -1.25
+  17    Isle of Man, UK                362                 6                34              17                -1.24
+  18    Bermuda, UK                    141                 1                15               4                -1.13
+  19    China                          294                 5                28              13                -1.12
+  20    United States                  139                 1                15               4                -1.11
+  21    Marshall Islands              5,166              167               392             331                -1.11
+  22    Cyprus                        2,155               65               171             131                -1.10
+  23    Spain                           88                 0                11               2                -1.00
+  24    United Kingdom                 696                19                60              37                -0.99
+  25    Greece                         544                15                48              28                -0.91
+  26    Saudi Arabia                    77                 0                10               1                -0.83
+  27    Ireland                         72                 0                 9               1                -0.73
+  28    Gibraltar, UK                  250                 6                25              10                -0.73
+  29    Liberia                       6,319              276               476             408                -0.73
+  30    Croatia                         97                 1                11               2                -0.59
+  31    Barbados                       957                39                80              54                -0.56
+  32    Türkiye                        611                23                54              32                -0.56
+  33    Estonia                         87                 1                11               2                -0.40
+  34    Jersey, UK                      54                 0                 7               0                -0.22
+  35    Antigua and Barbuda           1,757               95               141             105                -0.20
+  36    Panama                        5,731              338               433             369                -0.19
+  37    Faroe Islands                  225                 8                23               9                -0.18
+  38    Belgium                        164                 5                17               6                -0.16
+  39    Poland                          43                 0                 6               0                 0.04
+  40    Canada                          35                 0                 5               0                 0.09

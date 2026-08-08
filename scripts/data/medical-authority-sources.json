@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "policy": {
+    "purpose": "Change detection only; never convert source changes into medical or legal guidance automatically.",
+    "on_change": "pending-review",
+    "auto_publish_interpretations": false
+  },
+  "sources": [
+    {
+      "id": "who-international-medical-guide-for-ships",
+      "title": "WHO International Medical Guide for Ships",
+      "url": "https://iris.who.int/server/api/core/bitstreams/d834ff4a-6e90-4812-b2b1-b89785c30c35/content",
+      "applies_to": ["GLOBAL"]
+    },
+    {
+      "id": "uk-msn-1905",
+      "title": "United Kingdom MSN 1905 (M+F)",
+      "url": "https://assets.publishing.service.gov.uk/media/6059f0c68fa8f545d879f0c6/MSN_1905__M+F_.pdf",
+      "applies_to": ["GB"]
+    },
+    {
+      "id": "marshall-islands-mi-108",
+      "title": "Republic of the Marshall Islands MI-108",
+      "url": "https://www.register-iri.com/wp-content/uploads/MI-108.pdf",
+      "applies_to": ["MH"]
+    },
+    {
+      "id": "panama-mmc-339",
+      "title": "Panama MMC-339 Medicine Chest and Medical Equipment",
+      "url": "https://www.panamashipregistry.com/wp-content/uploads/2021/03/MMC-339-MEDICINE-CHEST-AND-MEDICAL-EQUIPMENT.MARCH_.2021-rev.RB_.pdf",
+      "applies_to": ["PA"]
+    },
+    {
+      "id": "malta-medical-stores",
+      "title": "Malta Merchant Shipping (Maritime Labour Convention) Rules",
+      "url": "https://legislation.mt/getpdf/67adafe31b765e1e1c5e8c04",
+      "applies_to": ["MT"]
+    }
+  ]
+}

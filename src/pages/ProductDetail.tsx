@@ -1,68 +1,84 @@
-/**
- * Product Detail Page
- *
- * Individual product view with full specifications, pricing,
- * certifications, and add-to-cart functionality via Ecwid.
- * Includes related products and maritime compliance badges.
- *
- * @module pages/ProductDetail
- */
-import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, CheckCircle, Star, ExternalLink, AlertTriangle, Phone, Mail } from 'lucide-react';
+/** Individual maritime medical equipment detail page. */
+import { useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import {
+  AlertTriangle,
+  ArrowLeft,
+  CheckCircle,
+  ExternalLink,
+  Mail,
+  Package,
+  Phone,
+} from 'lucide-react';
 import { motion } from 'framer-motion';
 import Container from '../components/Common/Container';
-import Button from '../components/Common/Button';
 import { Badge } from '../components/Common';
 import { ScrollReveal } from '../components/Animations';
+import { SEOHead } from '../components/SEO';
 import { MOCK_PRODUCTS } from '../lib/constants';
+import type { ProductStatus } from '../lib/types';
 
-/** Contact email for product inquiries */
 const QUOTE_EMAIL = 'sales@bluecross.tech';
+const SITE_URL = 'https://www.bluecross.tech';
 
-/** Ecwid e-commerce integration type declarations */
-declare global {
-  interface Window {
-    ecwidAddToCart?: (productId: number, callback?: (success: boolean) => void) => void;
-  }
-}
-
-// Add to cart using Ecwid embedded cart
-const handleAddToCart = (productId: string) => {
-  if (window.ecwidAddToCart) {
-    window.ecwidAddToCart(parseInt(productId));
-  }
+const schemaAvailability: Record<ProductStatus, string> = {
+  'in-stock': 'https://schema.org/InStock',
+  'to-order': 'https://schema.org/BackOrder',
+  'not-available': 'https://schema.org/OutOfStock',
 };
 
-// Helper to format long description into readable sections
-function formatDescription(text: string) {
-  const sentences = text.split('. ').filter(s => s.trim());
-  const items: string[] = [];
-  
-  sentences.forEach((sentence) => {
-    const trimmed = sentence.trim();
-    if (!trimmed) return;
-    
-    // Add period back if not last
-    const formatted = trimmed.endsWith('.') ? trimmed : trimmed + '.';
-    items.push(formatted);
-  });
+const statusLabels: Record<ProductStatus, string> = {
+  'in-stock': 'In Stock',
+  'to-order': 'To Order',
+  'not-available': 'Not Available',
+};
 
-  return items;
+const statusVariants: Record<ProductStatus, 'success' | 'warning' | 'danger'> = {
+  'in-stock': 'success',
+  'to-order': 'warning',
+  'not-available': 'danger',
+};
+
+const prePurchaseChecks = [
+  'Confirm the exact model, configuration and included accessories in writing.',
+  'Request current conformity documents for the supplied model and destination market.',
+  'Check service life, warranty, maintenance, calibration and inspection requirements.',
+  'Plan replacement batteries, electrodes, sensors or other consumables as applicable.',
+  'Confirm delivery terms, technical support and the process for reporting a device issue.',
+];
+
+/** Breaks the legacy paragraph into shorter readable statements. */
+function formatDescription(text: string) {
+  return text
+    .split('. ')
+    .map((sentence) => sentence.trim())
+    .filter(Boolean)
+    .map((sentence) => sentence.endsWith('.') ? sentence : `${sentence}.`);
 }
 
 function ProductDetail() {
   const { slug } = useParams<{ slug: string }>();
-  const product = MOCK_PRODUCTS.find((p) => p.slug === slug);
+  const product = MOCK_PRODUCTS.find((candidate) => candidate.slug === slug);
+  const [failedImageUrl, setFailedImageUrl] = useState<string | null>(null);
 
   if (!product) {
+    const missingPath = `/products/${encodeURIComponent(slug || 'not-found')}`;
+
     return (
-      <main className="pt-20 pb-16">
+      <main className="pb-16 pt-20">
+        <SEOHead
+          title="Product Not Found"
+          description="This equipment page could not be found. Browse the current BlueCross Medical equipment catalog."
+          url={missingPath}
+          noindex
+        />
         <Container size="md">
           <div className="py-12 text-center">
-            <h1 className="text-h1 font-bold text-brand-slate mb-4">Product Not Found</h1>
-            <p className="text-brand-gray mb-6">The product you're looking for doesn't exist.</p>
-            <Link to="/products" className="text-brand-ocean hover:underline">
-              ← Back to Products
+            <h1 className="mb-4 text-h1 font-bold text-brand-slate">Product Not Found</h1>
+            <p className="mb-6 text-brand-gray">The equipment page you requested does not exist.</p>
+            <Link to="/products" className="inline-flex min-h-[44px] items-center justify-center rounded-lg px-4 font-semibold text-brand-ocean hover:bg-brand-ocean/10">
+              <ArrowLeft size={18} className="mr-2" aria-hidden="true" />
+              Back to equipment
             </Link>
           </div>
         </Container>
@@ -70,95 +86,116 @@ function ProductDetail() {
     );
   }
 
-  // Product images based on slug
-  const productImages: Record<string, string> = {
-    'vital-signs-monitor': 'https://images.spr.so/cdn-cgi/imagedelivery/j42No7y-dcokJuNgXeA0ig/143ad6b6-6b0e-4f05-b803-c7086e8a796c/VSP_(1)/w=800,quality=90,fit=scale-down',
-    '12-lead-ecg': 'https://images.spr.so/cdn-cgi/imagedelivery/j42No7y-dcokJuNgXeA0ig/26f68a92-706c-42cd-8b35-02a84c3c98d7/12-lead_Notion_Cover/w=800,quality=90,fit=scale-down',
-    'telemedicine-base-station': 'https://images.spr.so/cdn-cgi/imagedelivery/j42No7y-dcokJuNgXeA0ig/c52c8fd3-dce9-4989-a374-49cb6534f5db/Telemedicine_Base_Station_(1)/w=800,quality=90,fit=scale-down',
-    'semi-automatic-defibrillator': 'https://images.spr.so/cdn-cgi/imagedelivery/j42No7y-dcokJuNgXeA0ig/7f19e4a7-df0b-4bca-abee-453050f6f9fb/DeFib_Notion_Cover/w=800,quality=90,fit=scale-down',
-    'oxygen-resuscitation-kit': 'https://images.spr.so/cdn-cgi/imagedelivery/j42No7y-dcokJuNgXeA0ig/24552e5d-9512-467b-a55a-86f6892cf0ab/Oxygen_Resuscitation_Kit_-_Notion_Cover_(1)/w=800,quality=90,fit=scale-down',
-    'bleeding-control-kit': 'https://images.spr.so/cdn-cgi/imagedelivery/j42No7y-dcokJuNgXeA0ig/01628833-765e-492a-92a1-dcd3d4b6dc01/Bleeding_Control_Kit_Notion_Cover/w=800,quality=90,fit=scale-down',
+  const canonicalPath = `/products/${product.slug}`;
+  const canonicalUrl = `${SITE_URL}${canonicalPath}`;
+  const productImageUrl = new URL(product.image_url || '/og-image.png', `${SITE_URL}/`).toString();
+  const displayPrice = typeof product.price === 'number' ? product.price : null;
+  const hasWorkingImage = Boolean(product.image_url && failedImageUrl !== product.image_url);
+  const productSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    '@id': `${canonicalUrl}#product`,
+    name: product.name,
+    image: productImageUrl,
+    description: product.description,
+    url: canonicalUrl,
+    category: 'Maritime medical equipment',
+    ...(displayPrice !== null ? {
+      offers: {
+        '@type': 'Offer',
+        url: canonicalUrl,
+        price: displayPrice,
+        priceCurrency: 'EUR',
+        availability: schemaAvailability[product.status],
+        itemCondition: 'https://schema.org/NewCondition',
+        seller: { '@id': `${SITE_URL}/#organization` },
+      },
+    } : {}),
   };
 
   return (
-    <main className="flex-1">
-      {/* Header */}
-      <section className="pt-24 pb-12 md:pt-28 md:pb-16 bg-brand-navy text-white">
+    <main className="flex-1 overflow-x-clip">
+      <SEOHead
+        title={`${product.name} for Maritime Use`}
+        description={`${product.description} Review onboard use, stated product documentation, availability and quote information.`}
+        url={canonicalPath}
+        type="product"
+        image="/og-image.png"
+        imageAlt={`${product.name} maritime equipment information from BlueCross Medical`}
+        keywords={[product.name, 'maritime medical equipment', 'ship medical equipment', 'yacht medical equipment']}
+        jsonLd={productSchema}
+      />
+
+      <section className="bg-brand-navy pb-12 pt-24 text-white md:pb-16 md:pt-28">
         <Container>
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-            <Link to="/products" className="inline-flex items-center text-brand-sky hover:text-white mb-6">
-              <ArrowLeft size={16} className="mr-2" />
-              Back to Products
+            <Link to="/products" className="mb-5 inline-flex min-h-[44px] items-center text-brand-sky hover:text-white">
+              <ArrowLeft size={17} className="mr-2" aria-hidden="true" />
+              Back to equipment
             </Link>
-            
-            <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-              <div>
-                <div className="flex items-center gap-3 mb-4">
-                  <Badge variant={
-                    product.status === 'in-stock' ? 'success' : 
-                    product.status === 'to-order' ? 'warning' : 'danger'
-                  }>
-                    {product.status === 'in-stock' ? 'In Stock' : 
-                     product.status === 'to-order' ? 'To Order' : 'Not Available'}
-                  </Badge>
-                  <Badge variant="info">✓ Tested at Sea</Badge>
+
+            <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
+              <div className="min-w-0">
+                <div className="mb-4 flex flex-wrap items-center gap-3">
+                  <Badge variant={statusVariants[product.status]}>{statusLabels[product.status]}</Badge>
                 </div>
-                <h1 className="text-3xl md:text-4xl lg:text-display font-bold mb-4">{product.name}</h1>
-                <p className="text-lg text-brand-sky-light/90 mb-6">{product.description}</p>
-                
-                <div className="flex items-center gap-4 mb-8">
-                  <div className="flex items-center">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} size={18} className={i < 4 ? 'text-yellow-400 fill-yellow-400' : 'text-gray-500'} />
-                    ))}
-                  </div>
-                  <span className="text-brand-sky text-sm">Verified by seafarers</span>
-                </div>
-                
-                <div className="flex items-center gap-4">
-                  {/* Show price unless it's telemedicine-base-station */}
-                  {product.price && product.slug !== 'telemedicine-base-station' ? (
-                    <span className="text-2xl font-bold text-white">
-                      €{product.price.toLocaleString()}
-                    </span>
-                  ) : product.slug === 'telemedicine-base-station' ? (
-                    <span className="text-xl font-semibold text-brand-sky">
-                      Contact for pricing
-                    </span>
-                  ) : null}
-                  <a 
+                <h1 className="mb-4 break-words text-3xl font-bold leading-tight md:text-4xl lg:text-display">
+                  {product.name}
+                </h1>
+                <p className="mb-7 text-base leading-relaxed text-brand-sky-light/90 sm:text-lg">
+                  {product.description}
+                </p>
+
+                <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
+                  <span className="text-xl font-bold text-white sm:text-2xl">
+                    {displayPrice !== null ? `€${displayPrice.toLocaleString()}` : 'Contact for pricing'}
+                  </span>
+                  <a
                     href={`mailto:${QUOTE_EMAIL}?subject=Quote Request: ${encodeURIComponent(product.name)}`}
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-white text-[#0A1628] font-semibold rounded-lg hover:bg-gray-100 transition-colors"
+                    className="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg bg-white px-5 py-3 font-semibold text-brand-navy transition-colors hover:bg-gray-100 sm:w-auto"
                   >
-                    Request Quote
-                    <Mail size={20} />
+                    Request quote
+                    <Mail size={19} aria-hidden="true" />
                   </a>
                 </div>
               </div>
-              
-              {/* Product Image */}
-              <div className="bg-white rounded-2xl p-6 shadow-xl">
-                <img
-                  src={productImages[product.slug] || productImages['vital-signs-monitor']}
-                  alt={product.name}
-                  className="w-full h-auto object-contain max-h-80"
-                />
+
+              <div className="overflow-hidden rounded-2xl bg-white p-3 shadow-xl sm:p-6">
+                {hasWorkingImage ? (
+                  <img
+                    src={product.image_url}
+                    alt={`${product.name} — branded illustrative product view`}
+                    width={800}
+                    height={450}
+                    loading="eager"
+                    {...{ fetchpriority: 'high' }}
+                    decoding="async"
+                    onError={() => setFailedImageUrl(product.image_url || null)}
+                    className="aspect-video h-auto w-full object-contain"
+                  />
+                ) : (
+                  <div className="flex aspect-video flex-col items-center justify-center gap-3 rounded-xl bg-gradient-to-br from-brand-navy via-brand-blue to-brand-ocean text-white">
+                    <span className="flex h-20 w-20 items-center justify-center rounded-2xl bg-white/15 ring-1 ring-white/25">
+                      <Package size={42} aria-hidden="true" />
+                    </span>
+                    <span className="text-sm font-medium text-brand-sky-light">Product illustration unavailable</span>
+                  </div>
+                )}
               </div>
             </div>
           </motion.div>
         </Container>
       </section>
 
-      {/* Features */}
-      <section className="py-16">
+      <section className="py-12 md:py-16" aria-labelledby="features-heading">
         <Container>
           <ScrollReveal>
-            <h2 className="text-h1 font-bold text-brand-slate mb-8">Key Features</h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {product.features.map((feature, index) => (
-                <div key={index} className="flex items-start gap-3 p-4 bg-surface-secondary rounded-lg">
-                  <CheckCircle className="w-6 h-6 text-brand-green flex-shrink-0 mt-0.5" />
-                  <span className="text-brand-slate font-medium">{feature}</span>
+            <h2 id="features-heading" className="mb-7 text-h1 font-bold text-brand-slate">Key features</h2>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 md:gap-6">
+              {product.features.map((feature) => (
+                <div key={feature} className="flex items-start gap-3 rounded-lg bg-surface-secondary p-4">
+                  <CheckCircle className="mt-0.5 h-6 w-6 shrink-0 text-brand-green" aria-hidden="true" />
+                  <span className="font-medium text-brand-slate">{feature}</span>
                 </div>
               ))}
             </div>
@@ -166,74 +203,72 @@ function ProductDetail() {
         </Container>
       </section>
 
-      {/* Description */}
-      <section className="py-16 bg-surface-secondary">
+      <section className="bg-surface-secondary py-12 md:py-16" aria-labelledby="details-heading">
         <Container>
           <ScrollReveal>
-            <h2 className="text-h1 font-bold text-brand-slate mb-8">Product Details</h2>
-            <div className="grid md:grid-cols-2 gap-8">
-              {/* Main Description */}
-              <div className="bg-white rounded-xl p-6 shadow-sm">
-                <h3 className="text-lg font-semibold text-brand-navy mb-4">Overview</h3>
+            <h2 id="details-heading" className="mb-7 text-h1 font-bold text-brand-slate">Product details</h2>
+            <div className="grid gap-6 md:grid-cols-2 md:gap-8">
+              <article className="rounded-xl bg-white p-5 shadow-sm sm:p-6">
+                <h3 className="mb-4 text-lg font-semibold text-brand-navy">Overview</h3>
                 <div className="space-y-3">
-                  {formatDescription(product.long_description || '').map((sentence, index) => (
-                    <p key={index} className="text-brand-gray leading-relaxed flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 bg-brand-ocean rounded-full mt-2 flex-shrink-0"></span>
+                  {formatDescription(product.long_description || '').map((sentence) => (
+                    <p key={sentence} className="flex items-start gap-2 leading-relaxed text-brand-gray">
+                      <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-ocean" aria-hidden="true" />
                       <span>{sentence}</span>
                     </p>
                   ))}
                 </div>
-              </div>
-              
-              {/* Specifications Card */}
-              <div className="bg-white rounded-xl p-6 shadow-sm">
-                <h3 className="text-lg font-semibold text-brand-navy mb-4">Specifications</h3>
+              </article>
+
+              <article className="rounded-xl bg-white p-5 shadow-sm sm:p-6">
+                <h3 className="mb-2 text-lg font-semibold text-brand-navy">Pre-purchase checks</h3>
+                <p className="mb-4 text-sm leading-relaxed text-brand-gray">
+                  Use the product details as a starting point, then verify the supplied item and evidence.
+                </p>
                 <div className="space-y-3">
-                  {product.features.map((feature, index) => (
-                    <div key={index} className="flex items-center gap-3 py-2 border-b border-gray-100 last:border-0">
-                      <CheckCircle className="w-5 h-5 text-brand-green flex-shrink-0" />
-                      <span className="text-brand-slate">{feature}</span>
+                  {prePurchaseChecks.map((check) => (
+                    <div key={check} className="flex items-start gap-3 border-b border-gray-100 py-2 last:border-0">
+                      <CheckCircle className="h-5 w-5 shrink-0 text-brand-green" aria-hidden="true" />
+                      <span className="text-brand-slate">{check}</span>
                     </div>
                   ))}
                 </div>
-              </div>
+              </article>
             </div>
           </ScrollReveal>
         </Container>
       </section>
 
-      {/* Important Notice */}
-      <section className="py-12 bg-amber-50 border-y border-amber-200">
+      <section className="border-y border-amber-200 bg-amber-50 py-12" aria-labelledby="before-onboard-heading">
         <Container>
           <ScrollReveal>
-            <div className="flex flex-col md:flex-row items-start gap-6">
-              <div className="flex-shrink-0">
-                <div className="w-14 h-14 bg-amber-100 rounded-full flex items-center justify-center">
-                  <AlertTriangle className="w-7 h-7 text-amber-600" />
-                </div>
-              </div>
-              <div className="flex-1">
-                <h3 className="text-lg font-bold text-amber-800 mb-2">Important Notice</h3>
-                <p className="text-amber-700 mb-4">
-                  Medical equipment alone is not sufficient to handle a medical emergency at sea. 
-                  Effective communication with an emergency medicine doctor is essential for proper 
-                  diagnosis and treatment guidance during any medical incident onboard.
+            <div className="flex flex-col items-start gap-5 md:flex-row md:gap-6">
+              <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-amber-100">
+                <AlertTriangle className="h-7 w-7 text-amber-700" aria-hidden="true" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <h2 id="before-onboard-heading" className="mb-3 text-xl font-bold text-amber-900">Before placing this equipment onboard</h2>
+                <p className="mb-4 leading-relaxed text-amber-800">
+                  Descriptions and conformity statements on this page are based on the manufacturer or supplier information available for the named product. The image is a branded illustration, not product photography. Confirm the exact supplied model, current declaration or certificate, intended use, consumables, service support and delivery terms before purchase.
                 </p>
-                <div className="flex items-start gap-3 bg-amber-100/50 rounded-lg p-4">
-                  <Phone className="w-5 h-5 text-amber-700 mt-0.5 flex-shrink-0" />
+                <p className="mb-5 leading-relaxed text-amber-800">
+                  Medical-chest and equipment requirements vary by <Link to="/flags" className="font-semibold underline underline-offset-2 hover:text-amber-950">flag state</Link>, vessel type and size, voyage or operating area, and people onboard. Equipment also requires competent responders; review the available <Link to="/training" className="font-semibold underline underline-offset-2 hover:text-amber-950">maritime medical training</Link> options.
+                </p>
+
+                <div className="flex items-start gap-3 rounded-lg bg-amber-100/70 p-4">
+                  <Phone className="mt-0.5 h-5 w-5 shrink-0 text-amber-800" aria-hidden="true" />
                   <div>
-                    <p className="font-semibold text-amber-800">We recommend MSOS (Medical Support Offshore)</p>
-                    <p className="text-sm text-amber-700 mt-1">
-                      24/7 telemedicine service providing immediate access to emergency medicine physicians 
-                      who can guide you through any medical situation at sea.
+                    <h3 className="font-semibold text-amber-900">Plan access to appropriate medical support</h3>
+                    <p className="mt-1 text-sm leading-relaxed text-amber-800">
+                      Medical equipment does not replace clinical judgment. Establish a suitable telemedical pathway and follow your emergency procedures and device instructions.
                     </p>
-                    <a 
-                      href="https://www.msos.org.uk/telemedical-support" 
-                      target="_blank" 
+                    <a
+                      href="https://www.msos.org.uk/telemedical-support"
+                      target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-amber-800 hover:text-amber-900 hover:underline mt-2 text-sm font-medium"
+                      className="mt-2 inline-flex min-h-[44px] items-center gap-1 py-2 text-sm font-semibold text-amber-900 hover:underline"
                     >
-                      Learn more about MSOS <ExternalLink size={14} />
+                      Learn about MSOS telemedical support <ExternalLink size={14} aria-hidden="true" />
                     </a>
                   </div>
                 </div>
@@ -243,39 +278,26 @@ function ProductDetail() {
         </Container>
       </section>
 
-      {/* CTA */}
-      <section className="py-16 bg-brand-navy text-white">
+      <section className="bg-brand-navy py-12 text-white md:py-16" aria-labelledby="quote-heading">
         <Container>
           <ScrollReveal>
-            <div className="text-center">
-              <h2 className="text-h1 font-bold mb-4">Interested in {product.name}?</h2>
-              <p className="text-brand-sky mb-8 max-w-2xl mx-auto">
-                Contact us for pricing, availability, and technical specifications. Our team is ready to help equip your vessel.
+            <div className="mx-auto max-w-3xl text-center">
+              <h2 id="quote-heading" className="mb-4 text-h1 font-bold">Request current information for {product.name}</h2>
+              <p className="mx-auto mb-7 max-w-2xl text-brand-sky-light">
+                Ask about current availability, delivery, the exact supplied configuration and supporting technical documents.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <div className="flex items-center gap-4">
-                  {/* Show price unless it's telemedicine-base-station */}
-                  {product.price && product.slug !== 'telemedicine-base-station' ? (
-                    <span className="text-2xl font-bold text-white">
-                      €{product.price.toLocaleString()}
-                    </span>
-                  ) : product.slug === 'telemedicine-base-station' ? (
-                    <span className="text-xl font-semibold text-brand-sky">
-                      Contact for pricing
-                    </span>
-                  ) : null}
-                  <a 
-                    href={`mailto:${QUOTE_EMAIL}?subject=Quote Request: ${encodeURIComponent(product.name)}`}
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-brand-ocean text-white font-semibold rounded-lg hover:bg-brand-ocean/90 transition-colors"
-                  >
-                    Request Quote
-                    <Mail size={20} />
-                  </a>
-                </div>
-                <Link to="/contact">
-                  <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-brand-navy">
-                    Contact Us
-                  </Button>
+              <div className="flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
+                <span className="text-xl font-bold sm:text-2xl">
+                  {displayPrice !== null ? `€${displayPrice.toLocaleString()}` : 'Contact for pricing'}
+                </span>
+                <a
+                  href={`mailto:${QUOTE_EMAIL}?subject=Quote Request: ${encodeURIComponent(product.name)}`}
+                  className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-lg bg-brand-ocean px-5 py-3 font-semibold text-white hover:bg-brand-ocean-light"
+                >
+                  Request quote <Mail size={19} aria-hidden="true" />
+                </a>
+                <Link to="/contact" className="inline-flex min-h-[44px] items-center justify-center rounded-lg border-2 border-white px-5 py-3 font-semibold text-white hover:bg-white hover:text-brand-navy">
+                  Contact us
                 </Link>
               </div>
             </div>

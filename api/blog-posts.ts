@@ -23,7 +23,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   // Get database URL
-  const databaseUrl = process.env.NEON_DATABASE_URL || process.env.VITE_NEON_DATABASE_URL;
+  const databaseUrl = process.env.NEON_DATABASE_URL;
   if (!databaseUrl) {
     console.error('Database URL not configured');
     return res.status(500).json({ error: 'Database not configured' });
