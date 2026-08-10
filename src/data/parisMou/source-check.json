@@ -52,7 +52,9 @@
       "id": "who-international-medical-guide-for-ships",
       "title": "WHO International Medical Guide for Ships",
       "url": "https://iris.who.int/server/api/core/bitstreams/d834ff4a-6e90-4812-b2b1-b89785c30c35/content",
-      "applies_to": ["GLOBAL"],
+      "applies_to": [
+        "GLOBAL"
+      ],
       "check_status": "ok",
       "final_url": "https://iris.who.int/server/api/core/bitstreams/d834ff4a-6e90-4812-b2b1-b89785c30c35/content",
       "content_type": "application/pdf;charset=UTF-8",
@@ -66,7 +68,9 @@
       "id": "uk-msn-1905",
       "title": "United Kingdom MSN 1905 (M+F)",
       "url": "https://assets.publishing.service.gov.uk/media/6059f0c68fa8f545d879f0c6/MSN_1905__M+F_.pdf",
-      "applies_to": ["GB"],
+      "applies_to": [
+        "GB"
+      ],
       "check_status": "ok",
       "final_url": "https://assets.publishing.service.gov.uk/media/6059f0c68fa8f545d879f0c6/MSN_1905__M+F_.pdf",
       "content_type": "application/pdf",
@@ -80,21 +84,26 @@
       "id": "marshall-islands-mi-108",
       "title": "Republic of the Marshall Islands MI-108",
       "url": "https://www.register-iri.com/wp-content/uploads/MI-108.pdf",
-      "applies_to": ["MH"],
-      "check_status": "ok",
+      "applies_to": [
+        "MH"
+      ],
+      "check_status": "unavailable",
       "final_url": "https://www.register-iri.com/wp-content/uploads/MI-108.pdf",
       "content_type": "application/pdf",
       "etag": "\"6a31b311-106a41\"",
       "last_modified": "Tue, 16 Jun 2026 20:33:21 GMT",
       "byte_length": 1075777,
       "sha256": "37eb59ccca424e5c94dc8af565b5305dfeaebb8c304564f536fa254f76a46908",
-      "review_status": "pending-review"
+      "review_status": "pending-review",
+      "error_kind": "network-error"
     },
     {
       "id": "panama-mmc-339",
       "title": "Panama MMC-339 Medicine Chest and Medical Equipment",
       "url": "https://www.panamashipregistry.com/wp-content/uploads/2021/03/MMC-339-MEDICINE-CHEST-AND-MEDICAL-EQUIPMENT.MARCH_.2021-rev.RB_.pdf",
-      "applies_to": ["PA"],
+      "applies_to": [
+        "PA"
+      ],
       "check_status": "ok",
       "final_url": "https://www.panamashipregistry.com/wp-content/uploads/2021/03/MMC-339-MEDICINE-CHEST-AND-MEDICAL-EQUIPMENT.MARCH_.2021-rev.RB_.pdf",
       "content_type": "application/pdf",
@@ -108,7 +117,9 @@
       "id": "malta-medical-stores",
       "title": "Malta Merchant Shipping (Maritime Labour Convention) Rules",
       "url": "https://legislation.mt/getpdf/67adafe31b765e1e1c5e8c04",
-      "applies_to": ["MT"],
+      "applies_to": [
+        "MT"
+      ],
       "check_status": "ok",
       "final_url": "https://legislation.mt/getpdf/67adafe31b765e1e1c5e8c04",
       "content_type": "application/pdf",
