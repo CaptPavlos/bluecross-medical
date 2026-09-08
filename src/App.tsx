@@ -94,7 +94,7 @@ function App() {
     <Router>
       <AuthProvider>
         <ArticleProvider>
-          <div className="flex min-h-screen flex-col bg-white pb-[calc(4rem+env(safe-area-inset-bottom))] md:pb-0">
+          <div className="flex min-h-screen flex-col bg-white pb-[calc(4rem+env(safe-area-inset-bottom))] lg:pb-0">
             <a
               href="#main-content"
               className="sr-only z-50 rounded-lg bg-white px-4 py-3 font-semibold text-brand-navy shadow-lg focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
