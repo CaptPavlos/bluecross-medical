@@ -37,8 +37,8 @@ function TeamGrid({ limit }: TeamGridProps) {
 
   if (isLoading) {
     return (
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {Array.from({ length: limit || 4 }).map((_, i) => (
+      <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+        {Array.from({ length: limit || 3 }).map((_, i) => (
           <SkeletonTeamCard key={i} />
         ))}
       </div>
@@ -54,7 +54,7 @@ function TeamGrid({ limit }: TeamGridProps) {
   }
 
   return (
-    <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
       {team.map((member, index) => (
         <TeamCard key={member.id} member={member} index={index} />
       ))}

@@ -46,7 +46,7 @@ function Header() {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden items-center space-x-8 md:flex" aria-label="Primary navigation">
+          <nav className="hidden items-center space-x-7 lg:flex" aria-label="Primary navigation">
               {NAV_ITEMS.map((item) => {
                 const isActive = location.pathname === item.path
                   || (item.path !== '/' && location.pathname.startsWith(`${item.path}/`));

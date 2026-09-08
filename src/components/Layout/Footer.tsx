@@ -16,7 +16,7 @@ function Footer() {
   return (
     <>
       {/* Mobile Footer - Minimal with legal links only */}
-      <footer className="md:hidden bg-brand-navy text-white py-6 mb-14">
+      <footer className="bg-brand-navy py-6 mb-14 text-white lg:hidden">
         <Container>
           <div className="flex flex-col items-center gap-3">
             <div className="flex justify-center items-center gap-4 text-sm text-gray-400">
@@ -45,7 +45,7 @@ function Footer() {
       </footer>
 
       {/* Desktop Footer - Full version */}
-      <footer className="hidden md:block bg-gradient-to-b from-brand-navy to-brand-navy text-white pt-12 pb-8 relative overflow-hidden">
+      <footer className="relative hidden overflow-hidden bg-gradient-to-b from-brand-navy to-brand-navy pb-8 pt-12 text-white lg:block">
         {/* Wave decoration at top */}
         <div className="absolute top-0 left-0 right-0 h-16 opacity-10">
           <svg className="w-full h-full" viewBox="0 0 1440 100" preserveAspectRatio="none">
